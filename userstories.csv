@@ -1,0 +1,19 @@
+﻿Story,Done Conditions
+As a user I can log in,I am logged in and at a start display
+"As a game maker, I can create a scavenger hunt",A new blank scavenger hunt listed
+"As a GM, I can add a landmark to a scavenger hunt",Selected scavenger hunt has an additional landmark
+"As a GM, I can add a clue to a landmark",Selected landmark has additional clue as detailed
+"As a GM, I can add a confirmation to a landmark",Landmark has detailed confirmation (prompt/answer) associated with it
+"As a GM, I can check the status of the game",Printout of teams with last found landmark and current score
+"As a GM, I can set penalties on confirmations",Comfirmation prompt; yes results in penalty on confirmation
+"As a GM, I can end the game, declaring a winner","Game is over, teams can no longer get clues/questions or answer questions, declared winner is set to winner"
+"As a GM, I can create a team",Team is created with specified credentials
+"As a GM, I can edit teams credentials",Credentials of team are changed according to entered values
+"As a GM, I can delete a team","Specific team can no longer logged in, data is stored from team at last state"
+"As a team member, I can access current clue without penalty",Clue is displayed according to what my next landmark is
+"As a TM, I can request a confirmation question","Confirmation question is displayed, timer starts"
+"As a TM, I can submit a confirmation answer only after requesting a question","Answer is submitted, displays correct or not with timer status, adjust score, move to next landmark"
+"As a TM, I can edit team data (password, name, etc.)",Team data is changed according to entered values
+"As a TM, I can check my team's status (penalties, current score)","Display team name, current penalties, current clue, current score, completed tasks"
+"As a GM, I can edit a scavenger hunt's details",Specified details are updated; displays an error on certain conditions
+"As a GM, I can edit a landmark's details",Specified details are updated; displays an error on certain conditions

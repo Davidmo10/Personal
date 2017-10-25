@@ -10,3 +10,8 @@ Our software, eScavenge, aims to address these difficulties. The game maker crea
 Once a team has arrived at the final landmark and entered the final confirmation question it receives its score (based on its finishing rank and any penalties.) The game maker can check the status of all teams (current landmark, confirmation question timer (if any), current penalty, total score if complete). Teams can only know their own status.
 
 The application will use a simple command line interface. Once a user (team or game maker) logs in, they issue commands. Teams need  to receive confirmation questions, enter confirmation answers, see the current clue, get status. They also need to edit their data (password, team name, etc.) Game makers need only get status while the game is running, but to set up they game the game maker needs to be able to create a landmark, enter the clue and confirmation question for that landmark, create a game (which is a total ordering of a subset of existing landmarks), start and end a game, and create/edit/delete teams' login credentials. The game maker's login will be set by the developers.
+
+--------------------------
+### Lab Descriptions
+- [Lab 7](lab7.md)
+- [Lab 8](lab8.md)

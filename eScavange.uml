@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>Python</ID>
+  <OriginalElement>#/Users/devlightning0/Documents/GitHub/eScavenge/User.py</OriginalElement>
+  <nodes>
+    <node x="1706.875" y="944.0">Landmark.Landmark</node>
+    <node x="611.375" y="889.0">Team.Team</node>
+    <node x="1168.375" y="146.0">object</node>
+    <node x="760.9676339285714" y="733.0">User.User</node>
+    <node x="312.0" y="744.0">ScavengerHuntGameMaker.ScavengerHuntGameMaker</node>
+    <node x="1188.375" y="922.0">Game.Game</node>
+    <node x="245.8125" y="933.5">ScavengerHunt.ScavengerHunt</node>
+    <node x="1209.375" y="0.0">_collections_abc.Hashable</node>
+    <node x="826.375" y="878.0">GameMaker.GameMaker</node>
+    <node x="1540.875" y="766.0">LandmarkTeam.LandmarkTeam</node>
+    <node x="1112.375" y="644.0">abc.ABC</node>
+    <node x="1260.875" y="766.0">GameGameMaster.GameGameMaster</node>
+    <node x="0.0" y="733.0">ScavengerHuntTeam.ScavengerHuntTeam</node>
+    <node x="843.375" y="201.0">abc.ABCMeta</node>
+    <node x="1782.875" y="744.0">LandmarkGameMaker.LandmarkGameMaker</node>
+    <node x="1068.875" y="766.0">GameTeam.GameTeam</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="object" target="_collections_abc.Hashable">
+      <point x="0.0" y="-224.0" />
+      <point x="0.0" y="48.0" />
+    </edge>
+    <edge source="abc.ABC" target="object">
+      <point x="21.25" y="-14.5" />
+      <point x="1176.125" y="619.0" />
+      <point x="1313.875" y="619.0" />
+      <point x="0.0" y="224.0" />
+    </edge>
+    <edge source="ScavengerHuntTeam.ScavengerHuntTeam" target="abc.ABC">
+      <point x="0.0" y="-47.5" />
+      <point x="146.0" y="693.0" />
+      <point x="1118.4464285714287" y="693.0" />
+      <point x="-36.42857142857133" y="14.5" />
+    </edge>
+    <edge source="abc.ABC" target="abc.ABCMeta">
+      <point x="-21.25" y="-14.5" />
+      <point x="1133.625" y="619.0" />
+      <point x="995.875" y="619.0" />
+      <point x="0.0" y="169.0" />
+    </edge>
+    <edge source="LandmarkGameMaker.LandmarkGameMaker" target="abc.ABC">
+      <point x="0.0" y="-36.5" />
+      <point x="1932.875" y="693.0" />
+      <point x="1191.3035714285713" y="693.0" />
+      <point x="36.42857142857133" y="14.5" />
+    </edge>
+    <edge source="User.User" target="abc.ABC">
+      <point x="0.0" y="-47.5" />
+      <point x="850.4676339285714" y="713.0" />
+      <point x="1142.732142857143" y="713.0" />
+      <point x="-12.14285714285711" y="14.5" />
+    </edge>
+    <edge source="ScavengerHunt.ScavengerHunt" target="ScavengerHuntGameMaker.ScavengerHuntGameMaker">
+      <point x="56.5" y="-69.5" />
+      <point x="415.3125" y="853.0" />
+      <point x="497.0" y="853.0" />
+      <point x="0.0" y="36.5" />
+    </edge>
+    <edge source="GameGameMaster.GameGameMaster" target="abc.ABC">
+      <point x="0.0" y="-14.5" />
+      <point x="1390.875" y="713.0" />
+      <point x="1167.017857142857" y="713.0" />
+      <point x="12.14285714285711" y="14.5" />
+    </edge>
+    <edge source="Game.Game" target="GameGameMaster.GameGameMaster">
+      <point x="42.25" y="-81.0" />
+      <point x="1315.125" y="853.0" />
+      <point x="1390.875" y="853.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="LandmarkTeam.LandmarkTeam" target="abc.ABC">
+      <point x="0.0" y="-14.5" />
+      <point x="1651.875" y="703.0" />
+      <point x="1179.1607142857142" y="703.0" />
+      <point x="24.28571428571422" y="14.5" />
+    </edge>
+    <edge source="ScavengerHuntGameMaker.ScavengerHuntGameMaker" target="abc.ABC">
+      <point x="0.0" y="-36.5" />
+      <point x="497.0" y="703.0" />
+      <point x="1130.5892857142858" y="703.0" />
+      <point x="-24.28571428571422" y="14.5" />
+    </edge>
+    <edge source="Team.Team" target="User.User">
+      <point x="0.0" y="-114.0" />
+      <point x="708.875" y="853.0" />
+      <point x="805.7176339285714" y="853.0" />
+      <point x="-44.75" y="47.5" />
+    </edge>
+    <edge source="GameMaker.GameMaker" target="User.User">
+      <point x="0.0" y="-125.0" />
+      <point x="974.375" y="853.0" />
+      <point x="895.2176339285714" y="853.0" />
+      <point x="44.75" y="47.5" />
+    </edge>
+    <edge source="Landmark.Landmark" target="LandmarkTeam.LandmarkTeam">
+      <point x="-42.75" y="-59.0" />
+      <point x="1749.625" y="853.0" />
+      <point x="1651.875" y="853.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="Game.Game" target="GameTeam.GameTeam">
+      <point x="-42.25" y="-81.0" />
+      <point x="1230.625" y="853.0" />
+      <point x="1154.875" y="853.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="ScavengerHunt.ScavengerHunt" target="ScavengerHuntTeam.ScavengerHuntTeam">
+      <point x="-56.5" y="-69.5" />
+      <point x="302.3125" y="853.0" />
+      <point x="146.0" y="853.0" />
+      <point x="0.0" y="47.5" />
+    </edge>
+    <edge source="Landmark.Landmark" target="LandmarkGameMaker.LandmarkGameMaker">
+      <point x="42.75" y="-59.0" />
+      <point x="1835.125" y="853.0" />
+      <point x="1932.875" y="853.0" />
+      <point x="0.0" y="36.5" />
+    </edge>
+    <edge source="GameTeam.GameTeam" target="abc.ABC">
+      <point x="0.0" y="-14.5" />
+      <point x="0.0" y="14.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.5164992826398852" x="973.5" y="575.6736111111111" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Fields</Category>
+    <Category>Inner Classes</Category>
+    <Category>Methods</Category>
+  </Categories>
+</Diagram>
+

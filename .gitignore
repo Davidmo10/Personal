@@ -103,4 +103,5 @@ ENV/
 # IDE specific
 *.xml
 *.iml
-/eScavange.uml
+
+.idea/

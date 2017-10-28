@@ -3,4 +3,8 @@ from abc import ABC
 
 class LandmarkTeam(ABC):
 
-	pass
+	def get_clue(self):
+		pass
+
+	def get_confirmation(self):
+		pass

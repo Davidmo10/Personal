@@ -1,5 +1,5 @@
 from LandmarkGameMaker import LandmarkGameMaker
-from LandmarkTeam import  LandmarkTeam
+from LandmarkTeam import LandmarkTeam
 
 
 class Landmark(LandmarkGameMaker, LandmarkTeam):
@@ -12,4 +12,10 @@ class Landmark(LandmarkGameMaker, LandmarkTeam):
 		pass
 
 	def add_clue(self):
+		pass
+
+	def get_confirmation(self):
+		pass
+
+	def get_clue(self):
 		pass

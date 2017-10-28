@@ -1,4 +1,4 @@
-from GameGameMaster import GameGameMaster
+from GameGameMaker import GameGameMaker
 from GameTeam import GameTeam
 import User
 import Landmark
@@ -6,7 +6,7 @@ import ScavengerHunt
 
 
 
-class Game(GameGameMaster, GameTeam):
+class Game(GameGameMaker, GameTeam):
 
 	on = False
 	myUserDisct = {}

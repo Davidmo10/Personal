@@ -6,7 +6,7 @@ class Landmark(LandmarkGameMaker, LandmarkTeam):
 
 	clues = {}
 
-	questions = {}
+	confirmations = {}
 
 	def add_question(self):
 		pass

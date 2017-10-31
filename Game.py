@@ -1,15 +1,11 @@
 from GameGameMaker import GameGameMaker
 from GameTeam import GameTeam
-import User
-import Landmark
-import ScavengerHunt
-
 
 
 class Game(GameGameMaker, GameTeam):
 
 	on = False
-	myUserDisct = {}
+	myUserDict = {}
 	myLandmarkDict = {}
 	myScavengerHunt = {}
 

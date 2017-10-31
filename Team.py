@@ -3,9 +3,9 @@ from User import User
 
 class Team(User):
 
-	commands = {}  # dict
+	commands = {}   # dict
 
-	landmark = []  # index
+	landmark = 0    # index
 
 	def login(self):
 		pass

@@ -7,3 +7,9 @@ class GameGameMaker(ABC):
 
 	def stop(self):
 		pass
+
+	def get_landmarks(self)->dict:
+		pass
+
+	def add_landmark(self):
+		pass

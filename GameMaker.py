@@ -32,5 +32,8 @@ class GameMaker(User):
 	def add_landmark_to_scavenger_hunt(self):
 		pass
 
+	def end_game(self):
+		pass
+
 
 pass

@@ -1,20 +1,20 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 
 
 class GameGameMaker(ABC):
 	
-	@abc.abstractmethod
+	@abstractmethod
 	def start(self):
 		pass
 	
-	@abc.abstractmethod
+	@abstractmethod
 	def stop(self):
 		pass
 	
-	@abc.abstractmethod
+	@abstractmethod
 	def get_landmarks(self)->dict:
 		pass
 	
-	@abc.abstractmethod
+	@abstractmethod
 	def add_landmark(self):
 		pass

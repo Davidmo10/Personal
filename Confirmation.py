@@ -2,10 +2,10 @@ from abc import ABC, abstractmethod
 
 
 class Confirmation(ABC):
-	@abc.abstractmethod
+	@abstractmethod
 	def validate(self):
 		pass
 
-	@abc.abstractmethod
+	@abstractmethod
 	def display(self):
 		pass

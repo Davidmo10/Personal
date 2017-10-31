@@ -1,10 +1,11 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 
 
 class Confirmation(ABC):
-
-	def display(self):
+	@abstractmethod
+	def validate(self):
 		pass
 
-	def validate(self):
+	@abstractmethod
+	def display(self):
 		pass

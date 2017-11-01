@@ -36,7 +36,7 @@ class GameMaker(User):
 	def edit_landmark_clue(self, name, old_clue, new_clue) -> bool:
 		pass
 
-	def edit_landmark_question(self, name, old_question, new_question) -> bool:
+	def edit_landmark_question(self, name, old_question, new_question, new_answer) -> bool:
 		pass
 
 	def create_team(self, name) -> bool:

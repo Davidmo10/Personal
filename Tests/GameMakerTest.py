@@ -7,6 +7,8 @@ class TestGameMaker(unittest.TestCase):
 		self.GM = GameMaker()
 
 	# Not sure if this is a proper test: TODO: Verify Test_start
+	def test_createGame(self):
+		self.assertTrue(self.GM.create_game, "The game has been created.")
 
 	def test_start(self):
 		self.this_game = self.GM.create_game()

@@ -1,5 +1,6 @@
 from GameGameMaker import GameGameMaker
 from GameTeam import GameTeam
+from Landmark import Landmark
 
 
 class Game(GameGameMaker, GameTeam):
@@ -24,7 +25,7 @@ class Game(GameGameMaker, GameTeam):
 		pass
 
 	def get_question(self, index: int):
-		pass
+		return self.myLandmarkDict[int].get_confirmation()
 
-	def check_answer(self, index: int,answer: str):
-		pass
+	def check_answer(self, index: int, answer: str):
+		return self.myLandmarkDict[int].check_answer()

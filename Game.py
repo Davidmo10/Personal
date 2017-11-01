@@ -25,7 +25,7 @@ class Game(GameGameMaker, GameTeam):
 		pass
 
 	def get_question(self, index: int):
-		return self.myLandmarkDict[int].get_confirmation()
+		return self.myLandmarkDict[index].get_confirmation()
 
 	def check_answer(self, index: int, answer: str):
-		return self.myLandmarkDict[int].check_answer()
+		return self.myLandmarkDict[index].check_answer(answer)

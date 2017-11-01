@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>Python</ID>
+  <OriginalElement />
+  <nodes>
+    <node x="202.0" y="1164.0">LandmarkGame.LandmarkGame</node>
+    <node x="235.0" y="890.0">Landmark.Landmark</node>
+    <node x="1184.5" y="868.0">Team.Team</node>
+    <node x="1031.0" y="711.0">Clue.Clue</node>
+    <node x="763.625" y="0.0">object</node>
+    <node x="1310.25" y="689.0">User.User</node>
+    <node x="608.0" y="857.0">Game.Game</node>
+    <node x="858.375" y="499.0">Parser.Parser</node>
+    <node x="0.0" y="1164.0">_collections_abc.Hashable</node>
+    <node x="1379.5" y="846.0">GameMaker.GameMaker</node>
+    <node x="1017.5" y="956.5">StringClue.StringClue</node>
+    <node x="495.0" y="678.0">GameGameMaker.GameGameMaker</node>
+    <node x="704.0" y="543.5">abc.ABC</node>
+    <node x="0.0" y="945.5">StringQuestion.StringQuestion</node>
+    <node x="206.0" y="700.0">LandmarkGameMaker.LandmarkGameMaker</node>
+    <node x="671.25" y="209.5">abc.ABCMeta</node>
+    <node x="742.0" y="678.0">GameTeam.GameTeam</node>
+    <node x="10.0" y="700.0">Confirmation.Confirmation</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="Confirmation.Confirmation" target="abc.ABC">
+      <point x="0.0" y="-37.0" />
+      <point x="98.0" y="638.0" />
+      <point x="710.4166666666666" y="638.0" />
+      <point x="-32.08333333333337" y="15.0" />
+    </edge>
+    <edge source="abc.ABC" target="object">
+      <point x="19.25" y="-15.0" />
+      <point x="761.75" y="474.0" />
+      <point x="826.875" y="474.0" />
+      <point x="-63.25" y="224.5" />
+    </edge>
+    <edge source="abc.ABC" target="abc.ABCMeta">
+      <point x="-19.25" y="-15.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="Landmark.Landmark" target="LandmarkGame.LandmarkGame">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="LandmarkGameMaker.LandmarkGameMaker" target="abc.ABC">
+      <point x="0.0" y="-37.0" />
+      <point x="340.5" y="648.0" />
+      <point x="723.25" y="648.0" />
+      <point x="-19.25" y="15.0" />
+    </edge>
+    <edge source="User.User" target="abc.ABC">
+      <point x="0.0" y="-48.0" />
+      <point x="1391.25" y="638.0" />
+      <point x="774.5833333333334" y="638.0" />
+      <point x="32.08333333333337" y="15.0" />
+    </edge>
+    <edge source="Team.Team" target="User.User">
+      <point x="0.0" y="-114.5" />
+      <point x="1272.0" y="821.0" />
+      <point x="1350.75" y="821.0" />
+      <point x="-40.5" y="48.0" />
+    </edge>
+    <edge source="Clue.Clue" target="abc.ABC">
+      <point x="0.0" y="-26.0" />
+      <point x="1091.0" y="648.0" />
+      <point x="761.75" y="648.0" />
+      <point x="19.25" y="15.0" />
+    </edge>
+    <edge source="GameMaker.GameMaker" target="User.User">
+      <point x="0.0" y="-136.5" />
+      <point x="1510.5" y="821.0" />
+      <point x="1431.75" y="821.0" />
+      <point x="40.5" y="48.0" />
+    </edge>
+    <edge source="StringClue.StringClue" target="Clue.Clue">
+      <point x="0.0" y="-26.0" />
+      <point x="0.0" y="26.0" />
+    </edge>
+    <edge source="GameGameMaker.GameGameMaker" target="abc.ABC">
+      <point x="0.0" y="-59.0" />
+      <point x="608.5" y="658.0" />
+      <point x="736.0833333333334" y="658.0" />
+      <point x="-6.416666666666629" y="15.0" />
+    </edge>
+    <edge source="Game.Game" target="GameTeam.GameTeam">
+      <point x="67.25" y="-125.5" />
+      <point x="809.75" y="821.0" />
+      <point x="876.5" y="821.0" />
+      <point x="0.0" y="59.0" />
+    </edge>
+    <edge source="Parser.Parser" target="object">
+      <point x="0.0" y="-59.5" />
+      <point x="63.25" y="224.5" />
+    </edge>
+    <edge source="Landmark.Landmark" target="LandmarkGameMaker.LandmarkGameMaker">
+      <point x="1.1368683772161603E-13" y="-92.5" />
+      <point x="0.0" y="37.0" />
+    </edge>
+    <edge source="GameTeam.GameTeam" target="abc.ABC">
+      <point x="0.0" y="-59.0" />
+      <point x="876.5" y="658.0" />
+      <point x="748.9166666666666" y="658.0" />
+      <point x="6.416666666666629" y="15.0" />
+    </edge>
+    <edge source="Game.Game" target="GameGameMaker.GameGameMaker">
+      <point x="-67.25" y="-125.5" />
+      <point x="675.25" y="821.0" />
+      <point x="608.5" y="821.0" />
+      <point x="0.0" y="59.0" />
+    </edge>
+    <edge source="StringQuestion.StringQuestion" target="Confirmation.Confirmation">
+      <point x="0.0" y="-37.0" />
+      <point x="0.0" y="37.0" />
+    </edge>
+    <edge source="LandmarkGame.LandmarkGame" target="abc.ABC">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.6159250585480094" x="821.0" y="630.5" />
+  <SelectedNodes>
+    <node>LandmarkGame.LandmarkGame</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Fields</Category>
+    <Category>Inner Classes</Category>
+    <Category>Methods</Category>
+  </Categories>
+</Diagram>
+

@@ -42,3 +42,14 @@ class TestTeamConfirmation(unittest.TestCase):
 		self.team.request_question()
 		self.team.answer("Red")
 		self.assertEqual(self.team.landmark, 1, "Landmark id was not incremented despite correct answer")
+		
+
+class TestTeam(unittest.TestCase):
+  
+  def setUp(self):
+    self.TM = Team()
+    self.GA = Game()
+    
+  def test_forfeit(self):
+    if(self.assertTrue(self.GA.start)):
+      self.assertTrue(self.TM.forfeit, "The game was successfully forfeited");

@@ -30,7 +30,7 @@ class GameMaker(User):
 	def create_game(self) -> Game:
 		pass
 
-	def create_landmark(self, name, place) -> bool:
+	def create_landmark(self, name, clue, question, answer) -> bool:
 		pass
 
 	def edit_landmark_clue(self, name, old_clue, new_clue) -> bool:

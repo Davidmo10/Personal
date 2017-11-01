@@ -14,7 +14,7 @@ class Game(GameGameMaker, GameTeam):
 	def stop(self):
 		pass
 
-	def get_landmarks(self)->dict:
+	def get_landmarks(self) -> dict:
 		pass
 
 	def add_landmark(self):

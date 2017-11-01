@@ -1,29 +1,45 @@
+# interfaces
 from User import User
+
+# Classes used
+from GameGameMaker import GameGameMaker
+# TODO: Where Does LandmarkGameMaker fit in Exactly?
+from LandmarkGameMaker import LandmarkGameMaker
+from Game import Game
 
 
 class GameMaker(User):
-
 	commands = {}  # dict
+	game = GameGameMaker  # TODO: Unsure about this?
+	temp_landmarks = {}
+	temp_users = {}
 
-	def login(self):
+	# User Inheritance:
+
+	def login(self) -> bool:
 		pass
 
 	def logout(self):
 		pass
 
-	def list_commands(self):
+	def list_commands(self) -> dict:
 		pass
 
-	def create_game(self):
+	# Game Maker Specific:
+
+	def create_game(self) -> Game:
 		pass
 
-	def create_landmark(self):
+	def create_landmark(self, name, place) -> bool:
 		pass
 
-	def edit_landmark_clue(self):
+	def edit_landmark_clue(self, name, old_clue, new_clue) -> bool:
 		pass
 
-	def edit_landmark_question(self):
+	def edit_landmark_question(self, name, old_question, new_question) -> bool:
+		pass
+
+	def create_team(self, name) -> bool:
 		pass
 
 	def create_scavenger_hunt(self):
@@ -34,6 +50,5 @@ class GameMaker(User):
 
 	def end_game(self):
 		pass
-
 
 pass

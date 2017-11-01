@@ -193,7 +193,8 @@ class Test_Landmark(TestCase):
 		self.new_lm = { "landmark_id" : 3, "title" : "foo" , "desc" : "blah foo blah", "clue" : None, "question" : None, "answer" : None}
 	
 	def tearDown(self):
-		self.g["landmarks"].remove()
+		if len(self.g["landmarks"]) == 4:
+			del self.g["landmarks"][3] 
 		self.l["title"] = "uwm"
 		self.l["desc"] = "blah uwm blah"
 		self.l["question"] = "am i uwm?"
@@ -266,7 +267,7 @@ class Test_Landmark(TestCase):
 		tmp = self.mock.create_landmark(0, "foo", "bar")["landmark_id"]
 		self.mock.set_question(tmp, 0, "foo", None)
 		self.assertEqual(self.g["landmarks"][tmp]["question"], "foo", "set_question(blah, blah) didn't set question on created landmark")
-		self.assertEqual(self.g["landmarks"][tmp]["answer"], "yes", "set_question(blah) changed answer on created landmark")
+		self.assertEqual(self.g["landmarks"][tmp]["answer"], None, "set_question(blah) created answer on created landmark")
 	
 	def test_set_answer_no_question(self):
 		self.l["question"] = None

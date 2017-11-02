@@ -17,10 +17,10 @@ class Landmark(LandmarkGameMaker, LandmarkGame):
 		pass
 
 	def get_confirmation(self):
-		pass
+		return self.confirmations.get("Confirmation").display()
 
 	def get_clue(self):
 		pass
 
 	def check_answer(self, string: str) -> bool:
-		pass
+		return self.confirmations.get("Confirmation").validate()

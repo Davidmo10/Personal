@@ -1,4 +1,5 @@
 from unittest import TestCase
+
 from Parser import Parser
 
 
@@ -15,7 +16,7 @@ class MockUser:
 		return ret
 
 
-class ParserTest(TestCase):
+class TestParser(TestCase):
 	def setUp(self):
 		self.par = Parser()
 		self.user = MockUser()
@@ -36,7 +37,6 @@ class ParserTest(TestCase):
 	def test_argument_quantity_low(self):
 		self.par.commandsDict = self.user.list_commands()
 		self.assertEqual(self.par.parse("arg"), "Please add an argument to that command", "a command that requires an argument should alert the user they need an argument")
-		pass
 
 	def test_argument_quantity_high(self):
 		self.par.commandsDict = self.user.list_commands()

@@ -10,10 +10,12 @@ class Game(GameGameMaker, GameTeam):
 	myLandmarkDict = {}
 
 	def start(self):
-		pass
+		self.on = True
+		return self
 
 	def stop(self):
-		pass
+		self.on = False
+		return self
 
 	def get_landmarks(self) -> dict:
 		pass

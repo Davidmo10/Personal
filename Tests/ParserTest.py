@@ -11,8 +11,11 @@ class MockUser:
 	def returns_arg(self, arg):
 		return arg
 
+	def sum(self, a, b):
+		return int(a) + int(b)
+
 	def list_commands(self) -> dict:
-		ret = {'two': self.returns_two(), 'arg': (lambda arg: self.returns_arg(arg))}  # TODO: Figure out lambdas
+		ret = {'two': self.returns_two(), 'arg': (lambda arg: self.returns_arg(arg)), 'sum': (lambda a, b: self.sum(a, b))}
 		return ret
 
 
@@ -46,3 +49,7 @@ class TestParser(TestCase):
 	def test_invalid_command(self):
 		self.par.commandsDict = self.user.list_commands()
 		self.assertEqual(self.par.parse("s"), "You can't access that command", "invalid command shouldn't pass")
+
+	def test_multiple_args(self):
+		self.par.commandsDict = self.user.list_commands()
+		self.assertEqual(self.par.parse("sum 1 2"), "3","multiple args to a command with multiple args should function")

@@ -1,11 +1,9 @@
 # interfaces
-from User import User
-
+# TODO: Where Does LandmarkGameMaker fit in Exactly?
+from Game import Game
 # Classes used
 from GameGameMaker import GameGameMaker
-# TODO: Where Does LandmarkGameMaker fit in Exactly?
-from LandmarkGameMaker import LandmarkGameMaker
-from Game import Game
+from User import User
 
 
 class GameMaker(User):
@@ -50,5 +48,3 @@ class GameMaker(User):
 
 	def end_game(self):
 		pass
-
-pass

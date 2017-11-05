@@ -1,6 +1,6 @@
 import unittest
-import Tests.GameMakerTest
 
+import Tests.GameMakerTest
 
 # Classes to Test
 game_maker_test = Tests.GameMakerTest
@@ -19,6 +19,6 @@ def suite():
 # run the suite
 suite()
 
-# Optinal Code
+# Optional Code
 # if __name__ == '__main__':
 #     unittest.main()

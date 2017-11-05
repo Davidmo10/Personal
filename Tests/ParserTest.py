@@ -24,7 +24,7 @@ class TestParser(TestCase):
 		self.par = Parser()
 		self.user = MockUser()
 
-	def test_set_user(self):
+	def test_login(self):
 		self.par.parse("login user test")
 		self.assertEqual(self.par.user, self.user, "Should be able to login")
 		self.assertEqual(self.par.commandsDict, self.user.list_commands(), "setting user should set commands dict")

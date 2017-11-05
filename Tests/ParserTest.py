@@ -39,7 +39,7 @@ class TestParser(TestCase):
 
 	def test_argument_quantity_low(self):
 		self.par.commandsDict = self.user.list_commands()
-		self.assertEqual(self.par.parse("arg"), "Please add an argument to that command", "a command that requires an argument should alert the user they need an argument")
+		self.assertEqual(self.par.parse("arg"), "Please add more arguments to that command", "a command that requires an argument should alert the user they need an argument")
 
 	def test_argument_quantity_high(self):
 		self.par.commandsDict = self.user.list_commands()

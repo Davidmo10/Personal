@@ -4,25 +4,31 @@ from Game import Game
 
 class Team(User):
 
-	def __init__(self, user_id):
-		self.team_id = user_id
-		self.db = Team_DBMock()
-		try:
-			info = self.db.fetch_info(user_id)
-		except InvalidUserException:
-			pass
-		self.name = info.name
-		self.game_id = info.game_id
-		self.events = self.db.fetch_status(self.game_id, self.team_id)
-		self.game = Game(self.game_id)
+	commands = {}   # dict
+
+	landmark = 0    # index
+
+	def __init__(self):
+		self.game = Game()
+		self.has_requested = False
+
+	def login(self):
+		pass
+
+	def logout(self):
+		pass
+
+	def list_commands(self):
+		pass
 
 	def request_clue(self):
-		self.game.get_clue(self.get_last_event())
+		pass
 
 	def request_question(self):
-		self.game.get_question()
+		self.has_requested = True
+		return self.game.get_question(self.landmark)
 
-	def submit_answer(self, string):
+	def answer(self, string):
 		if not self.has_requested:
 			raise Exception
 
@@ -36,14 +42,4 @@ class Team(User):
 
 	def forfeit(self):
 		pass
-
-	def get_events(self, events):
-		pass
-
-	def is_playing(self):
-		pass
-
-	def get_last_event(self):
-		pass
-
 

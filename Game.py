@@ -9,6 +9,9 @@ class Game(GameGameMaker, GameTeam):
 	myUserDict = {}
 	myLandmarkDict = {}
 
+	def __init__(self, on, myUserDict, myLandmarkDict):
+
+
 	def start(self):
 		pass
 

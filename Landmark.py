@@ -7,8 +7,13 @@ from LandmarkGameMaker import LandmarkGameMaker
 class Landmark(LandmarkGameMaker, LandmarkGame):
 
 	clues = {}
-
 	confirmations = {}
+
+	def __init__(self, name, clue, question, answer):
+		self.name = name
+		self.clue = clue
+		self.question = question
+		self. answer = answer
 
 	def add_confirmation(self, confirmation: Confirmation):
 		pass

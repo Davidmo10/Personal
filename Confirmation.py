@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 
 class Confirmation(ABC):
 	@abstractmethod
-	def validate(self):
+	def validate(self, Object):
 		pass
 
 	@abstractmethod

@@ -1,6 +1,5 @@
 from Clue import Clue
 
-
 class StringClue(Clue):
 	def __init__(self, string = None):
 	  if (string == None):

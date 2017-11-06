@@ -38,11 +38,11 @@ class TestGameMaker(unittest.TestCase):
 		pass  # ToDO test that it didn't add a duplicate team and still return false.
 
 	def test_edit_landmark_clue_when_landmark_non_existent(self):
-		self.assertFalse(self.GM.edit_landmark_clue("name", "old_clue", "new_clue", 0), "todo")
+		self.assertFalse(self.GM.edit_landmark_clue("name", "old_clue", "new_clue", ), "todo")
 
 	def test_edit_landmark_clue_when_landmark_is_existent(self):
 		self.GM.create_landmark("name", "clue", "question", "answer")
-		self.assertTrue(self.GM.edit_landmark_clue("name", "old_clue", "new_clue", 0), "todo")
+		self.assertTrue(self.GM.edit_landmark_clue("name", "old_clue", "new_clue"), "todo")
 
 	def test_edit_landmark_question_when_landmark_non_existent(self):
 		self.assertFalse(self.GM.edit_landmark_question("name", "old_question", "new_question", "new_answer"), "todo")

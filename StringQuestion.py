@@ -11,7 +11,10 @@ class StringQuestion(Confirmation):
 	  self.confirmation = confirmation
 	  
 	  
-	def validate(self, answer = None):
+	def validate(self, answer):
+		if answer == self.confirmation:
+			return true
+		return false
 	 
 
 	def display(self):

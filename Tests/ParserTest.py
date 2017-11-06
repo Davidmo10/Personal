@@ -1,4 +1,5 @@
 from unittest import TestCase
+
 from Parser import Parser
 
 
@@ -10,17 +11,20 @@ class MockUser:
 	def returns_arg(self, arg):
 		return arg
 
+	def sum(self, a, b):
+		return int(a) + int(b)
+
 	def list_commands(self) -> dict:
-		ret = {'two': self.returns_two(), 'arg': (lambda arg: self.returns_arg(arg))}  # TODO: Figure out lambdas
+		ret = {'two': self.returns_two(), 'arg': (lambda arg: self.returns_arg(arg)), 'sum': (lambda a, b: self.sum(a, b))}
 		return ret
 
 
-class ParserTest(TestCase):
+class TestParser(TestCase):
 	def setUp(self):
 		self.par = Parser()
 		self.user = MockUser()
 
-	def test_set_user(self):
+	def test_login(self):
 		self.par.parse("login user test")
 		self.assertEqual(self.par.user, self.user, "Should be able to login")
 		self.assertEqual(self.par.commandsDict, self.user.list_commands(), "setting user should set commands dict")
@@ -35,8 +39,7 @@ class ParserTest(TestCase):
 
 	def test_argument_quantity_low(self):
 		self.par.commandsDict = self.user.list_commands()
-		self.assertEqual(self.par.parse("arg"), "Please add an argument to that command", "a command that requires an argument should alert the user they need an argument")
-		pass
+		self.assertEqual(self.par.parse("arg"), "Please add more arguments to that command", "a command that requires an argument should alert the user they need an argument")
 
 	def test_argument_quantity_high(self):
 		self.par.commandsDict = self.user.list_commands()
@@ -46,3 +49,7 @@ class ParserTest(TestCase):
 	def test_invalid_command(self):
 		self.par.commandsDict = self.user.list_commands()
 		self.assertEqual(self.par.parse("s"), "You can't access that command", "invalid command shouldn't pass")
+
+	def test_multiple_args(self):
+		self.par.commandsDict = self.user.list_commands()
+		self.assertEqual(self.par.parse("sum 1 2"), "3","multiple args to a command with multiple args should function")

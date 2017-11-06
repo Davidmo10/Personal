@@ -9,6 +9,6 @@ class User():
 			pass
 		self.name = info.name
 		self.game_id = info.game_id
-	s	self.events = self.db.fetch_status(self.game_id, elf.team_id)
+		self.events = self.db.fetch_status(self.game_id, self.team_id)
 
-	defx
+	def

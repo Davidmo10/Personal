@@ -57,7 +57,6 @@ class GameMaker(User):
 		return stringlist
 
 
-
 	# def create_team(self, name) -> bool:
 	# 	self.temp_user = User
 
@@ -68,5 +67,6 @@ class GameMaker(User):
 	# def add_landmark_to_scavenger_hunt(self):
 	# 	pass
 
-	def end_game(self):
+	def end_game(self) -> bool:
 		self.myGame.stop()
+		return True

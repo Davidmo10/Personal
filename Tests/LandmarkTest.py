@@ -8,7 +8,7 @@ class TestLandmarkConfirmation(unittest.TestCase):
 	def setUp(self):
 		self.string_question = StringQuestion("What color is the car?", "Red")
 		self.landmark = Landmark()
-		self.landmark.confirmations["Confirmation"] = self.string_question
+		self.landmark.confirmation["Confirmation"] = self.string_question
 		pass
 
 	def test_getQuestion(self):

@@ -6,7 +6,6 @@ from LandmarkGameMaker import LandmarkGameMaker
 
 class Landmark(LandmarkGameMaker, LandmarkGame):
 
-
 	def __init__(self, name):
 		self.clue = None
 		self.confirmation = None
@@ -19,10 +18,10 @@ class Landmark(LandmarkGameMaker, LandmarkGame):
 		pass
 
 	def get_confirmation(self):
-		return self.confirmations.get("Confirmation").display()
+		return self.confirmation.get("Confirmation").display()
 
 	def get_clue(self):
 		pass
 
 	def check_answer(self, string: str) -> bool:
-		return self.confirmations.get("Confirmation").validate()
+		return self.confirmation.get("Confirmation").validate()

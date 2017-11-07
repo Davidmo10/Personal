@@ -4,6 +4,7 @@ from Game import Game
 # Classes used
 from GameGameMaker import GameGameMaker
 from User import User
+from Game import Game
 
 
 class GameMaker(User):
@@ -17,6 +18,10 @@ class GameMaker(User):
 	def login(self) -> bool:
 		pass
 
+<<<<<<< HEAD
+	def __init__(self, user_id):
+		super().__init__(user_id)
+=======
 	def logout(self):
 		pass
 
@@ -24,6 +29,7 @@ class GameMaker(User):
 		pass
 
 	# Game Maker Specific:
+>>>>>>> master
 
 	def create_game(self) -> Game:
 		pass

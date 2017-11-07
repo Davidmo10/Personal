@@ -15,4 +15,4 @@ class StringQuestion(Confirmation):
 		return False
 
 	def display(self):
-		print(self.question)
+		return self.question

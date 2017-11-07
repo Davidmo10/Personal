@@ -16,8 +16,8 @@ class TestGameConfirmation(unittest.TestCase):
 		self.landmark2.confirmations["Confirmation"] = self.string_question2
 
 		self.game = Game()
-		self.game.myLandmarkDict[0] = self.landmark
-		self.game.myLandmarkDict[1] = self.landmark2
+		self.game.landmarkList[0] = self.landmark
+		self.game.landmarkList[1] = self.landmark2
 		pass
 
 	def test_getQuestion(self):

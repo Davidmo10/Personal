@@ -9,15 +9,8 @@ from Team import Team
 class TestTeamConfirmation(unittest.TestCase):
 
 	def setUp(self):
-		self.string_question = StringQuestion("What color is the car?", "Red")
-		self.landmark = Landmark()
-		self.landmark.confirmations["Confirmation"] = self.string_question
-
-		self.game = Game()
-		self.game.landmarkList[0] = self.landmark
-
-		self.team = Team()
-		self.team.game = self.game
+		self.MyGame = Game()
+		self.myTeam = Team(self.MyGame)
 
 	def test_getQuestion(self):
 		self.assertEqual(

@@ -1,9 +1,6 @@
-from abc import ABC
+class User:
 
-
-class User(ABC):
-
-	def login(self):
+	def __init__(self):
 		pass
 
 	def logout(self):

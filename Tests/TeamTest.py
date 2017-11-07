@@ -14,7 +14,7 @@ class TestTeamConfirmation(unittest.TestCase):
 		self.landmark.confirmations["Confirmation"] = self.string_question
 
 		self.game = Game()
-		self.game.myLandmarkDict[0] = self.landmark
+		self.game.landmarkList[0] = self.landmark
 
 		self.team = Team()
 		self.team.game = self.game

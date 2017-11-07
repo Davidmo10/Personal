@@ -4,10 +4,10 @@ from Landmark import Landmark
 
 
 class Game(GameGameMaker, GameTeam):
-
-	on = False
-	myUserDict = {}
-	myLandmarkDict = {}
+	def __init__(self):
+		self.on = False
+		self.myUserDict = []
+		self.landmarkList = []
 
 	def start(self):
 		pass
@@ -25,7 +25,12 @@ class Game(GameGameMaker, GameTeam):
 		pass
 
 	def get_question(self, index: int):
-		return self.myLandmarkDict[index].get_confirmation()
+		return self.landmarkList[index].get_confirmation()
 
 	def check_answer(self, index: int, answer: str):
-		return self.myLandmarkDict[index].check_answer(answer)
+		return self.landmarkList[index].check_answer(answer)
+
+	def get_landmark_by_name(self, name) -> Landmark:
+		for i in self.landmarkList:
+			if i.name == name:
+				return i

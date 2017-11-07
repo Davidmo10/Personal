@@ -11,7 +11,7 @@ class MockUser:
 		return arg
 
 	def returns_bool(self, i):
-		return bool(i)
+		return int(i) == 1
 
 	def list_commands(self) -> dict:
 		ret = {'two': self.returns_two(), 'arg': (lambda arg: self.returns_arg(arg)), "retTru": (lambda i: self.returns_bool(i))}
@@ -38,7 +38,7 @@ class ParserTest(TestCase):
 
 	def test_argument_quantity_low(self):
 		self.par.commandsDict = self.user.list_commands()
-		self.assertEqual(self.par.parse("arg"), "Please add an argument to that command", "a command that requires an argument should alert the user they need an argument")
+		self.assertEqual(self.par.parse("arg"), "Please add more arguments to that command", "a command that requires an argument should alert the user they need an argument")
 		pass
 
 	def test_argument_quantity_high(self):

@@ -1,5 +1,6 @@
 from User import User
 from Game import Game
+from GameTeam import GameTeam
 
 
 class Team(User):
@@ -8,15 +9,16 @@ class Team(User):
 
 	landmark = 0    # index
 
-	def __init__(self):
-		self.game = Game()
+	def __init__(self, game):
+		self.myGame = game
 		self.has_requested = False
+		self.GT = GameTeam()
 
-	def login(self):
-		pass
+	#def login(self):
+	#	pass
 
-	def logout(self):
-		pass
+	#def logout(self):
+	#	pass
 
 	def list_commands(self):
 		pass
@@ -41,5 +43,6 @@ class Team(User):
 		return correct
 
 	def forfeit(self):
-		pass
+		self.GT.is_on = False
+		return True
 

@@ -1,8 +1,9 @@
 import unittest
-from Team import Team
+
 from Game import Game
 from Landmark import Landmark
 from StringQuestion import StringQuestion
+from Team import Team
 
 
 class TestTeamConfirmation(unittest.TestCase):
@@ -45,11 +46,11 @@ class TestTeamConfirmation(unittest.TestCase):
 		
 
 class TestTeam(unittest.TestCase):
-  
-  def setUp(self):
-    self.TM = Team()
-    self.GA = Game()
-    
-  def test_forfeit(self):
-    if(self.assertTrue(self.GA.start)):
-      self.assertTrue(self.TM.forfeit, "The game was successfully forfeited");
+
+	def setUp(self):
+		self.TM = Team()
+		self.GA = Game()
+
+	def test_forfeit(self):
+		if self.assertTrue(self.GA.start):
+			self.assertTrue(self.TM.forfeit, "The game was successfully forfeited")

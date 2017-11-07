@@ -11,5 +11,5 @@ class GameTeam(ABC):
 	def get_question(self, index: int):
 		pass
 
-	def check_answer(self, index: int,answer: str):
+	def check_answer(self, index: int, answer: str):
 		pass

@@ -9,16 +9,32 @@ class TestGameConfirmation(unittest.TestCase):
 	def setUp(self):
 		self.string_question = StringQuestion("What color is the car?", "Red")
 		self.landmark = Landmark()
-		self.landmark.confirmations["Confirmation"] = self.string_question
+		self.landmark.confirmation["Confirmation"] = self.string_question
 
 		self.string_question2 = StringQuestion("What is written on the board?", "Hello")
 		self.landmark2 = Landmark()
-		self.landmark2.confirmations["Confirmation"] = self.string_question2
+		self.landmark2.confirmation["Confirmation"] = self.string_question2
 
 		self.game = Game()
 		self.game.landmarkList[0] = self.landmark
 		self.game.landmarkList[1] = self.landmark2
 		pass
+
+	def test_start(self):
+		self.assertTrue(self.game.start(), "Game not started")
+
+	def test_stop(self):
+		self.assertFalse(self.game.start(), "Game Still On")
+
+	def test_get_landmarks(self):
+		self.assertEquals(isinstance(self.game.get_landmarks(), list), "get_landmarks() did not return a list")
+
+	def test_add_landmark(self):
+		self.lm_test = Landmark()
+		self.assertTrue(self.game.add_landmark(self.lm_test), "add_landmark cannot successfully add a landmark to your game")
+
+	def test_get_clue(self):
+		self.
 
 	def test_getQuestion(self):
 		self.assertEqual(

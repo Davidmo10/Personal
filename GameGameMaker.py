@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from Landmark import Landmark
 
 
 class GameGameMaker(ABC):
@@ -16,5 +17,5 @@ class GameGameMaker(ABC):
 		pass
 	
 	@abstractmethod
-	def add_landmark(self) -> bool:
+	def add_landmark(self, landmark: Landmark) -> bool:
 		pass

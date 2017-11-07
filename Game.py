@@ -6,29 +6,29 @@ from Landmark import Landmark
 class Game(GameGameMaker, GameTeam):
 	def __init__(self):
 		self.on = False
-		self.myUserDict = []
+		self.myUserList = []
 		self.landmarkList = []
 
-	def start(self):
+	def start(self) -> bool:
 		self.on = True
-		return self
+		return self.on
 
-	def stop(self):
+	def stop(self) -> bool:
 		self.on = False
-		return self
+		return self.on
 
-	def get_landmarks(self) -> dict:
-		return self.myLandmarkDict
+	def get_landmarks(self) -> list:
+		return self.landmarkList
 
-	def add_landmark(self, Landmark):		
-		self.myLandmarkDict = self.myLandmarkDict + Landmark	#This will need to be changed
-		return true
+	def add_landmark(self, landmark: Landmark) -> bool:
+		self.landmarkList.append(Landmark)
+		return True
 		
 	def get_clue(self, index: int):
-		pass
+		return self.landmarkList[index].get_clue
 
 	def get_question(self, index: int):
-		return self.landmarkList[index].get_confirmation()
+		return self.landmarkList[index].get_confirmation
 
 	def check_answer(self, index: int, answer: str):
 		return self.landmarkList[index].check_answer(answer)

@@ -5,4 +5,3 @@ class Clue(ABC):
 	@abstractmethod
 	def display(self):
 		pass
-	

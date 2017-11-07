@@ -5,7 +5,7 @@ As a user I can log in,I am logged in and at a start display
 "As a GM, I can add a clue to a landmark",Selected landmark has additional clue as detailed
 "As a GM, I can add a confirmation to a landmark",Landmark has detailed confirmation (prompt/answer) associated with it
 "As a GM, I can check the status of the game",Printout of teams with last found landmark and current score
-"As a GM, I can set penalties on confirmations",Comfirmation prompt; yes results in penalty on confirmation
+"As a GM, I can set penalties on confirmations",Confirmation prompt; yes results in penalty on confirmation
 "As a GM, I can end the game, declaring a winner","Game is over, teams can no longer get clues/questions or answer questions, declared winner is set to winner"
 "As a GM, I can create a team",Team is created with specified credentials
 "As a GM, I can edit teams credentials",Credentials of team are changed according to entered values

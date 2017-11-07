@@ -1,13 +1,7 @@
-<<<<<<< HEAD
 class User():
 
 	def __init__(self, user_id):
 		pass
-=======
-from abc import ABC
-
-
-class User(ABC):
 
 	def login(self):
 		pass
@@ -17,4 +11,4 @@ class User(ABC):
 
 	def list_commands(self):
 		pass
->>>>>>> master
+

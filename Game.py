@@ -10,17 +10,20 @@ class Game(GameGameMaker, GameTeam):
 		self.landmarkList = []
 
 	def start(self):
-		pass
+		self.on = True
+		return self
 
 	def stop(self):
-		pass
+		self.on = False
+		return self
 
 	def get_landmarks(self) -> dict:
-		pass
+		return self.myLandmarkDict
 
-	def add_landmark(self):
-		pass
-
+	def add_landmark(self, Landmark):		
+		self.myLandmarkDict = self.myLandmarkDict + Landmark	#This will need to be changed
+		return true
+		
 	def get_clue(self, index: int):
 		pass
 

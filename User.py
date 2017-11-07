@@ -1,9 +1,6 @@
 class User():
 
-	def __init__(self, user_id):
-		pass
-
-	def login(self):
+	def __init__(self):
 		pass
 
 	def logout(self):
@@ -11,4 +8,3 @@ class User():
 
 	def list_commands(self):
 		pass
-

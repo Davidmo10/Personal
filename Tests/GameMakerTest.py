@@ -1,6 +1,5 @@
 import unittest
 from GameMaker import GameMaker
-from Game import Game
 
 
 class TestGameMaker(unittest.TestCase):
@@ -55,7 +54,7 @@ class TestGameMaker(unittest.TestCase):
 		self.assertFalse(self.GM.edit_landmark_question("name", "new_question", "new_answer"), "todo")
 
 	def test_endGame(self):
-		self.assertFalse(self.GA.is_on)
+		self.assertFalse(self.GM.myGame.on)
 		self.assertTrue(self.GM.end_game, "The game was ended successfully")
 		
 	# Cannot create a game, when game is happening

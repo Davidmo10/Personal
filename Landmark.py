@@ -1,4 +1,5 @@
 from Clue import Clue
+# from StringQuestion import StringQuestion
 from Confirmation import Confirmation
 from LandmarkGame import LandmarkGame
 from LandmarkGameMaker import LandmarkGameMaker
@@ -6,23 +7,24 @@ from LandmarkGameMaker import LandmarkGameMaker
 
 class Landmark(LandmarkGameMaker, LandmarkGame):
 
-
 	def __init__(self, name):
 		self.clue = None
 		self.confirmation = None
 		self.name = name
 
-	def add_confirmation(self, confirmation: Confirmation):
-		pass
+	def set_confirmation(self, confirmation: Confirmation) -> bool:
+		self.confirmation = confirmation
+		return True
 
-	def add_clue(self, clue: Clue):
-		pass
+	def set_clue(self, clue: Clue) -> bool:
+		self.clue = clue
+		return True
 
-	def get_confirmation(self):
-		return self.confirmations.get("Confirmation").display()
+	def get_confirmation(self) -> Confirmation:
+		return self.confirmation
 
-	def get_clue(self):
-		pass
+	def get_clue(self) -> Clue:
+		return self.clue
 
 	def check_answer(self, string: str) -> bool:
-		return self.confirmations.get("Confirmation").validate()
+		return self.get_confirmation() == string

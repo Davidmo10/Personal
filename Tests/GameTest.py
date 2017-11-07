@@ -39,7 +39,7 @@ class TestGameConfirmation(unittest.TestCase):
 	# def test_get_clue(self):
 	# 	self.assertEquals()
 
-	
+
 
 	# The following tests were implemented with a mock trial
 	# Unsure if the code is correct - left implementations

@@ -7,6 +7,6 @@ class StringClue(Clue):
 			raise ValueError('Must specify clue during instantiation')  # Placeholder
 		self.clue = string
 
-	def display(self):
+	def display(self) -> object:
 		print(self.clue)
 

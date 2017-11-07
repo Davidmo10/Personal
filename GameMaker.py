@@ -42,12 +42,12 @@ class GameMaker(User):
 
 	def edit_landmark_clue(self, name, new_clue: str) -> bool:
 		tempClue = StringClue(new_clue)
-		self.myGame.get_landmark_by_name(name).add_clue(tempClue)
+		self.myGame.get_landmark_by_name(name).set_clue(tempClue)
 		return True
 
 	def edit_landmark_question(self, name, new_question, new_answer) -> bool:
 		tempQuestion = StringQuestion(new_question, new_answer)
-		self.myGame.get_landmark_by_name(name).add_confirmation(tempQuestion)
+		self.myGame.get_landmark_by_name(name).set_confirmation(tempQuestion)
 		return True
 
 	def list_landmarks(self) -> str:

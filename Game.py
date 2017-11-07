@@ -22,7 +22,7 @@ class Game(GameGameMaker, GameTeam):
 
 	def add_landmark(self, Landmark):		
 		self.myLandmarkDict = self.myLandmarkDict + Landmark	#This will need to be changed
-		return true
+		return True
 		
 	def get_clue(self, index: int):
 		pass

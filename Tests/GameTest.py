@@ -33,9 +33,17 @@ class TestGameConfirmation(unittest.TestCase):
 		self.lm_test = Landmark()
 		self.assertTrue(self.game.add_landmark(self.lm_test), "add_landmark cannot successfully add a landmark to your game")
 
-	def test_get_clue(self):
-		self.
+	# Would require mocking which we have not learned yet
+	# Waiting to implement this test
+	#
+	# def test_get_clue(self):
+	# 	self.assertEquals()
 
+	
+
+	# The following tests were implemented with a mock trial
+	# Unsure if the code is correct - left implementations
+	#
 	def test_getQuestion(self):
 		self.assertEqual(
 			self.game.get_question(0), "What color is the car?", "Returned: " + self.landmark.get_confirmation()

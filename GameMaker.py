@@ -69,6 +69,5 @@ class GameMaker(User):
 	# 	pass
 
 	def end_game(self):
-		self.myGame.is_on = False
 		self.myGame.stop()
 		return True

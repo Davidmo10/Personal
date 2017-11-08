@@ -16,6 +16,6 @@ class UserFactory:
 		"""
 		if user not in game.myUserDict:
 			raise LoginError(user)
-		if game.myUserDict[user].password is not password:
+		if game.myUserDict[user].password != password:
 			raise LoginError(user)
 		return game.myUserDict[user]

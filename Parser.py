@@ -40,10 +40,10 @@ class Parser:
 		return str(o)
 
 	def _login(self, username: str, password: str):
-		self.user = UserFactory.make_user(username, password)
+		self.user = UserFactory.make_user(username, password, self.game)
 		self.commandsDict = self.user.list_commands()
 		self.commandsDict["logout"] = lambda: self._logout()
 
 	def _logout(self):
-		self.commandsDict = {"login": (lambda u, p: self._login(u, p, self.game))}
 		self.user = None
+		self.commandsDict = {"login": (lambda u, p: self._login(u, p))}

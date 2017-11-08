@@ -16,6 +16,6 @@ class TestUF(TestCase):
 
 	def test_make_team(self):
 		team = Team("team1", "pass",Game())
-		self.game.myUserDict[team.name] = team
+		self.game.myUserDict.append(team)
 		user = Uf.make_user("team1", "pass", self.game)
 		self.assertTrue(isinstance(user, Team), "user created should be a team")

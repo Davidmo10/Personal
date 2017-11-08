@@ -5,6 +5,8 @@ from Game import Game
 from UserFactory import UserFactory
 from errors import LoginError
 
+testing = False
+
 
 class Parser:
 	def __init__(self, game: Game):
@@ -44,7 +46,10 @@ class Parser:
 		try:
 			self.user = UserFactory.make_user(username, password, self.game)
 		except LoginError as err:
-			return "Could not login to "+str(err.user)
+			if testing:
+				return str(err.user)
+			else:
+				return "Unable to login as " + username
 		self.commandsDict = self.user.list_commands()
 		self.commandsDict["logout"] = lambda: self._logout()
 		return "Logged in!"

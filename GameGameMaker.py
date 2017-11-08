@@ -3,7 +3,9 @@ from Landmark import Landmark
 
 
 class GameGameMaker(ABC):
-	
+
+	landmarkList = []
+
 	@abstractmethod
 	def start(self) -> bool:
 		pass

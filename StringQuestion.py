@@ -9,10 +9,8 @@ class StringQuestion(Confirmation):
 		self.question = question
 		self.confirmation = confirmation
 
-	def validate(self, answer: object) -> object:
-		if answer is self.confirmation:
-			return True
-		return False
+	def validate(self, answer: str) -> bool:
+		return self.confirmation == answer
 
-	def display(self) -> object:
+	def display(self) -> str:
 		return self.question

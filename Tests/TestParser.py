@@ -1,4 +1,7 @@
 from unittest import TestCase
+
+from Game import Game
+from GameMaker import GameMaker
 from Parser import Parser
 
 
@@ -20,13 +23,8 @@ class MockUser:
 
 class ParserTest(TestCase):
 	def setUp(self):
-		self.par = Parser()
+		self.par = Parser(Game())
 		self.user = MockUser()
-
-	def test_set_user(self):
-		self.par.parse("login user test")
-		self.assertEqual(self.par.user, self.user, "Should be able to login")
-		self.assertEqual(self.par.commandsDict, self.user.list_commands(), "setting user should set commands dict")
 
 	def test_empty_call(self):
 		self.par.commandsDict = self.user.list_commands()
@@ -61,3 +59,41 @@ class ParserTest(TestCase):
 	def test_quoted_args(self):
 		self.par.commandsDict = self.user.list_commands()
 		self.assertEqual(self.par.parse("arg \"this is a test\""), "this is a test", "Arguments in quotes should be collected")
+
+
+class LoginTests(TestCase):
+	def setUp(self):
+		self.par = Parser(Game())
+
+	def test_set_user(self):
+		self.par.parse("login maker password")
+		self.assertTrue(isinstance(self.par.user, GameMaker), "Should be able to login")
+		self.assertNotEqual(self.par.commandsDict, {"login": (lambda u, p: self._login(u, p))}, "setting user should change commands dict from login")
+
+	def test_login_response(self):
+		self.assertEqual(self.par.parse("login maker password"), "Logged in!", "login should notify user of response")
+
+	def test_login_error(self):
+		self.assertEqual(self.par.parse("login maker not_the_password"), "Could not login to maker", "failed login should explain failure")
+
+
+class LogoutTests(TestCase):
+	def setUp(self):
+		self.par = Parser(Game())
+
+	def test_logout_no_user(self):
+		self.assertEqual(self.par.parse("logout"), "You can't access that command", "Shouldn't be able to log out until logged in")
+
+	def test_logout_user(self):
+		self.par.parse("login maker password")
+		self.par.parse("logout")
+		self.assertEqual(self.par.user, None, "user should be reset")
+
+	def test_logout_game_maker(self):
+		self.par.parse("login maker password")
+		self.par.parse("logout")
+		self.assertEqual(self.par.parse("mklm a b c"), "You can't access that command", "logout should clear commands dict")
+
+	def test_logout_response(self):
+		self.par.parse("login maker password")
+		self.assertEqual(self.par.parse("logout"), "Success!", "logout should notify user of successes on good logout")

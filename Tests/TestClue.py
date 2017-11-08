@@ -9,4 +9,4 @@ class TestClue(unittest.TestCase):
         self.Clue = StringClue("Clue Placeholder")
      
     def testDisplay(self):
-        self.assertEqual(self.Clue.display(), "Clue Placeholder")
+        self.assertEqual(self.Clue.display(), "Clue Placeholder", "Invalid display of clue")

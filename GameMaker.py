@@ -2,6 +2,7 @@ from Landmark import Landmark
 from StringClue import StringClue
 from StringQuestion import StringQuestion
 from User import User
+from Test import Test
 
 
 class GameMaker(User):
@@ -11,6 +12,7 @@ class GameMaker(User):
 		self.password = "pw"
 		self.name = "un"
 		self.myGame = game
+		self.myTeams = {}
 
 	# # User Inheritance:
 	# def login(self, password, name) -> bool:
@@ -49,10 +51,10 @@ class GameMaker(User):
 		for i in self.myGame.landmarkList:
 			stringlist += ''.join(self.myGame.landmarkList[i].name)
 		return stringlist
-
-
-	# def create_team(self, name) -> bool:
-	# 	self.temp_user = User
+	
+	def create_team(self, name):
+		tempTeam = Team(name)
+		self.myTeams{tempTeam:User}
 
 
 	# def create_scavenger_hunt(self):

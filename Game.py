@@ -1,4 +1,5 @@
 from GameGameMaker import GameGameMaker
+from GameMaker import GameMaker
 from GameTeam import GameTeam
 from Landmark import Landmark
 
@@ -6,7 +7,11 @@ from Landmark import Landmark
 class Game(GameGameMaker, GameTeam):
 	def __init__(self):
 		self.on = False
-		self.myUserList = []
+		maker = GameMaker(self)
+		maker.name = "maker"
+		maker.password = "password"
+
+		self.myUserDict = {maker.name: maker}
 		self.landmarkList = []
 
 	def start(self) -> bool:

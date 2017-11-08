@@ -1,11 +1,15 @@
-from inspect import signature
 import shlex
+from inspect import signature
+
+from Game import Game
+from UserFactory import UserFactory
 
 
 class Parser:
-	def __init__(self):
+	def __init__(self, game: Game):
 		self.user = None
-		self.commandsDict = {"login":}
+		self.commandsDict = {"login": (lambda u, p: self._login(u, p))}
+		self.game = game
 
 	def parse(self, command: str) -> str:
 		tokens = shlex.split(command)
@@ -35,5 +39,11 @@ class Parser:
 				return "A problem occurred"
 		return str(o)
 
-	def _login(self):
-		pass
+	def _login(self, username: str, password: str):
+		self.user = UserFactory.make_user(username, password)
+		self.commandsDict = self.user.list_commands()
+		self.commandsDict["logout"] = lambda: self._logout()
+
+	def _logout(self):
+		self.commandsDict = {"login": (lambda u, p: self._login(u, p, self.game))}
+		self.user = None

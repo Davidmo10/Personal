@@ -1,9 +1,9 @@
+from Game import Game
 from Landmark import Landmark
 from StringClue import StringClue
 from StringQuestion import StringQuestion
-from User import User
 from Team import Team
-from Game import Game
+from User import User
 
 
 class GameMaker(User):
@@ -63,8 +63,9 @@ class GameMaker(User):
 		return string_list
 
 	def create_team(self, name: str, password: str) -> bool:
-		temp_user = User
-		return False
+		team = Team(name, password, self.game)
+		self.game.myUserDict[team.name] = team
+		return True
 
 	# def create_scavenger_hunt(self):
 	# 	pass

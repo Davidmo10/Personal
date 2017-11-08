@@ -17,7 +17,7 @@ class Team(User):
 		# 								   # login they are linked to the right team
 		self.myGame = game
 		self.has_requested = False
-		self.logged_in = False  # Until we can pass user indexes between game and user to flag login
+		self.is_playing = True  # Until we can pass user indexes between game and user to flag login
 		self.name = username
 		self.password = password
 
@@ -33,16 +33,16 @@ class Team(User):
 		return self.commands
 
 	def request_clue(self) -> Clue:
-		if self.logged_in:
+		if self.is_playing:
 			return self.myGame.get_clue(self.landmark_index)
 
 	def request_question(self):
-		if self.logged_in:
+		if self.is_playing:
 			self.has_requested = True
 			return self.myGame.get_question(self.landmark_index)
 
 	def answer(self, string):
-		if self.logged_in:
+		if self.is_playing:
 			if self.has_requested is not True:
 				raise Exception
 
@@ -55,6 +55,8 @@ class Team(User):
 		return correct
 
 	def forfeit(self) -> bool:
-		if self.logged_in:
-			self.logged_in = False
-			return self.logged_in
+		if self.is_playing:
+			self.is_playing = False
+			return True
+		else:
+			raise Exception("Can't log out if not logged in")

@@ -31,7 +31,7 @@ class Game(GameGameMaker, GameTeam):
 		return True
 		
 	def get_clue(self, index: int):
-		return self.landmarkList[index].get_clue
+		return self.landmarkList[index].get_clue().display()
 
 	def get_question(self, index: int):
 		return self.landmarkList[index].get_confirmation().display()

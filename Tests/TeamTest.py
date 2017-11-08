@@ -11,7 +11,7 @@ class TestTeamConfirmation(unittest.TestCase):
 	def setUp(self):
 		self.MyGame = Game()
 		self.myTeam = Team("name", "pass", self.MyGame)
-		self.myTeam.logged_in = True
+		self.myTeam.is_playing = True
 		self.landmark = Landmark("Landmark One")
 		self.tempQuestion = StringQuestion("question", "answer")
 		self.tempClue = StringClue("clue")

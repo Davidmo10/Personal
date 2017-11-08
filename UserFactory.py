@@ -17,7 +17,7 @@ class UserFactory:
 		user_index = game.get_user_index_by_name(user)
 
 		if user_index == -1:
-			raise LoginError("Unable to login as " + user)
+			raise LoginError("Invalid username " + user)
 		if game.myUserDict[user_index].password != password:
-			raise LoginError("Unable to login as " + user + " with supplied password")
+			raise LoginError("Invalid User/Password " + user + " / " + password )
 		return game.myUserDict[user_index]

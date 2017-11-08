@@ -1,14 +1,15 @@
 import unittest
 from Parser import Parser
+from Game import Game
 
 
 class ParserAcceptanceGameMaker(unittest.TestCase):
 
 	def setUp(self):
-		self.parser = Parser()
+		self.parser = Parser(Game())
 
 	def test_login(self):
-		self.assertEqual(self.parser.parse("login maker password"), "Success!", "Did not log in")
+		self.assertEqual(self.parser.parse("login maker password"), "Logged in!", "Did not log in")
 
 	def test_logout(self):
 		self.parser.parse("login maker password")
@@ -16,7 +17,7 @@ class ParserAcceptanceGameMaker(unittest.TestCase):
 
 	def test_create_team(self):
 		self.parser.parse("login maker password")
-		self.assertEqual(self.parser.parse("maketeam TestTeam SecretPassword"), "Success!", "Did not create team")
+		self.assertEqual(self.parser.parse("createteam TestTeam SecretPassword"), "Success!", "Did not create team")
 
 	def test_create_landmark(self):
 		self.parser.parse("login maker password")
@@ -24,7 +25,7 @@ class ParserAcceptanceGameMaker(unittest.TestCase):
 
 	def test_edit_landmark_clue(self):
 		self.parser.parse("login maker password")
-		self.parser.parser("createlandmark TestLandmark")
+		self.parser.parse("createlandmark TestLandmark")
 		self.assertEqual(self.parser.parse("landmarkclue TestLandmark TestClue"), "Success!", "Did not create/edit clue")
 
 	def test_edit_landmark_question(self):
@@ -58,9 +59,9 @@ class ParserAcceptanceGameMaker(unittest.TestCase):
 class ParserAcceptanceTeam(unittest.TestCase):
 
 	def setUp(self):
-		self.parser = Parser()
+		self.parser = Parser(Game())
 		self.parser.parse("login maker password")
-		self.parser.parse("maketeam TeamName TeamPass")
+		self.parser.parse("createteam TeamName TeamPass")
 
 		self.parser.parse("createlandmark TestLandmark")
 		self.parser.parse("landmarkclue TestLandmark TestClue")
@@ -74,7 +75,7 @@ class ParserAcceptanceTeam(unittest.TestCase):
 		self.parser.parse("logout")
 
 	def test_login(self):
-		self.assertEqual(self.parser.parse("login TeamName TeamPass"), "Success!", "Did not log in")
+		self.assertEqual(self.parser.parse("login TeamName TeamPass"), "Logged in!", "Did not log in")
 
 	def test_logout(self):
 		self.parser.parse("login TeamName TeamPass")

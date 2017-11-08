@@ -7,5 +7,5 @@ class Confirmation(ABC):
 		pass
 
 	@abstractmethod
-	def display(self) -> object:
+	def display(self) -> str:
 		pass

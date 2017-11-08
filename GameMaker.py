@@ -7,12 +7,14 @@ from User import User
 
 
 class GameMaker(User):
+	# noinspection PyPep8,PyPep8,PyPep8,PyPep8,PyPep8,PyPep8,PyPep8
 	def __init__(self, game: GameGameMaker):
 		super().__init__()
 		self.commands = {"createlandmark": lambda name: self.create_landmark(name),
-		                 "createteam": lambda name, password: self.create_team(name,password),
+		                 "createteam": lambda name, password: self.create_team(name, password),
 		                 "landmarkclue": lambda name, clue: self.edit_landmark_clue(name, clue),
-		                 "landmarkquestion": lambda name, question, answer: self.edit_landmark_question(name, question, answer),
+		                 "landmarkquestion": lambda name, question, answer: self.edit_landmark_question(name, question,
+		                                                                                                answer),
 		                 "endgame": lambda: self.end_game(),
 		                 "startgame": lambda: self.start_game(),
 		                 "listlandmarks": lambda: self.list_landmarks()}  # dict
@@ -62,8 +64,8 @@ class GameMaker(User):
 		return string_list
 
 	def create_team(self, name: str, password: str) -> bool:
-		team = Team(name, password, self.game)
-		self.game.myUserDict[team.name] = team
+		team = Team(name, password, self.myGame)
+		self.myGame.myUserDict[team.name] = team
 		return True
 
 	# def create_scavenger_hunt(self):

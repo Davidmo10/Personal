@@ -5,6 +5,7 @@ from GameMaker import GameMaker
 from Parser import Parser
 
 
+# noinspection PyMethodMayBeStatic,PyMethodMayBeStatic
 class MockUser:
 	@staticmethod
 	def returns_two():
@@ -65,6 +66,7 @@ class LoginTests(TestCase):
 	def setUp(self):
 		self.par = Parser(Game())
 
+	# noinspection PyUnresolvedReferences
 	def test_set_user(self):
 		self.par.parse("login maker password")
 		self.assertTrue(isinstance(self.par.user, GameMaker), "Should be able to login")

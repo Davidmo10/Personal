@@ -8,11 +8,11 @@ class TestGameConfirmation(unittest.TestCase):
 
 	def setUp(self):
 		self.string_question = StringQuestion("What color is the car?", "Red")
-		self.landmark = Landmark()
+		self.landmark = Landmark("landmark1")
 		self.landmark.confirmation["Confirmation"] = self.string_question
 
 		self.string_question2 = StringQuestion("What is written on the board?", "Hello")
-		self.landmark2 = Landmark()
+		self.landmark2 = Landmark("landmark2")
 		self.landmark2.confirmation["Confirmation"] = self.string_question2
 
 		self.game = Game()
@@ -30,7 +30,7 @@ class TestGameConfirmation(unittest.TestCase):
 		self.assertEquals(isinstance(self.game.get_landmarks(), list), "get_landmarks() did not return a list")
 
 	def test_add_landmark(self):
-		self.lm_test = Landmark()
+		self.lm_test = Landmark("landmark3")
 		self.assertTrue(self.game.add_landmark(self.lm_test), "add_landmark cannot successfully add a landmark to your game")
 
 	# Would require mocking which we have not learned yet
@@ -46,13 +46,13 @@ class TestGameConfirmation(unittest.TestCase):
 	#
 	def test_getQuestion(self):
 		self.assertEqual(
-			self.game.get_question(0), "What color is the car?", "Returned: " + self.landmark.get_confirmation()
+			self.game.get_question(0), "What color is the car?", "Returned: " + str(self.landmark.get_confirmation())
 			+ " instead of proper question")
 
 	def test_getQuestion2(self):
 		self.assertEqual(
-			self.game.get_question(1), "What is written on the board?", "Returned: " + self.landmark.get_confirmation()
-			+ " instead of proper question")
+			self.game.get_question(1), "What is written on the board?", "Returned: " + str(self.landmark.get_confirmation())
+			                         + " instead of proper question")
 
 	def test_answerCorrect(self):
 		self.assertTrue(self.game.check_answer(0, "Red"), "Did not accept correct answer")

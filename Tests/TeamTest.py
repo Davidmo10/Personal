@@ -11,14 +11,12 @@ class TestTeamConfirmation(unittest.TestCase):
 	def setUp(self):
 		self.string_question = StringQuestion("What color is the car?", "Red")
 		self.MyGame = Game()
-		self.myTeam = Team(self.MyGame)
+		self.myTeam = Team("name", "pass", self.MyGame)
 		self.landmark = Landmark("Landmark One")
 		self.tempQuestion = StringQuestion("question", "answer")
 		self.tempClue = StringClue("clue")
 		self.landmark.confirmation = self.tempQuestion
-		self.MyGame.landmarkList[0] = self.landmark
-		self.team = Team(self.MyGame)
-		self.team.game = self.MyGame  # This conflicts with the constructor. Choose to set game one place or the other
+		self.MyGame.landmarkList.append(self.landmark)
 
 	def test_getQuestion(self):
 		self.assertEqual(self.myTeam.request_question(), self.tempQuestion, "Can not retrieve proper Question ")
@@ -28,26 +26,26 @@ class TestTeamConfirmation(unittest.TestCase):
 			self.myTeam.answer("something")
 
 	def test_answerCorrect(self):
-		self.assertTrue(self.team.answer("Red"), "Did not accept correct answer")
+		self.assertTrue(self.myTeam.answer("Red"), "Did not accept correct answer")
 
 	def test_answerIncorrect(self):
-		self.assertFalse(self.team.answer("Blue"), "Accepted incorrect answer")
+		self.assertFalse(self.myTeam.answer("Blue"), "Accepted incorrect answer")
 
 	def test_landmarkIdAfterIncorrect(self):
-		self.team.request_question()
-		self.team.answer("Blue")
-		self.assertEqual(self.team.landmark_index, 0, "Landmark id was incremented despite incorrect answer")
+		self.myTeam.request_question()
+		self.myTeam.answer("Blue")
+		self.assertEqual(self.myTeam.landmark_index, 0, "Landmark id was incremented despite incorrect answer")
 
 	def test_landmarkIdAfterCorrect(self):
-		self.team.request_question()
-		self.team.answer("Red")
-		self.assertEqual(self.team.landmark_index, 1, "Landmark id was not incremented despite correct answer")
+		self.myTeam.request_question()
+		self.myTeam.answer("Red")
+		self.assertEqual(self.myTeam.landmark_index, 1, "Landmark id was not incremented despite correct answer")
 
 
 class TestTeam(unittest.TestCase):
 	def setUp(self):
 		self.GA = Game()
-		self.TM = Team(self.GA)
+		self.TM = Team("name", "pass", self.GA)
 
 	def test_forfeit(self):
 		if self.assertTrue(self.GA.start):

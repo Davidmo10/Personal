@@ -19,3 +19,11 @@ class GameGameMaker(ABC):
 	@abstractmethod
 	def add_landmark(self, landmark: Landmark) -> bool:
 		pass
+
+	@abstractmethod
+	def is_on(self) -> bool:
+		pass
+
+	@abstractmethod
+	def get_landmark_by_name(self, name: str) -> Landmark:
+		pass

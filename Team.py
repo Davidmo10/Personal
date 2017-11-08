@@ -1,15 +1,16 @@
 from Clue import Clue
-from Game import Game
 from User import User
+from GameTeam import GameTeam
 
 
 class Team(User):
-	def __init__(self,username: str, password:str, game: Game):
+	def __init__(self, username: str, password: str, game: GameTeam):
 		super().__init__()
+		# noinspection PyPep8
 		self.commands = {"getclue": lambda: self.request_clue(),
-						 "getquestion": lambda: self.request_question(),
-						 "answer": lambda ans: self.answer(ans),
-						 "forfeit": lambda: self.forfeit()}  # dict
+		                 "getquestion": lambda: self.request_question(),
+		                 "answer": lambda ans: self.answer(ans),
+		                 "forfeit": lambda: self.forfeit()}  # dict
 		self.landmark_index = 0  # index
 		# self.this_team_index = team_index  # This index has to come from outside team to logout
 		# 								   # Each team will need an index in username list so when they

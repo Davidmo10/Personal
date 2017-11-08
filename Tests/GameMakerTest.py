@@ -18,8 +18,9 @@ class TestGameMaker(unittest.TestCase):
 	# 	self.assertTrue(self.this_game.is_on(), "The game has not been created.")
 
 	def test_list_commands(self):
-		testObject = self.GM.list_commands()
-		self.assertTrue(isinstance(dict, testObject))
+		test_object = self.GM.list_commands()
+		# noinspection PyTypeChecker
+		self.assertTrue(isinstance(dict, test_object))
 
 	def test_create_landmark(self):
 		self.assertTrue(self.GM.create_landmark("name"), "The landmark has not been created")

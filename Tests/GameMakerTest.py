@@ -33,7 +33,7 @@ class TestGameMaker(unittest.TestCase):
 	# 	pass  # TODO test that it didn't add a landmark and still return false
 
 	def test_create_team(self):
-		self.assertFalse(self.GM.create_team("name", "pass"), "The Team has not been created.")
+		self.assertTrue(self.GM.create_team("name", "pass"), "The Team has not been created.")
 
 	def test_create_team_duplicate(self):
 		self.GM.create_team("name","pass")

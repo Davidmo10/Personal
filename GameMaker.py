@@ -68,7 +68,7 @@ class GameMaker(User):
 		return string_list
 
 	def create_team(self, name: str, password: str) -> bool:
-		if(self.myGame.has_user_by_name(name) is False):
+		if self.myGame.has_user_by_name(name):
 			return False
 		team = Team(name, password, self.myGame)
 		self.myGame.myUserDict.append(team)

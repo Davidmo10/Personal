@@ -2,7 +2,7 @@ from Landmark import Landmark
 from StringClue import StringClue
 from StringQuestion import StringQuestion
 from User import User
-from Test import Test
+from Team import Team
 
 
 class GameMaker(User):

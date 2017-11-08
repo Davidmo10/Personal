@@ -1,10 +1,12 @@
 import unittest
+
+from Game import Game
 from GameMaker import GameMaker
 
 
 class TestGameMaker(unittest.TestCase):
 	def setUp(self):
-		self.GM = GameMaker()
+		self.GM = GameMaker(Game())
 
 	# Not sure if this is a proper test: TODO: Verify Test_start
 	# def test_createGame(self):
@@ -27,17 +29,17 @@ class TestGameMaker(unittest.TestCase):
 		self.assertFalse(self.GM.create_landmark("name"), "The landmark has been created twice.")
 
 	# def test_create_landmark_duplicate_side_effect(self):
-	# 	pass  # ToDO test that it didn't add a landmark and still return false.
+	# 	pass  # TODO test that it didn't add a landmark and still return false
 
-	# def test_create_team(self):
-	# 	self.assertTrue(self.GM.create_team("name"), "The Team has not been created.")
-	#
-	# def test_create_team_duplicate(self):
-	# 	self.GM.create_team("name")
-	# 	self.assertFalse(self.GM.create_team("name"), "The Team has been created twice.")
-	#
-	# def test_create_team_duplicate_side_effect(self):
-	# 	pass  # ToDO test that it didn't add a duplicate team and still return false.
+	def test_create_team(self):
+		self.assertTrue(self.GM.create_team("name", "pass"), "The Team has not been created.")
+
+	def test_create_team_duplicate(self):
+		self.GM.create_team("name","pass")
+		self.assertFalse(self.GM.create_team("name","pass"), "The Team has been created twice.")
+
+	def test_create_team_duplicate_side_effect(self):
+		pass  # ToDO test that it didn't add a duplicate team and still return false.
 
 	def test_edit_landmark_clue_when_landmark_non_existent(self):
 		self.assertFalse(self.GM.edit_landmark_clue("name", "new_clue", ), "todo")

@@ -1,7 +1,5 @@
 from Clue import Clue
 from Confirmation import Confirmation
-from LandmarkGame import LandmarkGame
-from LandmarkGameMaker import LandmarkGameMaker
 
 
 class Landmark():

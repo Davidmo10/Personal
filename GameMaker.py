@@ -1,19 +1,13 @@
-# interfaces
-# TODO: Where Does LandmarkGameMaker fit in Exactly?
-from Game import Game
-# Classes used
-from GameGameMaker import GameGameMaker
-from User import User
 from Landmark import Landmark
-from StringQuestion import StringQuestion
 from StringClue import StringClue
+from StringQuestion import StringQuestion
+from User import User
 
-from Game import Game
 
 class GameMaker(User):
 	def __init__(self, game):
 		super().__init__()
-		self.commands = {"login": (lambda user, password: self.login(user, password)), 1: "logout(self)", 2: "list_commands(self)"}  # dict
+		self.commands = {1: "logout(self)", 2: "list_commands(self)"}  # dict
 		self.password = "pw"
 		self.name = "un"
 		self.myGame = game

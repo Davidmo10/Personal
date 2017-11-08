@@ -9,8 +9,8 @@ class GameMaker(User):
 		super().__init__()
 		self.commands = {"addlm": lambda name: self.create_landmark(name),
 		                 "addtm": lambda name, password: self.create_team(name,password),
-		                 "edlmcl": lambda name, clue: self.edit_landmark_clue(name, clue),
-		                 "edlmq": lambda name, question, answer: self.edit_landmark_question(name, question, answer),
+		                 "lmcl": lambda name, clue: self.edit_landmark_clue(name, clue),
+		                 "lmq": lambda name, question, answer: self.edit_landmark_question(name, question, answer),
 		                 "end": lambda: self.end_game(),
 		                 "lmks": lambda: self.list_landmarks()}  # dict
 		self.password = "pw"
@@ -51,7 +51,7 @@ class GameMaker(User):
 	def list_landmarks(self) -> str:
 		string_list = ""
 		for i in self.myGame.landmarkList:
-			string_list += ''.join(i.name)
+			string_list += f"- {i.name}\t{i.get_clue}\n"
 		return string_list
 
 	def create_team(self, name: str, password: str) -> bool:

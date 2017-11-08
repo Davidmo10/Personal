@@ -8,10 +8,10 @@ class Landmark():
         self.confirmation = None
         self.name = name
 
-    def add_confirmation(self, confirmation: Confirmation):
+    def set_confirmation(self, confirmation: Confirmation):
         self.confirmation = confirmation
 
-    def add_clue(self, clue: Clue):
+    def set_clue(self, clue: Clue):
         self.clue = clue
 
     def get_confirmation(self):

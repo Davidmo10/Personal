@@ -43,7 +43,7 @@ class Team(User):
 
 	def answer(self, string):
 		if self.logged_in:
-			if self.has_requested:
+			if self.has_requested is not True:
 				raise Exception
 
 		correct = self.myGame.check_answer(self.landmark_index, string)

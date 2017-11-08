@@ -2,6 +2,7 @@ from GameGameMaker import GameGameMaker
 from GameMaker import GameMaker
 from GameTeam import GameTeam
 from Landmark import Landmark
+from User import User
 
 
 class Game(GameGameMaker, GameTeam):
@@ -11,7 +12,7 @@ class Game(GameGameMaker, GameTeam):
 		maker.name = "maker"
 		maker.password = "password"
 
-		self.myUserDict = {maker.name: maker}
+		self.myUserDict = [maker]
 		self.landmarkList = []
 
 	def start(self) -> bool:
@@ -33,12 +34,35 @@ class Game(GameGameMaker, GameTeam):
 		return self.landmarkList[index].get_clue
 
 	def get_question(self, index: int):
-		return self.landmarkList[index].get_confirmation
+		return self.landmarkList[index].get_confirmation().display()
 
 	def check_answer(self, index: int, answer: str):
 		return self.landmarkList[index].check_answer(answer)
 
 	def get_landmark_by_name(self, name) -> Landmark:
 		for i in self.landmarkList:
-			if i.name == name:
+			if i.get_name() == name:
 				return i
+		return None
+
+	def is_on(self):
+		return self.on
+
+	def has_user_by_name(self, name: str) -> bool:
+		return any(u.name == name for u in self.myUserDict)
+
+	def get_user_index_by_name(self, search_for: str) -> int:
+		for i in range(len(self.myUserDict)):
+			if self.myUserDict[i].name == search_for:
+				return i
+		return -1
+
+	def get_maker(self):
+		return self.myUserDict[0]
+
+
+	def get_user_by_name(self, search_for: str) -> User:
+		for i in range(len(self.myUserDict)):
+			if self.myUserDict[i].name == search_for:
+				return self.myUserDict[i]
+		return None

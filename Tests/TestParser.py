@@ -76,7 +76,7 @@ class LoginTests(TestCase):
 		self.assertEqual(self.par.parse("login maker password"), "Logged in!", "login should notify user of response")
 
 	def test_login_error(self):
-		self.assertEqual(self.par.parse("login maker not_the_password"), "Could not login to maker", "failed login should explain failure")
+		self.assertEqual(self.par.parse("login maker not_the_password"), "Unable to login as maker", "failed login should explain failure")
 
 
 class LogoutTests(TestCase):

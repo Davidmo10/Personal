@@ -39,22 +39,26 @@ class GameMaker(User):
 	# 	return self.myGame
 
 	def create_landmark(self, name: str) -> bool:
+		if(self.myGame.get_landmark_by_name(name) != None):
+			return False
 		temp_landmark = Landmark(name)
-
-		# temp_landmark.add_confirmation(question, answer)
-		# temp_landmark.add_clue(clue, clue)
-
 		self.myGame.landmarkList.append(temp_landmark)
 		return True
 
 	def edit_landmark_clue(self, name: str, new_clue: str) -> bool:
 		temp_clue = StringClue(new_clue)
-		self.myGame.get_landmark_by_name(name).set_clue(temp_clue)
+		lm = self.myGame.get_landmark_by_name(name)
+		if lm is None:
+			return False
+		lm.set_clue(temp_clue)
 		return True
 
 	def edit_landmark_question(self, name: str, new_question: str, new_answer: str) -> bool:
 		temp_question = StringQuestion(new_question, new_answer)
-		self.myGame.get_landmark_by_name(name).set_confirmation(temp_question)
+		lm = self.myGame.get_landmark_by_name(name)
+		if lm is None:
+			return False
+		lm.set_confirmation(temp_question)
 		return True
 
 	def list_landmarks(self) -> str:
@@ -64,9 +68,12 @@ class GameMaker(User):
 		return string_list
 
 	def create_team(self, name: str, password: str) -> bool:
+		if(self.myGame.has_user_by_name(name) is False):
+			return False
 		team = Team(name, password, self.myGame)
-		self.myGame.myUserDict[team.name] = team
+		self.myGame.myUserDict.append(team)
 		return True
+
 
 	# def create_scavenger_hunt(self):
 	# 	pass

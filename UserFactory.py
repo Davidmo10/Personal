@@ -14,8 +14,10 @@ class UserFactory:
 		:param game: game object
 		:return: User object corresponding to login details
 		"""
-		if user not in game.myUserDict:
-			raise LoginError(user)
-		if game.myUserDict[user].password != password:
-			raise LoginError(user)
-		return game.myUserDict[user]
+		user_index = game.get_user_index_by_name(user)
+
+		if user_index == -1:
+			raise LoginError("Unable to login as " + user)
+		if game.myUserDict[user_index].password != password:
+			raise LoginError("Unable to login as " + user + " with supplied password")
+		return game.myUserDict[user_index]

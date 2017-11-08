@@ -21,10 +21,12 @@ class LandmarkTest(unittest.TestCase):
 		self.assertEqual(self.tempclue, self.landmark.clue, "Clue question not correctly set")
 
 	def test_get_confirmation(self):
-		self.assertEqual(self.landmark.get_confirmation, self.tempQuestion, "Cannot retrieve confirmation question")
+		self.landmark.confirmation = self.tempQuestion
+		self.assertEqual(self.landmark.get_confirmation(), self.tempQuestion, "Cannot retrieve confirmation question")
 
 	def test_get_clue(self):
-		self.assertEqual(self.landmark.get_clue, self.tempclue, "Cannot retrieve clue")
+		self.landmark.clue = self.tempclue
+		self.assertEqual(self.landmark.get_clue(), self.tempclue, "Cannot retrieve clue")
 
 	def test_answerCorrect(self):
 		self.assertTrue(self.landmark.check_answer("answer"), "Did not accept correct answer")

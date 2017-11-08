@@ -9,9 +9,9 @@ from Team import Team
 
 class TestTeamConfirmation(unittest.TestCase):
 	def setUp(self):
-		self.string_question = StringQuestion("What color is the car?", "Red")
 		self.MyGame = Game()
 		self.myTeam = Team("name", "pass", self.MyGame)
+		self.myTeam.logged_in = True
 		self.landmark = Landmark("Landmark One")
 		self.tempQuestion = StringQuestion("question", "answer")
 		self.tempClue = StringClue("clue")
@@ -26,9 +26,11 @@ class TestTeamConfirmation(unittest.TestCase):
 			self.myTeam.answer("something")
 
 	def test_answerCorrect(self):
-		self.assertTrue(self.myTeam.answer("Red"), "Did not accept correct answer")
+		self.myTeam.request_question()
+		self.assertTrue(self.myTeam.answer("answer"), "Did not accept correct answer")
 
 	def test_answerIncorrect(self):
+		self.myTeam.request_question()
 		self.assertFalse(self.myTeam.answer("Blue"), "Accepted incorrect answer")
 
 	def test_landmarkIdAfterIncorrect(self):
@@ -38,7 +40,7 @@ class TestTeamConfirmation(unittest.TestCase):
 
 	def test_landmarkIdAfterCorrect(self):
 		self.myTeam.request_question()
-		self.myTeam.answer("Red")
+		self.myTeam.answer("answer")
 		self.assertEqual(self.myTeam.landmark_index, 1, "Landmark id was not incremented despite correct answer")
 
 

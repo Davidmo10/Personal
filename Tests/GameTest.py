@@ -2,32 +2,34 @@ import unittest
 from Game import Game
 from StringQuestion import StringQuestion
 from Landmark import Landmark
-
+from Team import Team
 
 class TestGameConfirmation(unittest.TestCase):
 
 	def setUp(self):
 		self.string_question = StringQuestion("What color is the car?", "Red")
 		self.landmark = Landmark("landmark1")
-		self.landmark.confirmation["Confirmation"] = self.string_question
+		self.landmark.confirmation = self.string_question
 
 		self.string_question2 = StringQuestion("What is written on the board?", "Hello")
 		self.landmark2 = Landmark("landmark2")
-		self.landmark2.confirmation["Confirmation"] = self.string_question2
+		self.landmark2.confirmation = self.string_question2
 
 		self.game = Game()
-		self.game.landmarkList[0] = self.landmark
-		self.game.landmarkList[1] = self.landmark2
+		self.game.landmarkList.append(self.landmark)
+		self.game.landmarkList.append(self.landmark2)
 		pass
 
 	def test_start(self):
-		self.assertTrue(self.game.start(), "Game not started")
+		self.game.start()
+		self.assertTrue(self.game.on, "Game not started")
 
 	def test_stop(self):
-		self.assertFalse(self.game.start(), "Game Still On")
+		self.game.stop()
+		self.assertFalse(self.game.on, "Game Still On")
 
 	def test_get_landmarks(self):
-		self.assertEquals(isinstance(self.game.get_landmarks(), list), "get_landmarks() did not return a list")
+		self.assertTrue(isinstance(self.game.get_landmarks(), list), "get_landmarks() did not return a list")
 
 	def test_add_landmark(self):
 		self.lm_test = Landmark("landmark3")
@@ -51,7 +53,7 @@ class TestGameConfirmation(unittest.TestCase):
 
 	def test_getQuestion2(self):
 		self.assertEqual(
-			self.game.get_question(1), "What is written on the board?", "Returned: " + str(self.landmark.get_confirmation())
+			self.game.get_question(1), "What is written on the board?", "Returned: " + str(self.landmark.get_confirmation().display())
 			                         + " instead of proper question")
 
 	def test_answerCorrect(self):
@@ -59,3 +61,19 @@ class TestGameConfirmation(unittest.TestCase):
 
 	def test_answerIncorrect(self):
 		self.assertFalse(self.game.check_answer(0, "Blue"), "Accepted incorrect answer")
+
+	def test_get_lm_by_name(self):
+		self.assertEqual(self.game.get_landmark_by_name("landmark2"), self.landmark2, "Game couldn't retrieve landmark by name")
+
+	def test_has_user_by_name(self):
+		self.game.myUserDict.append(Team("foo", "bar", self.game))
+		self.assertTrue(self.game.has_user_by_name("foo"), "Game couldn't find user by name")
+
+	def test_get_user_index_by_name(self):
+		self.game.myUserDict.append(Team("foo0", "bar", self.game))
+		self.game.myUserDict.append(Team("foo1", "bar", self.game))
+		self.game.myUserDict.append(Team("foo2", "bar", self.game))
+		self.game.myUserDict.append(Team("foo3", "bar", self.game))
+		self.game.myUserDict.append(Team("foo4", "bar", self.game))
+		self.game.myUserDict.append(Team("foo5", "bar", self.game))
+		self.assertTrue(self.game.get_user_index_by_name("foo3"), "Game couldn't get index of user by name")

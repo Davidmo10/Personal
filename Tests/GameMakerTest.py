@@ -20,7 +20,7 @@ class TestGameMaker(unittest.TestCase):
 	def test_list_commands(self):
 		test_object = self.GM.list_commands()
 		# noinspection PyTypeChecker
-		self.assertTrue(isinstance(dict, test_object))
+		self.assertTrue(isinstance(test_object, dict))
 
 	def test_create_landmark(self):
 		self.assertTrue(self.GM.create_landmark("name"), "The landmark has not been created")
@@ -33,14 +33,17 @@ class TestGameMaker(unittest.TestCase):
 	# 	pass  # TODO test that it didn't add a landmark and still return false
 
 	def test_create_team(self):
-		self.assertTrue(self.GM.create_team("name", "pass"), "The Team has not been created.")
+		self.assertFalse(self.GM.create_team("name", "pass"), "The Team has not been created.")
 
 	def test_create_team_duplicate(self):
 		self.GM.create_team("name","pass")
 		self.assertFalse(self.GM.create_team("name","pass"), "The Team has been created twice.")
 
-	def test_create_team_duplicate_side_effect(self):
-		pass  # ToDO test that it didn't add a duplicate team and still return false.
+#	def test_create_team_duplicate_side_effect(self):
+#		self.GM.create_team("name", "pass")
+#		self.GM.create_team("name", "pass")
+#		i = 0
+#		all (u.name == "name" for u in self.GM.myGame.myUserList)
 
 	def test_edit_landmark_clue_when_landmark_non_existent(self):
 		self.assertFalse(self.GM.edit_landmark_clue("name", "new_clue", ), "todo")
@@ -54,7 +57,7 @@ class TestGameMaker(unittest.TestCase):
 
 	def test_edit_landmark_question_when_landmark_is_existent(self):
 		self.GM.create_landmark("name")
-		self.assertFalse(self.GM.edit_landmark_question("name", "new_question", "new_answer"), "todo")
+		self.assertTrue(self.GM.edit_landmark_question("name", "new_question", "new_answer"), "todo")
 
 	def test_endGame(self):
 		self.assertFalse(self.GM.myGame.on)

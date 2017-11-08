@@ -24,3 +24,6 @@ class Landmark(LandmarkGame, LandmarkGameMaker):
 
     def check_answer(self, string: str) -> bool:
         return self.confirmation.validate(string)
+
+    def get_name(self):
+        return self.name

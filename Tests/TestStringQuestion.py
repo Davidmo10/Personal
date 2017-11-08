@@ -9,7 +9,7 @@ class TestStringQuestion(unittest.TestCase):
 
 	def test_initialization(self):
 		self.assertEqual(self.Question.question, "What is five plus five?")
-		self.assertEqual(self.Question.confirmation, "Ten")
+		self.assertEqual(self.Question.answer, "Ten")
 
 	def test_validate(self):
 		self.assertFalse(self.Question.validate("Five"))

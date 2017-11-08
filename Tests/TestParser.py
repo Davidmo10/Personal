@@ -70,6 +70,12 @@ class LoginTests(TestCase):
 		self.assertTrue(isinstance(self.par.user, GameMaker), "Should be able to login")
 		self.assertNotEqual(self.par.commandsDict, {"login": (lambda u, p: self._login(u, p))}, "setting user should change commands dict from login")
 
+	def test_login_response(self):
+		self.assertEqual(self.par.parse("login maker password"), "Logged in!", "login should notify user of response")
+
+	def test_login_error(self):
+		self.assertEqual(self.par.parse("login maker not_the_password"), "Could not login to maker", "failed login should explain failure")
+
 
 class LogoutTests(TestCase):
 	def setUp(self):
@@ -87,3 +93,7 @@ class LogoutTests(TestCase):
 		self.par.parse("login maker password")
 		self.par.parse("logout")
 		self.assertEqual(self.par.parse("mklm a b c"), "You can't access that command", "logout should clear commands dict")
+
+	def test_logout_response(self):
+		self.par.parse("login maker password")
+		self.assertEqual(self.par.parse("logout"), "Success!", "logout should notify user of successes on good logout")

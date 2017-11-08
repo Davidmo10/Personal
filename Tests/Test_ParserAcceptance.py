@@ -8,48 +8,58 @@ class ParserAcceptanceGameMaker(unittest.TestCase):
 		self.parser = Parser()
 
 	def test_login(self):
-		self.assertEqual(self.parser.parse("login un pw"), "Success!", "Did not log in")
+		self.assertEqual(self.parser.parse("login maker password"), "Success!", "Did not log in")
 
 	def test_logout(self):
+		self.parser.parse("login maker password")
 		self.assertEqual(self.parser.parse("logout"), "Success!", "Did not log out")
 
 	def test_create_team(self):
+		self.parser.parse("login maker password")
 		self.assertEqual(self.parser.parse("maketeam TestTeam SecretPassword"), "Success!", "Did not create team")
 
 	def test_create_landmark(self):
+		self.parser.parse("login maker password")
 		self.assertEqual(self.parser.parse("createlandmark TestLandmark"), "Success!", "Did not create landmark")
 
 	def test_edit_landmark_clue(self):
+		self.parser.parse("login maker password")
 		self.parser.parser("createlandmark TestLandmark")
 		self.assertEqual(self.parser.parse("landmarkclue TestLandmark TestClue"), "Success!", "Did not create/edit clue")
 
 	def test_edit_landmark_question(self):
+		self.parser.parse("login maker password")
 		self.parser.parse("createlandmark TestLandmark")
 		self.assertEqual(
 			self.parser.parse("landmarkquestion TestLandmark TestQuestion TestAnswer"), "Success!", "Did not create/edit"
 			" question")
 
 	def test_start_game(self):
+		self.parser.parse("login maker password")
 		self.assertEqual(self.parser.parse("startgame"), "Success!", "Did not start game")
 
-	def test_list_commands(self):
-		# Don't know how to assert here, but don't want to stop the tests because it "Fails"
-		self.parser.parse("commands")
+	# def test_list_commands(self):
+	# 	 Not part of sprint
+	# 	 self.parser.parse("commands")
 
 	def test_end_game(self):
-		self.assertEqual(self.parser.parse("endgame"), "Success!", "dud not end game")
+		self.parser.parse("login maker password")
+		self.parser.parse("startgame")
+		self.assertEqual(self.parser.parse("endgame"), "Success!", "did not end game")
 
 	def test_list_landmarks(self):
+		# Not going to enforce list structure, so just calling it.
+		self.parser.parse("login maker password")
 		self.parser.parse("createlandmark TestLandmark")
 		self.parser.parse("createlandmark TestLandmark2")
-		self.assertEqual(self.parser.parse("listlandmarks"), "TestLandmark, TestLandmark2", "Did not list landmarks")
+		self.parser.parse("listlandmarks")
 
 
 class ParserAcceptanceTeam(unittest.TestCase):
 
 	def setUp(self):
 		self.parser = Parser()
-		self.parser.parser("login un pe")
+		self.parser.parse("login maker password")
 		self.parser.parse("maketeam TeamName TeamPass")
 
 		self.parser.parse("createlandmark TestLandmark")
@@ -83,10 +93,10 @@ class ParserAcceptanceTeam(unittest.TestCase):
 		self.parser.parse("getquestion")
 		self.assertEqual(self.parser.parse("answer TestAnswer"), "Success!", "Did not process answering")
 
-	def test_list_commands(self):
-		# Also don't want to stop the tests here, so not asserting
-		self.parser.parse("login TeamName TeamPass")
-		self.parser.parse("listcommands")
+	# def test_list_commands(self):
+	# 	# NOt part of sprint
+	# 	self.parser.parse("login TeamName TeamPass")
+	# 	self.parser.parse("listcommands")
 
 	def test_forfeit(self):
 		self.parser.parse("login TeamName TeamPass")

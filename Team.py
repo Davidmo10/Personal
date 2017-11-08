@@ -6,15 +6,17 @@ from User import User
 class Team(User):
     def __init__(self, game: Game):
         super().__init__()
-        self.commands = {"login": (lambda user, password: self.login(user, password)), 1: "logout(self)",
-                         2: "list_commands(self)"}  # dict
+        self.commands = {"getclue": lambda: self.request_clue(),
+                         "getquestion": lambda: self.request_question(),
+                         "answer": lambda ans: self.answer(ans),
+                         "forfeit": lambda: self.forfeit()}  # dict
         self.landmark_index = 0  # index
         # self.this_team_index = team_index  # This index has to come from outside team to logout
         # 								   # Each team will need an index in username list so when they
         # 								   # login they are linked to the right team
         self.myGame = game
         self.has_requested = False
-        self.logged_in = False  # Untill we can pass user indexes between game and user to flag login
+        self.logged_in = False  # Until we can pass user indexes between game and user to flag login
 
     # This is a temporary solution
 

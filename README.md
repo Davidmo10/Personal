@@ -1,6 +1,8 @@
 # eScavenge
 ##### Software to enable virtual scavenger hunts
 
+[Commands available here](instructions.md)
+
 A traditional scavenger hunt game works as follows. Teams of players are all given a clue describing a particular location in the hunt area. After deciphering the clue they go the landmark described where they find a clue (a card or sign left by the game maker) to the next landmark. This repeats until the final landmark is discovered. First team to arrive at the final landmark wins. The Amazing Race is an example.
 
 One difficulty in setting up such a game is that clues must be easily found when at the landmark, but they cannot be taken or dismantled by passers by. A second potential problem is that one team could destroy or alter a clue to confuse teams that arrive later to that landmark.

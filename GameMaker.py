@@ -3,14 +3,15 @@ from StringClue import StringClue
 from StringQuestion import StringQuestion
 from User import User
 from Team import Team
+from Game import Game
 
 
 class GameMaker(User):
-	def __init__(self, game):
+	def __init__(self, game: Game):
 		super().__init__()
 		self.commands = {1: "logout(self)", 2: "list_commands(self)"}  # dict
-		self.password = "pw"
-		self.name = "un"
+		self.password = None
+		self.name = None
 		self.myGame = game
 		self.myTeams = {}
 
@@ -20,6 +21,10 @@ class GameMaker(User):
 
 	def list_commands(self) -> dict:
 		return self.commands
+
+	def start_game(self) -> bool:
+		self.myGame.start()
+		return self.myGame.is_on()
 
 	# Game Maker Specific:
 

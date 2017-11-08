@@ -7,7 +7,7 @@ from StringClue import StringClue
 class LandmarkTest(unittest.TestCase):
 
 	def setUp(self):
-		self.landmark = Landmark()
+		self.landmark = Landmark("Landmark1")
 		self.tempQuestion = StringQuestion("question", "answer")
 		self.tempclue = StringClue("clue")
 		self.landmark.confirmation = self.tempQuestion

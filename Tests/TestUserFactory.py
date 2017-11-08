@@ -15,7 +15,7 @@ class TestUF(TestCase):
 		self.assertTrue(isinstance(user, GameMaker), "maker should be an instance of GameMaker")
 
 	def test_make_team(self):
-		team = Team()
+		team = Team(Game())
 		team.username = "team1"
 		team.password = "pass"
 		self.game.myUserDict[team.username] = team

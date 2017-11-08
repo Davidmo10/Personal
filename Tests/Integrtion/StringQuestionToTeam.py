@@ -13,7 +13,7 @@ class TestTeamToStringQuestion(unittest.TestCase):
 		self.landmark.confirmation = self.string_question
 		self.game = Game()
 		self.game.landmarkList[0] = self.landmark
-		self.team = Team(self.game)
+		self.team = Team("name", "Password", self.game)
 		self.team.game = self.game
 
 	def test_get_question(self):

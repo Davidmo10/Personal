@@ -8,8 +8,8 @@ from Game import Game
 class GameMaker(User):
 	def __init__(self, game: Game):
 		super().__init__()
-		self.commands = {"crlm": lambda name: self.create_landmark(name),
-		                 "crtm": lambda name, password: self.create_team(name,password),
+		self.commands = {"addlm": lambda name: self.create_landmark(name),
+		                 "addtm": lambda name, password: self.create_team(name,password),
 		                 "edlmcl": lambda name, clue: self.edit_landmark_clue(name, clue),
 		                 "edlmq": lambda name, question, answer: self.edit_landmark_question(name, question, answer),
 		                 "end": lambda: self.end_game(),
@@ -54,9 +54,9 @@ class GameMaker(User):
 		return True
 
 	def list_landmarks(self) -> str:
-		string_list = None
+		string_list = ""
 		for i in self.myGame.landmarkList:
-			string_list += ''.join(self.myGame.landmarkList[i].name)
+			string_list += ''.join(i.name)
 		return string_list
 
 	def create_team(self, name: str, password: str) -> bool:

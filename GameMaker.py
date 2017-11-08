@@ -1,12 +1,12 @@
+from GameGameMaker import GameGameMaker
 from Landmark import Landmark
 from StringClue import StringClue
 from StringQuestion import StringQuestion
 from User import User
-from Game import Game
 
 
 class GameMaker(User):
-	def __init__(self, game: Game):
+	def __init__(self, game: GameGameMaker):
 		super().__init__()
 		self.commands = {"createlandmark": lambda name: self.create_landmark(name),
 		                 "createteam": lambda name, password: self.create_team(name,password),

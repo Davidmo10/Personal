@@ -6,8 +6,8 @@ from User import User
 class Team(User):
     def __init__(self, game: Game):
         super().__init__()
-        self.commands = {"getclu": lambda: self.request_clue(),
-                         "getq": lambda: self.request_question(),
+        self.commands = {"getclue": lambda: self.request_clue(),
+                         "getquestion": lambda: self.request_question(),
                          "answer": lambda ans: self.answer(ans),
                          "forfeit": lambda: self.forfeit()}  # dict
         self.landmark_index = 0  # index

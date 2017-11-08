@@ -8,12 +8,13 @@ from Game import Game
 class GameMaker(User):
 	def __init__(self, game: Game):
 		super().__init__()
-		self.commands = {"addlm": lambda name: self.create_landmark(name),
-		                 "addtm": lambda name, password: self.create_team(name,password),
-		                 "lmcl": lambda name, clue: self.edit_landmark_clue(name, clue),
-		                 "lmq": lambda name, question, answer: self.edit_landmark_question(name, question, answer),
-		                 "end": lambda: self.end_game(),
-		                 "lmks": lambda: self.list_landmarks()}  # dict
+		self.commands = {"createlandmark": lambda name: self.create_landmark(name),
+		                 "createteam": lambda name, password: self.create_team(name,password),
+		                 "landmarkclue": lambda name, clue: self.edit_landmark_clue(name, clue),
+		                 "landmarkquestion": lambda name, question, answer: self.edit_landmark_question(name, question, answer),
+		                 "endgame": lambda: self.end_game(),
+		                 "startgame": lambda: self.start_game(),
+		                 "listlandmarks": lambda: self.list_landmarks()}  # dict
 		self.password = None
 		self.name = None
 		self.myGame = game

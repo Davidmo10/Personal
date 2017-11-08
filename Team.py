@@ -1,6 +1,6 @@
-from User import User
-from Game import Game
 from Clue import Clue
+from Game import Game
+from User import User
 
 
 class Team(User):

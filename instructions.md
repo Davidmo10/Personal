@@ -1,6 +1,6 @@
 # Commands
 
-!! Quoted strings are parsed as one 
+!! Quoted strings are parsed as one argument !!
 
 ### All Users
 - `login <username> <password>` - logs you in to your account

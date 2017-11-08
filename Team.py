@@ -1,45 +1,55 @@
 from User import User
 from Game import Game
+from Clue import Clue
 
 
 class Team(User):
+    def __init__(self, game: Game):
+        super().__init__()
+        self.commands = {"login": (lambda user, password: self.login(user, password)), 1: "logout(self)",
+                         2: "list_commands(self)"}  # dict
+        self.landmark_index = 0  # index
+        # self.this_team_index = team_index  # This index has to come from outside team to logout
+        # 								   # Each team will need an index in username list so when they
+        # 								   # login they are linked to the right team
+        self.myGame = game
+        self.has_requested = False
+        self.logged_in = False  # Untill we can pass user indexes between game and user to flag login
 
-	commands = {}   # dict
+    # This is a temporary solution
 
-	landmark = 0    # index
+    # def login(self):
+    # 	pass
+    #
+    # def logout(self):
+    # 	pass
 
-	def __init__(self):
-		self.game = Game()
-		self.has_requested = False
+    def list_commands(self) -> dict:
+        return self.commands
 
-	def login(self):
-		pass
+    def request_clue(self) -> Clue:
+        if self.logged_in:
+            return self.myGame.get_clue(self.landmark_index)
 
-	def logout(self):
-		pass
+    def request_question(self):
+        if self.logged_in:
+            self.has_requested = True
+            return self.myGame.get_question(self.landmark_index)
 
-	def list_commands(self):
-		pass
+    def answer(self, string):
+        if self.logged_in:
+            if self.has_requested:
+                raise Exception
 
-	def request_clue(self):
-		pass
+        correct = self.myGame.check_answer(self.landmark_index, string)
 
-	def request_question(self):
-		self.has_requested = True
-		return self.game.get_question(self.landmark)
+        if correct:
+            self.has_requested = False
+            self.landmark_index += 1
 
-	def answer(self, string):
-		if not self.has_requested:
-			raise Exception
+        return correct
 
-		correct = self.game.check_answer(self.landmark, string)
-
-		if correct:
-			self.has_requested = False
-			self.landmark += 1
-
-		return correct
-
-	def forfeit(self):
-		pass
-
+    def forfeit(self) -> bool:
+        if self.logged_in:
+            self.logged_in = False
+            return self.logged_in

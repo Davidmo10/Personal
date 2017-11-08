@@ -64,7 +64,7 @@ class GameMaker(User):
 	def list_landmarks(self) -> str:
 		string_list = ""
 		for i in self.myGame.landmarkList:
-			string_list += f"- {i.name}\t{i.get_clue}\n"
+			string_list += f"- {i.name}\t{i.get_clue()}\n"
 		return string_list
 
 	def create_team(self, name: str, password: str) -> bool:

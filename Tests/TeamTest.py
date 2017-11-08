@@ -3,6 +3,7 @@ import unittest
 from Game import Game
 from Landmark import Landmark
 from StringQuestion import StringQuestion
+from StringClue import StringClue
 from Team import Team
 
 
@@ -11,15 +12,17 @@ class TestTeamConfirmation(unittest.TestCase):
 	def setUp(self):
 		self.MyGame = Game()
 		self.myTeam = Team(self.MyGame)
+		self.landmark = Landmark()
+		self.tempQuestion = StringQuestion("question", "answer")
+		self.tempClue = StringClue("clue")
+		self.landmark.confirmation = self.tempQuestion
 
 	def test_getQuestion(self):
-		self.assertEqual(
-			self.team.request_question(), "What color is the car?", "Returned: " + self.landmark.get_confirmation()
-			+ " instead of proper question")
+		self.assertEqual(self.myTeam.request_question(), self.tempQuestion, "Can not retrieve proper Question ")
 
 	def test_answerWithoutGetQuestion(self):
 		with self.assertRaises(Exception):
-			self.team.answer("Red")
+			self.myTeam.answer()
 
 	def test_answerCorrect(self):
 		self.assertTrue(self.team.answer("Red"), "Did not accept correct answer")

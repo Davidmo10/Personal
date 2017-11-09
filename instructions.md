@@ -14,6 +14,7 @@
 - `forfeit` - forfeit, so users can no longer update their state
 
 ### Gamemaker
+###### Gamemaker user/pass: maker/password
 - `createlandmark <name>` - Adds a landmark to the game with specified name
 - `createteam <name> <password>` - Adds a team to the game with specified name and password
 - `landmarkclue <name> <clue>` - Adds a clue to landmark with specified name

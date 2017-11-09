@@ -15,7 +15,11 @@ class Parser:
 		self.game = game
 
 	def parse(self, command: str) -> str:
-		tokens = shlex.split(command)
+		try:
+			tokens = shlex.split(command)
+		except ValueError:
+			return "Please end your quotations"
+
 		args_list = tokens[1:]
 
 		if tokens[0] not in self.commandsDict.keys():

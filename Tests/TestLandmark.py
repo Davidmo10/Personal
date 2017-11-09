@@ -1,7 +1,8 @@
 import unittest
+
 from Landmark import Landmark
-from StringQuestion import StringQuestion
 from StringClue import StringClue
+from StringQuestion import StringQuestion
 
 
 class LandmarkTest(unittest.TestCase):

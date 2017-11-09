@@ -16,4 +16,4 @@ class TestStringQuestion(unittest.TestCase):
 		self.assertTrue(self.Question.validate("Ten"), "Should be true")
 
 	def test_display(self):
-		self.assertEqual(self.Question.display(), "What is five plus five?", "Wrong display of question)
+		self.assertEqual(self.Question.display(), "What is five plus five?", "Wrong display of question")

@@ -1,8 +1,9 @@
 import unittest
-from Team import Team
+
 from Game import Game
 from Landmark import Landmark
 from StringQuestion import StringQuestion
+from Team import Team
 
 
 class TestTeamToStringQuestion(unittest.TestCase):

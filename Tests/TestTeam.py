@@ -2,8 +2,8 @@ import unittest
 
 from Game import Game
 from Landmark import Landmark
-from StringQuestion import StringQuestion
 from StringClue import StringClue
+from StringQuestion import StringQuestion
 from Team import Team
 
 
@@ -19,7 +19,7 @@ class TestTeamConfirmation(unittest.TestCase):
 		self.MyGame.landmarkList.append(self.landmark)
 
 	def test_getQuestion(self):
-		self.assertEqual(self.myTeam.request_question(), self.tempQuestion, "Can not retrieve proper Question ")
+		self.assertEqual(self.myTeam.request_question(), str(self.tempQuestion.question), "Can not retrieve proper Question ")
 
 	def test_answerWithoutGetQuestion(self):
 		with self.assertRaises(Exception):

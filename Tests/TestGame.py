@@ -1,8 +1,10 @@
 import unittest
+
 from Game import Game
-from StringQuestion import StringQuestion
 from Landmark import Landmark
+from StringQuestion import StringQuestion
 from Team import Team
+
 
 class TestGameConfirmation(unittest.TestCase):
 

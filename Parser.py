@@ -61,7 +61,8 @@ class Parser:
 
 	def _logout(self) -> bool:
 		self.user = None
-		self.commandsDict = {"login": (lambda username, password: self._login(username, password))}
+		self.commandsDict = {"login": (lambda username, password: self._login(username, password)),
+							 "exit": (lambda: self.exit_game())}
 		return True
 
 	def print_commands(self) -> None:

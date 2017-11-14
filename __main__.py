@@ -10,10 +10,13 @@ from Parser import Parser
 def main_loop():
 	parser = Parser(Game())
 
-	print("*"*5, "WELCOME TO E-SCAVENGE", "*"*5)
+	print("*"*10, "WELCOME TO E-SCAVENGE", "*"*10)
+	print(" "*5, '\n', "Go ahead, find that landmark...all the cool kids are doing it\n")
 	while True:
+		parser.print_commands()
 		user_response = input(">")
 		print(parser.parse(user_response))
+
 
 
 if __name__ == '__main__':

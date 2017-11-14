@@ -18,6 +18,5 @@ def main_loop():
 		print(parser.parse(user_response))
 
 
-
 if __name__ == '__main__':
 	main_loop()

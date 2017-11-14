@@ -11,7 +11,7 @@ testing = False
 class Parser:
 	def __init__(self, game: Game):
 		self.user = None
-		self.commandsDict = {"login": (lambda username, password: self._login(u, p)),
+		self.commandsDict = {"login": (lambda username, password: self._login(username, password)),
 							 "exit": (lambda: self.exit_game())}
 		self.game = game
 
@@ -61,7 +61,7 @@ class Parser:
 
 	def _logout(self) -> bool:
 		self.user = None
-		self.commandsDict = {"login": (lambda username, password: self._login(u, p))}
+		self.commandsDict = {"login": (lambda username, password: self._login(username, password))}
 		return True
 
 	def print_commands(self) -> None:

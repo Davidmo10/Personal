@@ -7,7 +7,7 @@ from User import User
 
 
 class GameMaker(User):
-	# noinspection PyPep8,PyPep8,PyPep8,PyPep8,PyPep8,PyPep8,PyPep8
+	# noinspection PyPep8
 	def __init__(self, game: GameGameMaker):
 		super().__init__()
 		self.commands = {"createlandmark": lambda name: self.create_landmark(name),

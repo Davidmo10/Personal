@@ -18,3 +18,4 @@ The application will use a simple command line interface. Once a user (team or g
 - [Lab 7](Labs/lab7.md)
 - [Lab 8](Labs/lab8.md)
 - [Lab 9](Labs/lab9.md)
+- [Lab 11](Labs/lab11.md)

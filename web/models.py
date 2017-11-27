@@ -49,7 +49,7 @@ class Landmark(models.Model):
     name = models.CharField(max_length = 100)
     desc = models.CharField(max_length = 500, blank=True, default="")
     def __str__(self):
-        return str('<Landmark ModInst :: name = ' + self.name+ ', game = ' + str(self.game) + ' >')
+        return str('<Landmark ModInst :: name = ' + self.name+ ' >')
 
 
 class Clue(models.Model):

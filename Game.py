@@ -3,7 +3,7 @@ from GameMaker import GameMaker
 from GameTeam import GameTeam
 from Landmark import Landmark
 from User import User
-
+from Team import Team
 
 class Game(GameGameMaker, GameTeam):
 	def __init__(self):
@@ -14,7 +14,7 @@ class Game(GameGameMaker, GameTeam):
 
 		self.myUserDict = [maker]
 		self.landmarkList = []
-
+		self.teamList = []
 	def start(self) -> bool:
 		self.on = True
 		return self.on
@@ -29,7 +29,11 @@ class Game(GameGameMaker, GameTeam):
 	def add_landmark(self, landmark: Landmark) -> bool:
 		self.landmarkList.append(Landmark)
 		return True
-		
+
+	def add_team(self, team: Team) -> bool:
+		self.teamList.append(Team)
+		return True
+
 	def get_clue(self, index: int):
 		return self.landmarkList[index].get_clue().display()
 
@@ -42,6 +46,12 @@ class Game(GameGameMaker, GameTeam):
 	def get_landmark_by_name(self, name) -> Landmark:
 		for i in self.landmarkList:
 			if i.get_name() == name:
+				return i
+		return None
+
+	def get_team_by_name(self, name: str) -> Team:
+		for i in self.teamList:
+			if i.name == name:
 				return i
 		return None
 

@@ -10,17 +10,18 @@ class ITF(ABC):
     def edit_lmark(lm: Landmark, name: str, desc: str) -> bool:
         pass
     
+    # ValueError if invalid order
     # IndexError if submitted order is longer than hunt or less than zero
     def reorder_hunt(order : [int] ) -> bool:
         pass
     
     # ValueError for illegal value
-    # Warning for nonexistent Clue (meaning one will be created)
+    # IndexError for illegal landmark
     def edit_clue(clue: Clue, value: str) -> bool:
         pass
     
     # ValueError for illegal value
-    # Warning for nonexistent Confirmation (meaning one will be created)
+    # IndexError for illegal landmark
     def edit_conf(conf: Confirmation, ques: str, ans: str) -> bool:
         pass
     
@@ -60,11 +61,11 @@ class ITF(ABC):
         pass
     
     # UserWarning if Game in progress
-    def start () -> bool: 
+    def start() -> bool:
         pass
     
     # UserWarning if Game not in progress
-    def stop () -> bool: 
+    def stop() -> bool:
         pass
 
     def is_on() -> bool: 

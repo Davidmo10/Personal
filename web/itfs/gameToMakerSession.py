@@ -2,7 +2,7 @@ from abc import ABC
 from web.models import *
 
 
-def ITF(ABC):
+class ITF(ABC):
     
     # UserWarning on similar landmark to existing in models somewhere
     # ValueError for illegal value

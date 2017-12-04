@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ name }}'s eScavenge Dashboard</title>
+    <style>
+        #hunt_detail {
+            margin:10px;
+            background:white;
+            border: rebeccapurple dotted 1px;
+            font-size: 15px;
+            position:relative;
+        }
+        #hunt_detail b{
+            font-size:18px;
+        }
+        #status {
+            position:absolute;
+            width: 200px;
+            background:ghostwhite;
+            font-size:20px;
+            border: aliceblue groove 3px;
+        }
+        #stat_order {
+            position:absolute;
+            left:2px;
+            top:2px;
+            font-weight:bold
+        }
+        #feedback {
+            width:800px;
+            position:absolute;
+            left:250px;
+            min-height:300px;
+            background: papayawhip;
+            padding:20px;
+            border:aliceblue groove 5px;
+
+        }
+    </style>
+</head>
+
+<body style="text-align:center; margin-top:100px;background:lavender; color:darkblue">
+<h1>Welcome back {{ name }}!</h1>
+<div id="commands"><a href="logout">Logout</a></div><br><br>
+<div id="status">Your Progress:<br>
+    <b>{{ gmdet.name }}</b><br>
+    {% for p in progress %}
+        <div id="hunt_detail">
+        <div id="stat_order">{{ p.order }}</div>
+            <b>{{ p.lm }}</b><br>{{ p.right }}<br>Score: {{ p.score }}
+        </div>
+    {% endfor %}
+</div>
+<div id="feedback">
+    <h2>Current Clue:</h2>
+    {{ clue }}
+
+</div>
+</body>
+</html>

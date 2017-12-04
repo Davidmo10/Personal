@@ -36,8 +36,8 @@ class TestData:
         mkrs = User.objects.filter(is_mkr = True)
         s = ScoreScheme.objects.all()
         my_models = [
-        Game(name = "Game 1", desc="Test game 1", maker=mkrs[0], scheme=s[0]),
-        Game(name="Game 2", desc="Test game 2", maker=mkrs[1], scheme=s[1], on=True),
+        GameDetails(name ="Game 1", desc="Test game 1", maker=mkrs[0], scheme=s[0]),
+        GameDetails(name="Game 2", desc="Test game 2", maker=mkrs[1], scheme=s[1], on=True),
         Landmark(name="Landmark 1", desc="Test landmark 1"),
         Landmark(name="Landmark 2", desc="Test landmark 2"),
         Landmark(name="Landmark 3", desc="Test landmark 3"),
@@ -51,7 +51,7 @@ class TestData:
         ]
         for m in my_models:
             m.save()
-        gms = Game.objects.all()
+        gms = GameDetails.objects.all()
         lms = Landmark.objects.all()
         my_models = [
         Clue(lmark = lms[0], value="Clue 1"),
@@ -97,7 +97,12 @@ class TestData:
         Status(game = gms[1], team = tms[10], playing=True, cur = 4, pending = dt.now(tz('US/Central'))),
         Status(game = gms[1], team = tms[11], playing=True, pending = dt.now(tz('US/Central'))),
         Status(game = gms[1], team = tms[12], cur = 5),
-        Status(game = gms[1], team = tms[13], cur = 3)
+        Status(game = gms[1], team = tms[13], cur = 3),
+        LmScore(game = gms[1], team=tms[9], which=1, correct=True, time=56),
+        LmScore(game = gms[1], team=tms[9], which=2, correct=False, time=102),
+        LmScore(game = gms[1], team=tms[9], which=2, correct=True, time=88),
+        LmScore(game = gms[1], team=tms[9], which=3, correct=True, time=33),
+        LmScore(game = gms[1], team=tms[9], which=4, correct=False, time=12),
         ]
         for m in my_models:
             m.save()
@@ -115,6 +120,7 @@ class TestData:
         Clue.objects.all().delete()
         Confirmation.objects.all().delete()
         Landmark.objects.all().delete()
-        Game.objects.all().delete()
+        GameDetails.objects.all().delete()
         ScoreScheme.objects.all().delete()
         User.objects.all().delete()
+        LmScore.objects.all().delete()

@@ -1,7 +1,7 @@
 from abc import ABC
 from web.models import *
 
-def ITF(ABC):
+class ITF(ABC):
 
     # ReferenceError if team is not playing
     # IndexError if game is not on

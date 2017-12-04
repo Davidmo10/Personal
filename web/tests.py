@@ -1,7 +1,10 @@
-from django.test import TestCase
-from web.models import *
 from datetime import datetime as dt
+
+from django.test import TestCase
 from pytz import timezone as tz
+
+from web.models import *
+
 
 class TestData:
 
@@ -84,25 +87,25 @@ class TestData:
         Hunt(lmark = lms[8-1], game = gms[2-1]),
         Hunt(lmark = lms[9-1], game = gms[2-1]),
         Hunt(lmark = lms[10-1], game = gms[2-1]),
-        Status(game = gms[1-1], team = tms[1-1]),
-        Status(game = gms[1-1], team = tms[2-1]),
-        Status(game = gms[1-1], team = tms[3-1]),
-        Status(game = gms[1-1], team = tms[4-1]),
-        Status(game = gms[1-1], team = tms[5-1]),
-        Status(game = gms[1-1], team = tms[6-1]),
-        Status(game = gms[1-1], team = tms[7-1]),
-        Status(game = gms[1-1], team = tms[8-1]),
-        Status(game = gms[1], team = tms[8], playing=True),
-        Status(game = gms[1], team = tms[9], playing=True, cur = 4),
-        Status(game = gms[1], team = tms[10], playing=True, cur = 4, pending = dt.now(tz('US/Central'))),
-        Status(game = gms[1], team = tms[11], playing=True, pending = dt.now(tz('US/Central'))),
-        Status(game = gms[1], team = tms[12], cur = 5),
-        Status(game = gms[1], team = tms[13], cur = 3),
-        LmScore(game = gms[1], team=tms[9], which=1, correct=True, time=56),
-        LmScore(game = gms[1], team=tms[9], which=2, correct=False, time=102),
-        LmScore(game = gms[1], team=tms[9], which=2, correct=True, time=88),
-        LmScore(game = gms[1], team=tms[9], which=3, correct=True, time=33),
-        LmScore(game = gms[1], team=tms[9], which=4, correct=False, time=12),
+        Status(game=gms[1-1], team = tms[1-1]),
+        Status(game=gms[1-1], team = tms[2-1]),
+        Status(game=gms[1-1], team = tms[3-1]),
+        Status(game=gms[1-1], team = tms[4-1]),
+        Status(game=gms[1-1], team = tms[5-1]),
+        Status(game=gms[1-1], team = tms[6-1]),
+        Status(game=gms[1-1], team = tms[7-1]),
+        Status(game=gms[1-1], team = tms[8-1]),
+        Status(game=gms[1], team = tms[8], playing=True),
+        Status(game=gms[1], team = tms[9], playing=True, cur = 4),
+        Status(game=gms[1], team = tms[10], playing=True, cur = 4, pending = dt.now(tz('US/Central'))),
+        Status(game=gms[1], team = tms[11], playing=True, pending = dt.now(tz('US/Central'))),
+        Status(game=gms[1], team = tms[12], cur = 5),
+        Status(game=gms[1], team = tms[13], cur = 3),
+        LmScore(game=gms[1], team=tms[9], which=1, correct=True, time=56),
+        LmScore(game=gms[1], team=tms[9], which=2, correct=False, time=102),
+        LmScore(game=gms[1], team=tms[9], which=2, correct=True, time=88),
+        LmScore(game=gms[1], team=tms[9], which=3, correct=True, time=33),
+        LmScore(game=gms[1], team=tms[9], which=4, correct=False, time=12),
         ]
         for m in my_models:
             m.save()
@@ -124,3 +127,8 @@ class TestData:
         ScoreScheme.objects.all().delete()
         User.objects.all().delete()
         LmScore.objects.all().delete()
+
+
+class DjangoSampleTest(TestCase):
+    def test_sample(self):
+        self.assertTrue(True, "All logic has failed us")

@@ -2,6 +2,8 @@ import web.itfs.gameToMakerSession as GTMS
 import web.itfs.gameToTeamSession as GTTS
 from django.db import models
 from web.models import *
+from datetime import datetime as dt, timedelta
+from pytz import timezone as tz
 
 class Game(GTMS.ITF, GTTS.ITF):
 
@@ -31,7 +33,7 @@ class Game(GTMS.ITF, GTTS.ITF):
         output = output + self.scheme.ans_per_sec * entry.time
         return output
 
-    def process_team_progress(self, team: User):
+    def req_team_progress(self, team: User):
         progress = LmScore.objects.filter(game = self.dtls, team = team).order_by('which', 'correct')
         s = Status.objects.get(team = team)
         output : [{str, str, float}] = []
@@ -47,185 +49,305 @@ class Game(GTMS.ITF, GTTS.ITF):
             output.append({'lm' : lm, 'right' : corr, 'score' : score, 'order' : p.which})
         return output
 
-        # UserWarning on similar landmark to existing in models somewhere
-        # ValueError for illegal value
-        # Warning for nonexistent Landmark (meaning one will be created)
-        def edit_lmark(lm: Landmark, name: str, desc: str) -> bool:
-            pass
+    # UserWarning on similar landmark to existing in models somewhere
+    # ValueError for illegal value
+    # Warning for nonexistent Landmark (meaning one will be created)
+    def edit_lmark(self, lm: Landmark, name: str, desc: str) -> bool:
+        pass
 
-        # ValueError if invalid order
-        # IndexError if submitted order is longer than hunt or less than zero
-        def reorder_hunt(order: [int]) -> bool:
-            if len(self.hunt) != len(order):
-                raise IndexError
-            iMax = len(order)
-            seen : [bool] = [False] * iMax
-            for i in range(iMax):
-                cur = order[i]
-                if cur not in range(iMax):
-                    raise ValueError
-                if seen[cur]:
-                    raise ValueError
-                seen[cur] = True
-                self.hunt[i].h_order = cur
-            for h in self.hunt:
-                h.save()
-            return True
+    # ValueError if invalid order
+    # IndexError if submitted order is longer than hunt or less than zero
+    def reorder_hunt(self, order: [int]) -> bool:
+        if len(self.hunt) != len(order):
+            raise IndexError("Invalid order")
+        iMax = len(order)
+        seen : [bool] = [False] * iMax
+        for i in range(iMax):
+            cur = order[i]
+            if cur not in range(iMax):
+                raise ValueError("Invalid order")
+            if seen[cur]:
+                raise ValueError("Invalid order")
+            seen[cur] = True
+            self.hunt[i].h_order = cur
+        for h in self.hunt:
+            h.save()
+        return True
 
-        # ValueError for illegal value
-        # IndexError for illegal landmark
-        def edit_clue(lm: Landmark, value: str) -> bool:
-            if type(value) != str:
-                raise ValueError
-            if Hunt.objects.filter(lmark = lm, game = self.dtls):
-                raise IndexError
-            c = Clue.objects.filter(lmark = lm)
-            if c.count() == 0:
-                c = Clue(lmark = lm, value = value)
-                c.save()
+    # ValueError for illegal value
+    # IndexError for illegal landmark
+    def edit_clue(self, lm: Landmark, value: str) -> bool:
+        if type(value) != str:
+            raise ValueError("Invalid clue value")
+        if Hunt.objects.filter(lmark = lm, game = self.dtls):
+            raise IndexError("That landmark is not in this game")
+        c = Clue.objects.filter(lmark = lm)
+        if c.count() == 0:
+            c = Clue(lmark = lm, value = value)
+            c.save()
+        else:
+            c = c.first()
+            c.value = value
+            c.save()
+        return True
+
+
+    # ValueError for illegal value
+    # IndexError for illegal landmark
+    def edit_conf(self, lm: Landmark, ques: str, ans: str) -> bool:
+        if type(ques) != str:
+            raise ValueError("Invalid question")
+        if type(ans) != str:
+            raise ValueError("Invalid answer")
+        if Hunt.objects.filter(lmark=lm, game=self.dtls):
+            raise IndexError("That landmark is not in this game")
+        c = Confirmation.objects.filter(lmark=lm)
+        if c.count() == 0:
+            c = Confirmation(lmark=lm, ques = ques, ans = ans)
+            c.save()
+        else:
+            c = c.first()
+            c.ques = ques
+            c.ans = ans
+            c.save()
+        return True
+
+
+    # NameError on same name
+    def mk_team(self, name: str, pwd: str) -> bool:
+        if User.objects.filter(name = name).count() != 0:
+            raise NameError("A user with that name already exists")
+        u = User(name = name, pwd = pwd)
+        u.save()
+        s = Status(team = u, game = self.dtls)
+        s.save()
+        return True
+
+    # KeyError for nonexistent team
+    # KeyError for team not in game
+    def rm_team(self, team: User) -> bool:
+        try:
+            u = User.objects.get(pk = team.pk)
+            if Status.objects.filter(team = team, game = self.dtls).count() == 0:
+                raise KeyError("That team is not in a game you manage")
+            u.delete()
+        except:
+            raise KeyError("That does not exist")
+        return True
+
+
+    # KeyError on nonexistent team
+    # KeyError if team not in game
+    # ValueError on illegal values
+    def edit_team_creds(self, team: User, name: str, pwd: str) -> bool:
+        try:
+            u = User.objects.get(pk = team.pk)
+            if Status.objects.filter(team = team, game = self.dtls).count() == 0:
+                raise KeyError("That team is not in a game you manage")
+        except:
+            raise KeyError("That team does not exist")
+        if type(name) is not str or name.strip() == "":
+            raise ValueError("Illegal name")
+        if type(pwd) is not str or pwd.strip() == "":
+            raise ValueError("Illegal password")
+        u.name = name
+        u.pwd = pwd
+        u.save()
+        return True
+
+    # NameError on same name
+    # ValueError on non string
+    def mk_score_sch(self, name: str) -> bool:
+        if type(name) != str:
+            raise ValueError("Invalid name")
+        if ScoreScheme.objects.filter(name = name).count() != 0:
+            raise NameError("That name already exists")
+        s = ScoreScheme(name = name)
+        s.save()
+        return True
+
+    # KeyError on nonexistent scheme
+    # EnvironmentError if another game is using the same scheme
+    # ValueError on non-float values
+    def edit_score_sch(self, scheme: str, wrong: float, right: float, plc_num: float, ans_time: float,
+                       gm_time: float) -> bool:
+        try:
+            s = ScoreScheme.objects.get(name = scheme)
+        except:
+            raise KeyError("That scheme does not exist")
+        if type(wrong) != float or type(right) != float or type(plc_num) != float or type(ans_time) != float or type(gm_time) != float:
+            raise ValueError("Invalid scoring scheme")
+        if GameDetails.objects.filter(scheme = s).exclude(name = self.name) != 0:
+            raise EnvironmentError("Another game is using this scoring scheme, try creating a new one")
+        s.right = right
+        s.wrong = wrong
+        s.place_numerator = plc_num
+        s.ans_per_sec = ans_time
+        s.game_per_sec = gm_time
+        s.save()
+        return True
+
+    def req_status(self, team : User) -> {GameDetails, str, bool, float}:
+        try:
+            u = User.objects.get(pk = team.pk)
+        except:
+            raise KeyError("User does not exist")
+        progress = self.req_team_progress(team)
+        tot_score = 0
+        for p in progress:
+            tot_score = tot_score + p["score"]
+        s = Status.objects.get(team = u)
+        if not self.is_on():
+            curtype = "gameoff"
+        elif not s.playing:
+            if s.cur >= len(self.hunt):
+                curtype = "done"
             else:
-                c = c.first()
-                c.value = value
-                c.save()
-            return True
+                curtype = "forfeited"
+        elif s.pending is not None:
+            curtype = "pending"
+        else:
+            curtype = "clue"
+        return {"game" : self.dtls, "pending" : s.pending, "curtype" : curtype, "total" : tot_score}
+
+    def req_hunt(self) -> [Hunt]:
+        pass
+
+    # ValueError on illegal values
+    def edit(self, name: str, desc: str) -> bool:
+        if type(name) != str or type(desc) is not str:
+            raise ValueError("Illegal name or description")
+        self.dtls.name = name
+        self.dtls.desc = desc
+        self.dtls.save()
+        return True
+
+    # UserWarning if Game in progress
+    def start(self) -> bool:
+        if self.is_on():
+            raise UserWarning("This game is already in progress")
+        self.dtls.on = True
+        self.dtls.save()
+        return True
 
 
-        # ValueError for illegal value
-        # IndexError for illegal landmark
-        def edit_conf(lm: Landmark, ques: str, ans: str) -> bool:
-            if type(ques) != str:
-                raise ValueError
-            if type(ans) != str:
-                raise ValueError
-            if Hunt.objects.filter(lmark=lm, game=self.dtls):
-                raise IndexError
-            c = Confirmation.objects.filter(lmark=lm)
-            if c.count() == 0:
-                c = Confirmation(lmark=lm, ques = ques, ans = ans)
-                c.save()
+    # UserWarning if Game not in progress
+    def stop(self) -> bool:
+        if not self.is_on():
+            raise UserWarning("This game is not in progress")
+        self.dtls.on = False
+        self.dtls.save()
+        return True
+
+    def is_on(self) -> bool:
+        return self.dtls.on
+
+    # UserWarning if team not done with game
+    # KeyError if nonexistent team
+    # KeyError if team not in game
+    def set_winner(self, team: User) -> bool:
+        pass
+
+
+    # ReferenceError if team is not playing
+    # IndexError if game is not on
+    # EnvironmentError if no clue
+    # KeyError if team has question pending
+    def req_clue(self, team: User) -> Clue:
+        if not self.is_on():
+            raise IndexError("Game is not on")
+        s = Status.objects.filter(team = team, game = self.dtls)
+        if s.count() == 0:
+            raise ReferenceError("You are not in this game")
+        s = s.first()
+        if not s.playing:
+            raise ReferenceError("You may not have a clue after forfeiting")
+        if s.pending is not None:
+            raise KeyError("You may not have a clue while a question is pending")
+        lm = self.hunt[s.cur].lmark
+        try:
+            c = Clue.objects.get(lmark = lm)
+            return c.value
+        except:
+            raise EnvironmentError("There is no clue associated with this landmark")
+
+    # ReferenceError if team is not playing
+    # IndexError if game is not on
+    # EnvironmentError if no confirmation
+    def req_ques(self, team: User) -> str:
+        if not self.is_on():
+            raise IndexError("Game is not on")
+        s = Status.objects.filter(team = team, game = self.dtls)
+        if s.count() == 0:
+            raise ReferenceError("You are not in this game")
+        s = s.first()
+        if not s.playing:
+            raise ReferenceError("You may not have a question after forfeiting")
+        lm = self.hunt[s.cur].lmark
+        if s.pending is not None:
+            return Confirmation.objects.get(lmark = lm).ques
+        try:
+            c = Confirmation.objects.get(lmark = lm)
+            s.pending = dt.now(tz('US/Central'))
+            s.save()
+            return c.ques
+        except:
+            raise EnvironmentError("There is no confirmation associated with this landmark")
+
+    # ReferenceError if team is not playing
+    # IndexError if game is not on
+    # EnvironmentError if confirmation doesn't exist
+    # KeyError if team has no quesitoni pending
+    def submit_ans(self, team: User, ans: str) -> bool:
+        if not self.is_on():
+            raise IndexError("Game is not on")
+        s = Status.objects.filter(team = team, game = self.dtls)
+        if s.count() == 0:
+            raise ReferenceError("You are not in this game")
+        s = s.first()
+        if not s.playing:
+            raise ReferenceError("You may not submit an answer after forfeiting")
+        if s.pending is None:
+            raise KeyError("You may not submit an answer without a question pending")
+        lm = self.hunt[s.cur].lmark
+        try:
+            c = Confirmation.objects.get(lmark = lm)
+            deltat = (dt.now(tz('US/Central')) - s.pending).total_seconds()
+            sc = LmScore(team=team, game=self.dtls, which=s.cur, time = deltat, correct=(ans == c.ans))
+            sc.save()
+            s.pending = None
+            if(ans == c.ans):
+                s.cur = s.cur + 1
+                if s.cur > len(self.hunt):
+                    s.playing = False
+                s.save()
+                return True
             else:
-                c = c.first()
-                c.ques = ques
-                c.ans = ans
-                c.save()
-            return True
+                s.save()
+                return False
+        except:
+            raise EnvironmentError("There is no confirmation associated with this landmark")
 
 
-        # NameError on same name
-        def mk_team(name: str, pwd: str) -> bool:
-            if User.objects.filter(name = name).count() != 0:
-                raise NameError
-            u = User(name = name, pwd = pwd)
-            u.save()
-            s = Status(team = u, game = self.dtls)
-            s.save()
-            return True
 
-        # KeyError for nonexistent team
-        # KeyError for team not in game
-        def rm_team(team: User) -> bool:
-            try:
-                u = User.objects.get(pk = team.pk)
-                if Status.objects.filter(team = team, game = self.dtls).count() == 0:
-                    raise KeyError
-                u.delete()
-            except:
-                raise KeyError
-            return True
+    # KeyError on nonexistent team
+    # ValueError on illegal values
+    def edit_creds(self, team: User, name: str, pwd: str) -> bool:
+        return self.edit_team_creds(team, name, pwd)
 
 
-        # KeyError on nonexistent team
-        # KeyError if team not in game
-        # ValueError on illegal values
-        def edit_team_creds(team: User, name: str, pwd: str) -> bool:
-            try:
-                u = User.objects.get(pk = team.pk)
-                if Status.objects.filter(team = team, game = self.dtls).count() == 0:
-                    raise KeyError
-            except:
-                raise KeyError
-            if type(name) != str:
-                raise ValueError
-            if type(pwd) != str:
-                raise ValueError
-            if name.strip() == '':
-                raise ValueError
-            if pwd.strip() == '':
-                raise ValueError
-            u.name = name
-            u.pwd = pwd
-            u.save()
-            return True
-
-        # NameError on same name
-        # ValueError on non string
-        def mk_score_sch(name: str) -> bool:
-            if type(name) != str:
-                raise ValueError
-            if ScoreScheme.objects.filter(name = name).count() != 0:
-                raise NameError
-            s = ScoreScheme(name = name)
-            s = save()
-            return True
-
-        # KeyError on nonexistent scheme
-        # EnvironmentError if another game is using the same scheme
-        # ValueError on non-float values
-        def edit_score_sch(scheme: str, wrong: float, right: float, plc_num: float, ans_time: float,
-                           gm_time: float) -> bool:
-            try:
-                s = ScoreScheme.objects.get(name = scheme)
-            except:
-                raise KeyError
-            if type(wrong) != float or type(right) != float or type(plc_num) != float or type(ans_time) != float or type(gm_time) != float:
-                raise ValueError
-            if GameDetails.objects.filter(scheme = s).exclude(name = self.name) != 0:
-                raise EnvironmentError
-            s.right = right
-            s.wrong = wrong
-            s.place_numerator = plc_num
-            s.ans_per_sec = ans_time
-            s.game_per_sec = gm_time
-            s.save()
-            return True
-
-        def req_status() -> [Status]:
-            pass
-
-        def req_hunt() -> [Hunt]:
-            pass
-
-        # ValueError on illegal values
-        def edit(name: str, desc: str) -> bool:
-            if type(name) != str or type(desc) is not str:
-                raise ValueError
-            self.dtls.name = name
-            self.dtls.desc = desc
-            self.dtls.save()
-            return True
-
-        # UserWarning if Game in progress
-        def start() -> bool:
-            if self.is_on():
-                raise UserWarning
-            self.dtls.on = True
-            self.dtls.save()
-            return True
-
-
-        # UserWarning if Game not in progress
-        def stop() -> bool:
-            if not self.is_on():
-                raise UserWarning
-            self.dtls.on = False
-            self.dtls.save()
-            return True
-
-        def is_on() -> bool:
-            return self.dtls.on
-
-        # UserWarning if team not done with game
-        # KeyError if nonexistent team
-        # KeyError if team not in game
-        def set_winner(team: User) -> bool:
-            pass
+    # ReferenceError if team is not playing
+    # IndexError if game is not on
+    def forfeit(self, team: User) -> bool:
+        try:
+            t = User.objects.get(pk = team.pk)
+        except:
+            raise KeyError("Nonexistent team may not forfeit")
+        if not self.is_on():
+            raise IndexError("Cannot forfeit a game that is not in progress")
+        s = Status.objects.get(team=t)
+        if not s.playing:
+            raise ReferenceError("You have already forfeited")
+        s.playing = False
+        s.save()
+        return True

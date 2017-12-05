@@ -40,6 +40,7 @@ class Status(models.Model):
     pending = models.DateTimeField(default = None, null = True)
     playing = models.BooleanField(default = False)
     score = models.FloatField(default = 0)
+#    tot_time = models.FloatField(default = -1)
     def __str__(self):
         return str('Status ModInst ::  team = '+ self.team.name + ', game = '+ self.game.name + ', current = ' + str(self.cur) )
 

@@ -20,5 +20,9 @@ from web import views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^login$', views.login),
-    url(r'^$', views.dash)
+    url(r'^$', views.dash),
+    url(r'^req/(?P<type>.*)', views.req),
+    url(r'^do/(?P<type>.*)', views.do),
+    url(r'^edit/(?P<type>.*)', views.edit)
+
 ]

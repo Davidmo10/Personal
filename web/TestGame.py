@@ -7,9 +7,13 @@ class TestDeleteTeam(TestCase):
 	# I am testing based on the decision made that rm_team would delete the team from the database, not remove from game
 	def setup(self):
 		my_models = [
-			User(name="maker1", pwd="maker1pwd", is_mkr=True),
-			User(name="team1", pwd="team1pwd"),
-			User(name="team2", pwd="team2pwd"),
+			User.objects.get(name = "maker1"),
+			User.objects.get(name = "team1"),
+			User.objects.get(name = "team2")
+			
+			#User(name="maker1", pwd="maker1pwd", is_mkr=True),
+			#User(name="team1", pwd="team1pwd"),
+			#User(name="team2", pwd="team2pwd"),
 			ScoreScheme(),
 		]
 		for m in my_models:

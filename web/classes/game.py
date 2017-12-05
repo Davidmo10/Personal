@@ -173,6 +173,8 @@ class Game(GTMS.ITF, GTTS.ITF):
                        gm_time: float) -> bool:
         try:
             s = ScoreScheme.objects.get(name = scheme)
+            if s.name == "default":
+                raise UserError("Cannot edit default scheme")
         except:
             raise KeyError("That scheme does not exist")
         if type(wrong) != float or type(right) != float or type(plc_num) != float or type(ans_time) != float or type(gm_time) != float:
@@ -257,7 +259,18 @@ class Game(GTMS.ITF, GTTS.ITF):
     # KeyError if nonexistent team
     # KeyError if team not in game
     def set_winner(self, team: User) -> bool:
-        pass
+        try:
+            u = User.objects.get(pk = team.pk)
+            if Status.objects.filter(team = team, game = self.dtls).count() == 0:
+                raise KeyError("That team is not in a game you manage")
+        except:
+            raise KeyError("Team does not exist")
+            
+        if not self.stop():
+            raise UserWarning("The game for this team is still in progress")
+            
+         
+        
 
 
     # ReferenceError if team is not playing

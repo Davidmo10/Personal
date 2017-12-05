@@ -30,7 +30,7 @@ class ITF(ABC):
     
     # KeyError for nonexistent team
     # KeyError for team not in game
-    def rm_team(team: User) -> bool: 
+    def rm_team(self, team: User) -> bool:
         pass
     
     # KeyError on nonexistent team

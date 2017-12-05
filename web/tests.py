@@ -132,3 +132,103 @@ class TestData:
 class DjangoSampleTest(TestCase):
     def test_sample(self):
         self.assertTrue(True, "All logic has failed us")
+
+class TestTeam(TestCase):
+
+    def test_create_team(self):
+        u = User(name = "team0", pwd = "pwd0")
+        self.assertEqual(u.name, "team0")
+        self.assertEqual(u.pwd, "pwd0")
+        self.assertFalse(u.is_mkr)
+        self.assertEqual(u.__str__(),'< User ModInst (Team) :: name = '+ u.name + ' >')
+
+    def test_create_maker(self):
+        u = User(name = "mkr0", pwd = "pwd0", is_mkr = True)
+        self.assertTrue(u.is_mkr)
+        self.assertEqual(u.__str__(),'< User ModInst (Maker) :: name = '+ u.name + ' >')
+
+class TestLandmark(TestCase):
+
+    def test_create_landmark(self):
+        u = Landmark(name = "landmark0",desc = "a test landmark")
+        self.assertEqual(u.name, "landmark0")
+        self.assertEqual(u.desc, "a test landmark")
+        self.assertEqual(u.__str__(), 'Landmark ModInst :: name = ' + u.name)
+
+class TestClue(TestCase):
+
+    def test_create_clue(self):
+        landmark1 = Landmark(name = "landmark0",desc = "a test landmark")
+        u = Clue(lmark = landmark1,value = "a clue")
+        self.assertEqual(u.lmark.name, "landmark0")
+        self.assertEqual(u.lmark.desc, "a test landmark")
+        self.assertEqual(u.value,"a clue")
+        self.assertEqual(u.__str__(),'ModInst :: value = '+ u.value+ ', lmark = '+ u.lmark.name)
+
+class TestConfirmation(TestCase):
+
+    def test_create_confirmation(self):
+        landmark1 = Landmark(name="landmark0", desc="a test landmark")
+        u = Confirmation(lmark = landmark1, ques = "What is 2 + 2?", ans = "4")
+
+        self.assertEqual(u.lmark.name, "landmark0")
+        self.assertEqual(u.lmark.desc, "a test landmark")
+        self.assertEqual(u.ques, "What is 2 + 2?")
+        self.assertEqual(u.ans, "4")
+
+        self.assertEqual(u.__str__(),'Clue ModInst :: ques = '+ u.ques+ ', ans = '+ u.ans+ ', lmark = '+ u.lmark.name)
+
+class TestScoreScheme(TestCase):
+
+    def test_create_score_scheme(self):
+        u = ScoreScheme(name = "scoring1",wrong = 1, right = 2, place_numerator = 3, ans_per_sec = 4, game_per_sec = 5)
+
+        self.assertEqual(u.name, "scoring1")
+        self.assertEqual(u.wrong, 1)
+        self.assertEqual(u.right, 2)
+        self.assertEqual(u.place_numerator, 3)
+        self.assertEqual(u.ans_per_sec, 4)
+        self.assertEqual(u.game_per_sec, 5)
+
+        self.assertEqual(u.__str__(), 'ScoreScheme ModInst :: name = ' + u.name)
+
+    def test_default_score_scheme(self):
+        u = ScoreScheme()
+        self.assertEqual(u.name, "default")
+        self.assertEqual(u.wrong, -10)
+        self.assertEqual(u.right, 50)
+        self.assertEqual(u.place_numerator, 100)
+        self.assertEqual(u.ans_per_sec, -0.1)
+        self.assertEqual(u.game_per_sec, -.00001)
+
+class TestGameDetails(TestCase):
+
+    def test_create_game_details(self):
+        user = User(name="mkr0", pwd="pwd0", is_mkr=True)
+        user.save()
+        userpk = user.pk
+
+        scheme1 = ScoreScheme()
+        scheme1.save()
+        schemepk = scheme1.pk
+
+        u = GameDetails(name = "name0",desc = "desc0", on = True, winner = 10, maker =  user, scheme = scheme1)
+
+        self.assertEqual(u.name, "name0")
+        self.assertEqual(u.desc, "desc0")
+        self.assertTrue(u.on)
+        self.assertEqual(u.winner, 10)
+
+        self.assertEqual(u.maker.pk, userpk, "Wrong user assigned to game details")
+
+        self.assertEqual(u.scheme.pk, schemepk, "Wrong scheme assigned to game details")
+
+
+    def test_default_create_game_details(self):
+        user = User(name="mkr0", pwd="pwd0", is_mkr=True)
+
+        scheme1 = ScoreScheme()
+
+        u = GameDetails(name="name0", desc="desc0", maker=user, scheme=scheme1)
+        self.assertFalse(u.on)
+        self.assertEqual(u.winner,-1)

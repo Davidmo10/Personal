@@ -14,7 +14,7 @@ class TestDeleteTeam(TestCase):
 			#User(name="maker1", pwd="maker1pwd", is_mkr=True),
 			#User(name="team1", pwd="team1pwd"),
 			#User(name="team2", pwd="team2pwd"),
-			ScoreScheme(),
+			#ScoreScheme(),
 		]
 		for m in my_models:
 			m.save()

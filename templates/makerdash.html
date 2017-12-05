@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ name }}'s eScavenge Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}style.css">
+    <script>
+        function showEditCreds() {
+            document.getElementById("editcreds").style.display = 'block';
+        }
+        function showEditLm(i) {
+
+        }
+    </script>
+</head>
+
+<body style="text-align:center; margin-top:100px;background:lavender; color:darkblue">
+<h1>Welcome back {{ name }}!</h1>
+<div id="commands"><a href="do/logout">Logout</a><a href="do/forfeit">Forfeit</a><a href="javascript:showEditCreds()">Edit Credentials</a></div><br><br>
+<div id="status">
+    <b>{{ gmdet.name }}</b><br>
+    {% for lm in hunt %}
+        <div id="hunt_detail">
+        <div id="stat_order">{{ lm.order }}</div>
+            <b>{{ lm.name }}</b>
+        </div>
+    {% endfor %}
+</div>
+<div id="middle-block">
+    <div id="scheme"><table><tr><td style="width:120px"><b>Score Scheme :</b> </td><td><b>Wrong</b> = {{ sch.wrong }} <b>Right</b> = {{ sch.right }} <b>Per Pending Answer Second</b> = {{ sch.ans_per_sec }}<br><b>Place Numerator</b> = {{ sch.place_numerator }} <b>Game Duration per Second</b> = {{ sch.game_per_sec }}</td></tr></table></div>
+<div id="feedback">
+    <div id="editcreds"><form action="edit/creds" method="POST">{% csrf_token %}{{ credsForm }}<input type="submit" value="Change credentials"></form></div>
+    {% for i in range(len(hForms)) %}
+        <div id="hForm{{ i }}" style="display:none">
+            <form action="edit/lmark" method="POST">
+                {% csrf_token %}
+                {{ hForms.i }}
+                <input type="submit" value="Edit Landmark">
+            </form>
+        </div>
+    {% endfor %}
+    {% for i in range(len(cForms)) %}
+        <div id="cForm{{ i }}" style="display:none">
+            <form action="edit/creds" method="POST">
+                {% csrf_token %}
+                {{ cForms.i }}
+                <input type="submit" value="Edit Credentials">
+            </form>
+        </div>
+    {% endfor %}
+</div></div>
+<div id="teams">Teams:<br>
+{% for i in range(len(teams)) %}
+    <div id="hunt_detail">
+        <a href="javascript:editLm({{ i }})">{{ t.i }}</a>
+    </div>
+{% endfor %}
+</div>
+</body>
+</html>

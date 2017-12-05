@@ -20,6 +20,13 @@ class CredsForm(forms.Form):
     newpwd = forms.CharField(label='New Password ', max_length=100, widget = forms.PasswordInput())
     user = forms.IntegerField(widget = forms.HiddenInput())
 
+class EditLmForm(forms.Form):
+    name = forms.CharField(label='Landmark Name ', max_length=100)
+    desc = forms.CharField(label='Landmark Description ', max_length=500)
+    clue = forms.CharField(label='Landmark Clue ', max_length=500)
+    ques = forms.CharField(label='Landmark Question ', max_length=500)
+    ans = forms.CharField(label='Landmark Answer ', max_length=500)
+    id = forms.IntegerField(widget = forms.HiddenInput())
 
 def login(request):
     if request.method == 'POST':
@@ -45,38 +52,70 @@ def dash(request):
     if request.session.get('loggedin', False):
         try:
             u = User.objects.get(name = request.session['name'])
-            s = Status.objects.get(team = u)
         except:
             return HttpResponseRedirect('/login')
-        try:
-            g = Game(s.game)
-            status = g.req_status(u)
-            progress = g.req_team_progress(u)
-            if status["curtype"] == 'gameoff':
-                title = 'Game Off'
-                feedback = 'This game is not currently playable'
-            elif status["curtype"] == 'forfeited':
-                title = 'Your team has forfeited'
-                feedback = 'Quitters never win'
-            elif status["curtype"] == 'done':
-                title = "You're done"
-                feedback = 'Good job!'
-            elif status["curtype"] == 'pending':
-                title = "Current Question"
-                q = g.req_ques(u)
-                feedback = q
-            else:
-                title = "Current Clue"
-                feedback = g.req_clue(u)
-            ansForm = AnswerForm()
-            credsForm = CredsForm(initial = {"name" : u.name, "user" : u.pk})
-            return render(request, 'teamdash.html',
-                          {'name': u.name, 'type': status["curtype"], 'gmdet': status["game"], 'title': title, 'feedback': feedback,
-                           'progress': progress, 'total' : status["total"], 'ansForm' :ansForm, 'credsForm' : credsForm, 'pending' : s.pending })
-        except Exception as e:
-            title = "Error"
-            feedback= str(e)
-            return render(request, 'teamdash.html', {'name': u.name, 'type': "error", 'feedback' : feedback, 'title': title})
+        if request.session['mkr'] :
+            try:
+                gd = GameDetails.objects.get(maker = u)
+            except:
+                return HttpResponseRedirect('/do/mkgame')
+            g = Game(gd)
+            h = g.req_hunt()
+            hForms : [EditLmForm] = []
+            for x in h:
+                lm = Landmark.objects.get(name = x)
+                try:
+                    cl = Clue.objects.get(lmark__name = x)
+                except:
+                    cl = ""
+                try:
+                    co = Confirmation.objects.get(lmark__name = x)
+                    ques = co.ques
+                    ans = co.ans
+                except:
+                    ques = ""
+                    ans = ""
+                hForms.append(EditLmForm(initial= {"name" : x, "desc" : lm.desc, "clue" : cl, "ques" : ques, "ans" : ans, "id" : lm.pk}))
+            tms = g.req_teams()
+            tForms : [CredsForm] = []
+            for x in tms:
+                t = User.objects.get(name = x)
+                cf = CredsForm(initial={"name":x, "user":t.pk})
+                cf.fields["label"] = "Your Password: "
+                tForms.append(cf)
+
+            return render(request, 'makerdash.html', {'name' : u.name, 'gmdet' : gd, 'teams' : tms, 'hunt' : h, 'sch' : gd.scheme, "cForms" : cForms, "hForms" : hForms })
+        else:
+            try:
+                s = Status.objects.get(team = u)
+                g = Game(s.game)
+                status = g.req_status(u)
+                progress = g.req_team_progress(u)
+                if status["curtype"] == 'gameoff':
+                    title = 'Game Off'
+                    feedback = 'This game is not currently playable'
+                elif status["curtype"] == 'forfeited':
+                    title = 'Your team has forfeited'
+                    feedback = 'Quitters never win'
+                elif status["curtype"] == 'done':
+                    title = "You're done"
+                    feedback = 'Good job!'
+                elif status["curtype"] == 'pending':
+                    title = "Current Question"
+                    q = g.req_ques(u)
+                    feedback = q
+                else:
+                    title = "Current Clue"
+                    feedback = g.req_clue(u)
+                ansForm = AnswerForm()
+                credsForm = CredsForm(initial = {"name" : u.name, "user" : u.pk})
+                return render(request, 'teamdash.html',
+                              {'name': u.name, 'type': status["curtype"], 'gmdet': status["game"], 'title': title, 'feedback': feedback,
+                               'progress': progress, 'total' : status["total"], 'ansForm' :ansForm, 'credsForm' : credsForm, 'pending' : s.pending })
+            except Exception as e:
+                title = "Error"
+                feedback= str(e)
+                return render(request, 'teamdash.html', {'name': u.name, 'type': "error", 'feedback' : feedback, 'title': title})
 
     else:
         return HttpResponseRedirect('/login')

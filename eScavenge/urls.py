@@ -24,5 +24,4 @@ urlpatterns = [
     url(r'^req/(?P<type>.*)', views.req),
     url(r'^do/(?P<type>.*)', views.do),
     url(r'^edit/(?P<type>.*)', views.edit)
-
 ]

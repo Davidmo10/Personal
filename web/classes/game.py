@@ -210,8 +210,18 @@ class Game(GTMS.ITF, GTTS.ITF):
             curtype = "clue"
         return {"game" : self.dtls, "pending" : s.pending, "curtype" : curtype, "total" : tot_score}
 
-    def req_hunt(self) -> [Hunt]:
-        pass
+    def req_hunt(self) -> {str, int}:
+        output : [{str, int}] = []
+        for h in self.hunt:
+            output.append({"name" : h.lmark.name, "order" : h.h_order})
+        return output
+
+    def req_teams(self) -> [str]:
+        output : [str] = []
+        for p in self.players:
+            output.append(p.team.name)
+        return output
+
 
     # ValueError on illegal values
     def edit(self, name: str, desc: str) -> bool:

@@ -48,6 +48,7 @@
     margin-bottom:20px;
     left:1000px;
     margin-top:-43px;
+    font-weight:bold;
 }
 
 #scheme {
@@ -75,4 +76,16 @@ td {
     border: 0;
     margin: 0;
     padding: 0;
+}
+a {
+    color:maroon;
+    text-decoration:none;
+}
+a:visited {
+    color:maroon;
+    text-decoration:none;
+}
+a:hover {
+    color:mediumpurple;
+    text-decoration:underline;
 }

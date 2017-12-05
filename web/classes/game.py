@@ -210,16 +210,17 @@ class Game(GTMS.ITF, GTTS.ITF):
             curtype = "clue"
         return {"game" : self.dtls, "pending" : s.pending, "curtype" : curtype, "total" : tot_score}
 
-    def req_hunt(self) -> {str, int}:
+    def req_hunt(self) -> [{str, int}]:
         output : [{str, int}] = []
         for h in self.hunt:
             output.append({"name" : h.lmark.name, "order" : h.h_order})
         return output
 
-    def req_teams(self) -> [str]:
-        output : [str] = []
-        for p in self.players:
-            output.append(p.team.name)
+    def req_team_statuses(self) -> [{str, int}]:
+        output : [{str, int}] = []
+        for i in range(len(self.players)):
+            p = self.players[i]
+            output.append({"tm": p.team, "st" : p, "index" : i})
         return output
 
 
@@ -326,6 +327,7 @@ class Game(GTMS.ITF, GTTS.ITF):
             sc = LmScore(team=team, game=self.dtls, which=s.cur, time = deltat, correct=(ans == c.ans))
             sc.save()
             s.pending = None
+            s.score = s.score + self.calc_score_entry(sc)
             if(ans == c.ans):
                 s.cur = s.cur + 1
                 if s.cur > len(self.hunt):

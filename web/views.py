@@ -61,30 +61,30 @@ def dash(request):
                 return HttpResponseRedirect('/do/mkgame')
             g = Game(gd)
             h = g.req_hunt()
-            hForms : [EditLmForm] = []
-            for x in h:
-                lm = Landmark.objects.get(name = x)
+            hForms : [{EditLmForm, int}] = []
+            for i in range(len(h)):
+                x = h[i]
+                lm = Landmark.objects.get(name = x["name"])
                 try:
-                    cl = Clue.objects.get(lmark__name = x)
+                    cl = Clue.objects.get(lmark__name = x["name"]).value
                 except:
                     cl = ""
                 try:
-                    co = Confirmation.objects.get(lmark__name = x)
+                    co = Confirmation.objects.get(lmark__name = x["name"])
                     ques = co.ques
                     ans = co.ans
                 except:
                     ques = ""
                     ans = ""
-                hForms.append(EditLmForm(initial= {"name" : x, "desc" : lm.desc, "clue" : cl, "ques" : ques, "ans" : ans, "id" : lm.pk}))
-            tms = g.req_teams()
-            tForms : [CredsForm] = []
+                hForms.append({"form" : EditLmForm(initial= {"name" : x["name"], "desc" : lm.desc, "clue" : cl, "ques" : ques, "ans" : ans, "id" : lm.pk}), "index" : i})
+            tms = g.req_team_statuses()
+            tForms : [{CredsForm, int}] = []
             for x in tms:
-                t = User.objects.get(name = x)
-                cf = CredsForm(initial={"name":x, "user":t.pk})
-                cf.fields["label"] = "Your Password: "
-                tForms.append(cf)
+                cf = CredsForm(initial={"name":x.tm.name, "user":x.tm.pk})
+                cf.fields["oldpwd"].label = "Your Password: "
+                tForms.append({"form" :cf, "index" : x.index})
 
-            return render(request, 'makerdash.html', {'name' : u.name, 'gmdet' : gd, 'teams' : tms, 'hunt' : h, 'sch' : gd.scheme, "cForms" : cForms, "hForms" : hForms })
+            return render(request, 'makerdash.html', {'name' : u.name, 'gmdet' : gd, 'teams' : tms, 'hunt' : h, 'sch' : gd.scheme, "cForms" : tForms, "hForms" : hForms })
         else:
             try:
                 s = Status.objects.get(team = u)

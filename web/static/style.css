@@ -5,6 +5,7 @@
     border: rebeccapurple dotted 1px;
     font-size: 15px;
     position:relative;
+    line-height:1.8
 }
 #hunt_detail b{
     font-size:18px;
@@ -16,6 +17,7 @@
     font-size:20px;
     border: aliceblue groove 3px;
     margin-bottom:20px;
+    padding:10px 0px;
 }
 #stat_order {
     position:absolute;
@@ -35,6 +37,9 @@
 #editcreds {
     display:none;
 }
+#commands {
+    margin-left:-86px;
+}
 #commands a {
     margin:10px;
 }
@@ -47,7 +52,7 @@
     border: aliceblue groove 3px;
     margin-bottom:20px;
     left:1000px;
-    margin-top:-43px;
+    top:215px;
     font-weight:bold;
 }
 
@@ -66,6 +71,7 @@ table {
     border: 0;
     margin: 0;
     padding: 0;
+    width: 100%;
 }
 tr {
     border: 0;
@@ -76,6 +82,12 @@ td {
     border: 0;
     margin: 0;
     padding: 0;
+    vertical-align:top;
+    text-align: center;
+}
+td b {
+    margin: 0 0 0 5px;
+    line-height: 1.5;
 }
 a {
     color:maroon;
@@ -88,4 +100,17 @@ a:visited {
 a:hover {
     color:mediumpurple;
     text-decoration:underline;
+}
+.reorder_box {
+    width:20px;
+}
+.huntForm {
+    display:none;
+}
+#editscheme {
+    display: none;
+}
+
+#header {
+    margin-left:-86px;
 }

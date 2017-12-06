@@ -53,8 +53,16 @@ class Game(GTMS.ITF, GTTS.ITF):
     # ValueError for illegal value
     # Warning for nonexistent Landmark (meaning one will be created)
     def edit_lmark(self, lm: Landmark, name: str, desc: str) -> bool:
-        pass
-
+        if type(name) != str || type(desc) != str:
+            raise ValueError("Types for landmark must be string")
+        if not Hunt.objects.filter(lmark=lm, game=self.dtls):
+            if not Landmark.objects.filter(name=name, desc=desc):
+                Lnd = Landmark(name=name, desc=desc)
+                Lnd.save()
+                Hunt(lmark=Lnd, game=self.dtls).save()
+            Hunt(lmark=lm, game=self.dtls).save()
+          
+            
     # ValueError if invalid order
     # IndexError if submitted order is longer than hunt or less than zero
     def reorder_hunt(self, order: [int]) -> bool:
@@ -99,7 +107,7 @@ class Game(GTMS.ITF, GTTS.ITF):
             raise ValueError("Invalid question")
         if type(ans) != str:
             raise ValueError("Invalid answer")
-        if Hunt.objects.filter(lmark=lm, game=self.dtls):
+        if not Hunt.objects.filter(lmark=lm, game=self.dtls):
             raise IndexError("That landmark is not in this game")
         c = Confirmation.objects.filter(lmark=lm)
         if c.count() == 0:

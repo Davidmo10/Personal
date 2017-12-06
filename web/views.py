@@ -80,9 +80,9 @@ def dash(request):
             tms = g.req_team_statuses()
             tForms : [{CredsForm, int}] = []
             for x in tms:
-                cf = CredsForm(initial={"name":x.tm.name, "user":x.tm.pk})
+                cf = CredsForm(initial={"name":x['tm'].name, "user":x['tm'].pk})
                 cf.fields["oldpwd"].label = "Your Password: "
-                tForms.append({"form" :cf, "index" : x.index})
+                tForms.append({"form" :cf, "index" : x["index"]})
 
             return render(request, 'makerdash.html', {'name' : u.name, 'gmdet' : gd, 'teams' : tms, 'hunt' : h, 'sch' : gd.scheme, "cForms" : tForms, "hForms" : hForms })
         else:

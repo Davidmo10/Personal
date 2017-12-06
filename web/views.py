@@ -37,6 +37,7 @@ def login(request):
                 if u.pwd != form.cleaned_data["upwd"]:
                     raise ValueError
                 else:
+                    print("here now.............")
                     request.session['loggedin'] = True
                     request.session['name'] = u.name
                     request.session['mkr'] = u.is_mkr
@@ -54,7 +55,7 @@ def dash(request):
             u = User.objects.get(name = request.session['name'])
         except:
             return HttpResponseRedirect('/login')
-        if request.session['mkr'] :
+        if request.session['mkr']:
             try:
                 gd = GameDetails.objects.get(maker = u)
             except:
@@ -80,9 +81,9 @@ def dash(request):
             tms = g.req_team_statuses()
             tForms : [{CredsForm, int}] = []
             for x in tms:
-                cf = CredsForm(initial={"name":x.tm.name, "user":x.tm.pk})
+                cf = CredsForm(initial={"name":x['tm'].name, "user":x['tm'].pk})
                 cf.fields["oldpwd"].label = "Your Password: "
-                tForms.append({"form" :cf, "index" : x.index})
+                tForms.append({"form" :cf, "index" : x["index"]})
 
             return render(request, 'makerdash.html', {'name' : u.name, 'gmdet' : gd, 'teams' : tms, 'hunt' : h, 'sch' : gd.scheme, "cForms" : tForms, "hForms" : hForms })
         else:
@@ -159,11 +160,14 @@ def do(request, type):
         #     return render(request, "teamdash.html", {"name" : u.name, "feedback" : str(e), "title": "Error", "type" : "error"})
     return HttpResponseRedirect("/login")
 
-def edit(request, type):
+def edit(request, type, tid):
+
     if request.session.get('loggedin', False):
         try:
             u = User.objects.get(name = request.session['name'])
-            s = Status.objects.get(team = u)
+            if not u.is_mkr:
+                return HttpResponseRedirect('/login')
+            #s = Status.objects.get(team = u)
         except:
             return HttpResponseRedirect('/login')
         if type == 'creds':
@@ -176,6 +180,23 @@ def edit(request, type):
                         t.save()
                     else:
                         return render(request, 'teamdash.html', {'name' : u.name, 'type': 'error', 'title':'Error', 'feedback':'Invalid old password'})
+        if type == "lmark":
+            for l in Landmark.objects.all():
+                print(l, l.pk)
+                # print(tid)
+                # l = get_object_or_404(Landmark, pk=tid)
+                # print(l)
+            if request.method == "POST":
+                form = CredsForm(request.POST)
+                if (form.is_valid()):
+                    t = User.objects.get(pk=form.cleaned_data['user'])
+                    if t.pwd == form.cleaned_data['oldpwd'] or u.is_mkr:
+                        t.pwd = form.cleaned_data['newpwd']
+                        t.save()
+                    else:
+                        return render(request, 'teamdash.html', {'name': u.name, 'type': 'error', 'title': 'Error',
+                                                                 'feedback': 'Invalid old password'})
+
         return HttpResponseRedirect("/")
     # except Exception as e:
         #     return render(request, "teamdash.html", {"name" : u.name, "feedback" : str(e), "title": "Error", "type" : "error"})

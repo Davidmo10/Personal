@@ -53,7 +53,7 @@
     {% for x in hForms %}
         <div id="hForm{{ x.index }}" style="display:none">
             <h2>{{ x.form.name.value }}</h2>
-            <form action="edit/lmark" method="POST">
+            <form action="edit/lmark/{{ x.index }}/" method="POST">
                 {% csrf_token %}
                 {{ x.form.as_p }}
                 <input type="submit" value="Edit Landmark">

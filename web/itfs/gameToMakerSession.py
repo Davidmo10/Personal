@@ -56,7 +56,7 @@ class ITF(ABC):
         pass
     
     # ValueError on illegal values
-    def edit(name: str, desc: str) -> bool: 
+    def edit(self, name: str, desc: str) -> bool:
         pass
     
     # UserWarning if Game in progress

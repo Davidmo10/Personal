@@ -38,6 +38,8 @@ class TestDeleteTeam(TestCase):
 	def test_delete_team(self):
 		TestData.wipe()
 		TestData.build()
+		self.game = Game(GameDetails.objects.all()[0])
+		self.teams = User.objects.filter(is_mkr=False)
 		self.assertEqual(User.objects.filter(is_mkr=False).count(), 14, "Size of teams incorrect. Might be setup issues")
 		self.assertTrue(self.game.rm_team(self.teams[0]), "Did not return true when deleting team")
 		self.assertEqual(User.objects.filter(is_mkr=False).count(), 13, "Amount of teams not decreased after deletion")
@@ -45,6 +47,8 @@ class TestDeleteTeam(TestCase):
 	def test_delete_multiple_teams(self):
 		TestData.wipe()
 		TestData.build()
+		self.game = Game(GameDetails.objects.all()[0])
+		self.teams = User.objects.filter(is_mkr=False)
 		self.assertEqual(User.objects.filter(is_mkr=False).count(), 14, "Size of teams incorrect. Might be setup issues")
 		self.assertTrue(self.game.rm_team(self.teams[0]), "Did not return true when deleting team")
 		self.assertEqual(User.objects.filter(is_mkr=False).count(), 13, "Amount of teams not decreased after deletion")
@@ -55,4 +59,5 @@ class TestDeleteTeam(TestCase):
 		# Test fails when method fails to raise KeyError when trying to delete a team not in the database.
 		TestData.wipe()
 		TestData.build()
+		self.game = Game(GameDetails.objects.all()[0])
 		self.assertRaises(KeyError, self.game.rm_team(User(name="faketeam", pwd="pass")))

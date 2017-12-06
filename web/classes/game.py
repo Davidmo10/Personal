@@ -49,19 +49,25 @@ class Game(GTMS.ITF, GTTS.ITF):
             output.append({'lm' : lm, 'right' : corr, 'score' : score, 'order' : p.which})
         return output
 
-    # UserWarning on similar landmark to existing in models somewhere
     # ValueError for illegal value
     # Warning for nonexistent Landmark (meaning one will be created)
     def edit_lmark(self, lm: Landmark, name: str, desc: str) -> bool:
-        if type(name) != str || type(desc) != str:
+        if type(name) != str or type(desc) != str:
             raise ValueError("Types for landmark must be string")
-        if not Hunt.objects.filter(lmark=lm, game=self.dtls):
-            if not Landmark.objects.filter(name=name, desc=desc):
-                Lnd = Landmark(name=name, desc=desc)
-                Lnd.save()
-                Hunt(lmark=Lnd, game=self.dtls).save()
-            Hunt(lmark=lm, game=self.dtls).save()
-          
+            return False
+        if Landmark.objects.filter(name = lm.name, desc = lm.desc) is not None:
+            lm.name = name
+            lm.desc = desc
+            lm.save()
+            
+            if Hunt.objects.filter(lmark = lm, game = self.dtls) is None:
+                Hunt(lmark = lm, game = self.dtls).save()
+        else:
+            Lnd = Landmark(name = name, desc = desc)
+            Lnd.save()
+            Hunt(lmark = Lnd, game = self.dtls).save()
+        
+        return True
             
     # ValueError if invalid order
     # IndexError if submitted order is longer than hunt or less than zero
@@ -196,6 +202,8 @@ class Game(GTMS.ITF, GTTS.ITF):
         s.game_per_sec = gm_time
         s.save()
         return True
+    
+   
 
     def req_status(self, team : User) -> {GameDetails, str, bool, float}:
         try:
@@ -266,21 +274,25 @@ class Game(GTMS.ITF, GTTS.ITF):
     # UserWarning if team not done with game
     # KeyError if nonexistent team
     # KeyError if team not in game
-    def set_winner(self, team: User) -> bool:
+    def set_winner(self, team: User) -> User:
         try:
             u = User.objects.get(pk = team.pk)
             if Status.objects.filter(team = team, game = self.dtls).count() == 0:
                 raise KeyError("That team is not in a game you manage")
         except:
-            raise KeyError("Team does not exist")
+            raise KeyError("Team does not exist") 
             
-        if not self.stop():
-            raise UserWarning("The game for this team is still in progress")
-            
-         
+        stat = Status.objects.filter(game__name = self.dtls)
+        List = []
+        Team = []
         
-
-
+        for x in stat:
+            List.append(x.score)     
+            Team.append(x.team.name)
+            
+        #because all scores are currently 0 - the first team will be returned    
+        return Team[List.index(max(List))]
+    
     # ReferenceError if team is not playing
     # IndexError if game is not on
     # EnvironmentError if no clue

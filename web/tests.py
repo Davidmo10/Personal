@@ -1,4 +1,5 @@
 from datetime import datetime as dt
+from web.classes import game
 
 from django.test import TestCase
 from pytz import timezone as tz
@@ -132,3 +133,23 @@ class TestData:
 class DjangoSampleTest(TestCase):
     def test_sample(self):
         self.assertTrue(True, "All logic has failed us")
+
+
+class TestEditGameDetails(TestCase):
+
+    def test_edit_values(self):
+        TestData.wipe()
+        TestData.build()
+        self.game = game.Game(GameDetails.objects.all()[0])
+        self.assertTrue(self.game.edit("NewName", "NewDescription"), "Did not return true after editing game details.")
+        self.assertEqual(GameDetails.name, "NewName", "Did not change name of game details to NewName")
+        self.assertEqual(GameDetails.desc, "NewDescription", "Did not change description of game details to NewDescription")
+
+    def test_invalid_entry(self):
+        # needs to raise a ValueError if given the wrong types
+        TestData.wipe()
+        TestData.build()
+        self.game = game.Game(GameDetails.objects.all()[0])
+        self.assertRaises(ValueError, self.game.edit(123, "Test"))
+        self.assertRaises(ValueError, self.game.edit("Test", 123))
+        self.assertRaises(ValueError, self.game.edit(123, 456))

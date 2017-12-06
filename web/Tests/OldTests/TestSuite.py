@@ -1,9 +1,9 @@
 import unittest
 
-import Tests.TestGameMaker
+import web.Tests.OldTests.TestGameMaker
 
 # Classes to Test
-game_maker_test = Tests.TestGameMaker
+game_maker_test = web.Tests.OldTests.TestGameMaker
 
 
 def suite():

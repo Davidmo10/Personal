@@ -223,12 +223,45 @@ class TestGameDetails(TestCase):
 
         self.assertEqual(u.scheme.pk, schemepk, "Wrong scheme assigned to game details")
 
+        self.assertEqual(u.__str__(), 'Game ModInst :: name = ' + u.name + ', maker = ' + u.maker.name)
 
     def test_default_create_game_details(self):
-        user = User(name="mkr0", pwd="pwd0", is_mkr=True)
-
-        scheme1 = ScoreScheme()
-
-        u = GameDetails(name="name0", desc="desc0", maker=user, scheme=scheme1)
+        u = GameDetails(name="name0", desc="desc0", maker=None, scheme=None)
         self.assertFalse(u.on)
         self.assertEqual(u.winner,-1)
+
+
+
+class TestStatus(TestCase):
+
+
+    def test_create_status(self):
+        team = User(name="team0", pwd="pwd0")
+        team.save()
+        teampk = team.pk
+        gamemaker = User(name="mkr0", pwd="pwd0", is_mkr=True)
+        gamemaker.save()
+        scheme1 = ScoreScheme()
+        scheme1.save()
+
+        game = GameDetails(name="name0", desc="desc0", maker=gamemaker, scheme=scheme1)
+        game.save()
+        gamepk = game.pk
+
+        status = Status(game = game, team = team, cur = 1, playing = True, score = 100)
+
+        self.assertEqual(status.cur,1)
+        self.assertTrue(status.playing)
+        self.assertEqual(status.score, 100)
+        self.assertEqual(status.game.pk, gamepk, "Wrong game initiated with status")
+        self.assertEqual(status.team.pk, teampk, "Wrong team initiated with status")
+
+        self.assertEqual(status.__str__(),'Status ModInst ::  team = '+ status.team.name + ', game = '+ status.game.name + ', current = ' + str(status.cur))
+
+    def test_default_create_status(self):
+
+        status = Status(game=None, team=None)
+
+        self.assertEqual(status.pending, None)
+        self.assertFalse(status.playing)
+        self.assertEqual(status.score,0)

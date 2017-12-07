@@ -89,14 +89,14 @@ class TestData:
         Hunt(lmark = lms[8-1], game = gms[2-1]),
         Hunt(lmark = lms[9-1], game = gms[2-1]),
         Hunt(lmark = lms[10-1], game = gms[2-1]),
-        Status(game=gms[1-1], team = tms[1-1]),
-        Status(game=gms[1-1], team = tms[2-1]),
-        Status(game=gms[1-1], team = tms[3-1]),
-        Status(game=gms[1-1], team = tms[4-1]),
-        Status(game=gms[1-1], team = tms[5-1]),
-        Status(game=gms[1-1], team = tms[6-1]),
-        Status(game=gms[1-1], team = tms[7-1]),
-        Status(game=gms[1-1], team = tms[8-1]),
+        Status(game=gms[1-1], playing=True, team = tms[1-1]),
+        Status(game=gms[1-1], playing=True, team = tms[2-1]),
+        Status(game=gms[1-1], playing=True, team = tms[3-1]),
+        Status(game=gms[1-1], playing=True, team = tms[4-1]),
+        Status(game=gms[1-1], playing=True, team = tms[5-1]),
+        Status(game=gms[1-1], playing=True, team = tms[6-1]),
+        Status(game=gms[1-1], playing=True, team = tms[7-1]),
+        Status(game=gms[1-1], playing=True, team = tms[8-1]),
         Status(game=gms[1], team = tms[8], playing=True),
         Status(game=gms[1], team = tms[9], playing=True, cur = 4),
         Status(game=gms[1], team = tms[10], playing=True, cur = 4, pending = dt.now(tz('US/Central'))),
@@ -130,6 +130,7 @@ class TestData:
         gd = GameDetails.objects.get(pk = gd_pk)
         g = Game(gd)
         g.calc_scores()
+        User(name="newmkr", pwd="pwd", is_mkr=True)
 
     @staticmethod
     def huh():

@@ -79,7 +79,6 @@
 <div id="status">
     <b>{{ gmdet.name }}</b><br>
     <a href="javascript:switchIt('addLM')" style="font-size:15px">Add Landmark</a><br>
-    {% if hunt.all %}
     <form id='reorder-form' action="edit/reorder" method="POST">
     {% csrf_token %}
     {{ hunt_mng_form }}
@@ -97,7 +96,7 @@
     </span><span class="huntOrder">
         <a href="javascript:showReorder()">Reorder</a>
     </span></span>
-    </form> {% endif %}
+    </form>
 </div>
 <div id="middle-block">
     <div id="scheme"><table><tr><td style="width:120px"><b>Score Scheme :</b><br>{{ sch.name }}<br><a href="javascript:switchIt('editscheme')">Edit</a></td><td><b>Wrong</b> = {{ sch.wrong }} <b>Right</b> = {{ sch.right }} <b>Per Pending Answer Second</b> = {{ sch.ans_per_sec }}<br><b>Place Numerator</b> = {{ sch.place_numerator }} <b>Game Duration per Second</b> = {{ sch.game_per_sec }}</td></tr></table></div>

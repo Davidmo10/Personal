@@ -41,7 +41,7 @@ class TestData:
         s = ScoreScheme.objects.all()
         my_models = [
         GameDetails(name ="Game 1", desc="Test game 1", maker=mkrs[0], scheme=s[0]),
-        GameDetails(name="Game 2", desc="Test game 2", maker=mkrs[1], scheme=s[1], on=True),
+        GameDetails(name="Game 2", desc="Test game 2", maker=mkrs[1], scheme=s[1], on=True, startTime=dt.now(tz('US/Central')).replace(month=11)),
         Landmark(name="Landmark 1", desc="Test landmark 1"),
         Landmark(name="Landmark 2", desc="Test landmark 2"),
         Landmark(name="Landmark 3", desc="Test landmark 3"),
@@ -101,7 +101,7 @@ class TestData:
         Status(game=gms[1], team = tms[9], playing=True, cur = 4),
         Status(game=gms[1], team = tms[10], playing=True, cur = 4, pending = dt.now(tz('US/Central'))),
         Status(game=gms[1], team = tms[11], playing=True, pending = dt.now(tz('US/Central'))),
-        Status(game=gms[1], team = tms[12], cur = -1, playing=True),
+        Status(game=gms[1], team = tms[12], cur = -1, playing=True, endTime=dt.now(tz('US/Central')).replace(day=4 )),
         Status(game=gms[1], team = tms[13], cur = 3),
         LmScore(game=gms[1], team=tms[9], which=1, correct=True, time=56),
         LmScore(game=gms[1], team=tms[9], which=2, correct=False, time=102),
@@ -148,7 +148,6 @@ class TestData:
         ScoreScheme.objects.all().delete()
         User.objects.all().delete()
         LmScore.objects.all().delete()
-
 
 class DjangoSampleTest(TestCase):
     def test_sample(self):

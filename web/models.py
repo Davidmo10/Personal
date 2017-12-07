@@ -29,6 +29,7 @@ class GameDetails(models.Model):
     winner = models.IntegerField(default = -1)
     maker = models.ForeignKey(User, on_delete = models.CASCADE)
     scheme = models.ForeignKey(ScoreScheme)
+    startTime = models.DateTimeField(default = None, null = True)
     def __str__(self):
         return str('Game ModInst :: name = ' + self.name + ', maker = '+ self.maker.name )
 
@@ -40,7 +41,7 @@ class Status(models.Model):
     pending = models.DateTimeField(default = None, null = True)
     playing = models.BooleanField(default = False)
     score = models.FloatField(default = 0)
-#    tot_time = models.FloatField(default = -1)
+    endTime = models.DateTimeField(default = None, null = True)
     def __str__(self):
         return str('Status ModInst ::  team = '+ self.team.name + ', game = '+ self.game.name + ', current = ' + str(self.cur) )
 

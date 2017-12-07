@@ -4,6 +4,7 @@ from django.test import TestCase
 from pytz import timezone as tz
 
 from web.models import *
+from web.classes.game import Game
 
 
 class TestData:
@@ -54,6 +55,7 @@ class TestData:
         ]
         for m in my_models:
             m.save()
+        gd_pk = my_models[1].pk
         gms = GameDetails.objects.all()
         lms = Landmark.objects.all()
         my_models = [
@@ -99,16 +101,35 @@ class TestData:
         Status(game=gms[1], team = tms[9], playing=True, cur = 4),
         Status(game=gms[1], team = tms[10], playing=True, cur = 4, pending = dt.now(tz('US/Central'))),
         Status(game=gms[1], team = tms[11], playing=True, pending = dt.now(tz('US/Central'))),
-        Status(game=gms[1], team = tms[12], cur = 5),
+        Status(game=gms[1], team = tms[12], cur = -1, playing=True),
         Status(game=gms[1], team = tms[13], cur = 3),
         LmScore(game=gms[1], team=tms[9], which=1, correct=True, time=56),
         LmScore(game=gms[1], team=tms[9], which=2, correct=False, time=102),
         LmScore(game=gms[1], team=tms[9], which=2, correct=True, time=88),
         LmScore(game=gms[1], team=tms[9], which=3, correct=True, time=33),
         LmScore(game=gms[1], team=tms[9], which=4, correct=False, time=12),
+        LmScore(game=gms[1], team=tms[10], which=1, correct=True, time=26),
+        LmScore(game=gms[1], team=tms[10], which=2, correct=True, time=88),
+        LmScore(game=gms[1], team=tms[10], which=3, correct=False, time=12),
+        LmScore(game=gms[1], team=tms[10], which=3, correct=True, time=33),
+        LmScore(game=gms[1], team=tms[10], which=4, correct=False, time=82),
+        LmScore(game=gms[1], team=tms[12], which=1, correct=True, time=10),
+        LmScore(game=gms[1], team=tms[12], which=2, correct=True, time=20),
+        LmScore(game=gms[1], team=tms[12], which=3, correct=True, time=30),
+        LmScore(game=gms[1], team=tms[12], which=4, correct=True, time=40),
+        LmScore(game=gms[1], team=tms[12], which=5, correct=True, time=40),
+        LmScore(game=gms[1], team=tms[13], which=1, correct=True, time=10),
+        LmScore(game=gms[1], team=tms[13], which=2, correct=True, time=20),
+        LmScore(game=gms[1], team=tms[13], which=3, correct=False, time=30),
+        LmScore(game=gms[1], team=tms[13], which=3, correct=False, time=30),
+        LmScore(game=gms[1], team=tms[13], which=3, correct=False, time=30),
+        LmScore(game=gms[1], team=tms[13], which=3, correct=False, time=30)
         ]
         for m in my_models:
             m.save()
+        gd = GameDetails.objects.get(pk = gd_pk)
+        g = Game(gd)
+        g.calc_scores()
 
     @staticmethod
     def huh():

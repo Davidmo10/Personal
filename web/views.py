@@ -6,6 +6,13 @@ from django import forms
 from web.classes.game import Game
 from datetime import datetime as dt
 from pytz import timezone as tz
+import logging
+
+import logging
+logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
+logging.debug('This message should appear on the console')
+logging.info('So should this')
+logging.warning('And this, too')
 
 class LoginForm(forms.Form):
     uname = forms.CharField(label='Username ', max_length=100)
@@ -18,7 +25,7 @@ class CredsForm(forms.Form):
     name = forms.CharField(label='Team Name ', max_length=100)
     oldpwd = forms.CharField(label='Old Password ', max_length=100, widget = forms.PasswordInput())
     newpwd = forms.CharField(label='New Password ', max_length=100, widget = forms.PasswordInput())
-    user = forms.IntegerField(widget = forms.HiddenInput())
+    user_id = forms.IntegerField(widget = forms.HiddenInput())
 
 class EditLmForm(forms.Form):
     name = forms.CharField(label='Landmark Name ', max_length=100)
@@ -29,7 +36,7 @@ class EditLmForm(forms.Form):
     lm_id = forms.IntegerField(widget = forms.HiddenInput())
 
 class ReorderForm(forms.Form):
-    id = forms.IntegerField(widget=forms.HiddenInput())
+    pass
 
 class BaseReorderForm(forms.BaseFormSet):
     def add_fields(self, form, index):
@@ -97,19 +104,20 @@ def dash(request):
                     ans = ""
                 hForms.append({"form" : EditLmForm(initial= {"name" : x["name"], "desc" : lm.desc, "clue" : cl, "ques" : ques, "ans" : ans}), "index" : i,  "lm_id" : lm.pk})
             tms = g.req_team_statuses()
-            tForms : [{CredsForm, int}] = []
+            tForms : [{CredsForm, int, int}] = []
             for x in tms:
                 t = x["tm"]
-                cf = CredsForm(initial={"name":t.name, "user":t.pk})
+                cf = CredsForm(initial={"name":t.name})
                 cf.fields["oldpwd"].label = "Your Password: "
-                tForms.append({"form" :cf, "index" : x["index"]})
+                tForms.append({"form" :cf, "index" : x["index"], "pk": t.pk})
             rformset = forms.formset_factory(ReorderForm, formset=BaseReorderForm, extra=len(h))
             rForm = rformset()
             sForm = SchemeForm(instance=gd.scheme)
             if gd.scheme.name == 'default':
                 sForm.fields["create_new_scheme"] = True
                 sForm.fields["create_new_scheme"].widget = forms.HiddenInput()
-            return render(request, 'makerdash.html', {'name' : u.name, 'gmdet' : gd, 'teams' : tms, 'hunt' : zip(rForm.forms, h), 'sch' : gd.scheme, "cForms" : tForms, "hForms" : hForms, "schemeForm" : sForm })
+
+            return render(request, 'makerdash.html', {'name' : u.name, 'gmdet' : gd, 'teams' : tms, 'hunt' : zip(rForm, h), 'hunt_mng_form' : rForm.management_form,'sch' : gd.scheme, "cForms" : tForms, "hForms" : hForms, "schemeForm" : sForm })
         else:
             try:
                 s = Status.objects.get(team = u)
@@ -133,10 +141,10 @@ def dash(request):
                     title = "Current Clue"
                     feedback = g.req_clue(u)
                 ansForm = AnswerForm()
-                credsForm = CredsForm(initial = {"name" : u.name, "user" : u.pk})
+                cForm = CredsForm(initial = {"name" : u.name})
                 return render(request, 'teamdash.html',
                               {'name': u.name, 'type': status["curtype"], 'gmdet': status["game"], 'title': title, 'feedback': feedback,
-                               'progress': progress, 'total' : status["total"], 'ansForm' :ansForm, 'credsForm' : credsForm, 'pending' : s.pending })
+                               'progress': progress, 'total' : status["total"], 'ansForm' :ansForm, 'credsForm' : zip(cForm, u.pk), 'pending' : s.pending })
             except Exception as e:
                 title = "Error"
                 feedback= str(e)
@@ -190,56 +198,76 @@ def edit(request, type):
             u = User.objects.get(name = request.session['name'])
         except:
             return HttpResponseRedirect('/login')
-        if type == 'creds':
-            if request.method == "POST":
-                form = CredsForm(request.POST)
-                if form.is_valid():
-                    t = User.objects.get(pk = form.cleaned_data['user'])
-                    if t.pwd == form.cleaned_data['oldpwd'] or u.is_mkr:
-                        t.pwd = form.cleaned_data['newpwd']
-                        t.save()
+        try:
+            if type == 'creds':
+                if request.method == "POST":
+                    form = CredsForm(request.POST)
+                    if form.is_valid():
+                        t = User.objects.get(pk = form.cleaned_data['user_id'])
+                        cd = form.cleaned_data
+                        if t.pwd == cd['oldpwd'] or (u.is_mkr and cd['oldpwd'] == u.pwd):
+                            t.pwd = cd['newpwd']
+                            t.name = cd['name']
+                            t.save()
+                        else:
+                            return render(request, 'error.html', {'feedback':'Invalid password'})
                     else:
-                        return render(request, 'teamdash.html', {'name' : u.name, 'type': 'error', 'title':'Error', 'feedback':'Invalid old password'})
-        if u.is_mkr and request.method == 'POST':
-            gd = GameDetails.objects.get(maker=u)
-            g = Game(gd)
-            if type == 'reorder':
-                formset = request.POST
-                neworder = []
-                #for i in range(len(g.hunt)):
-                # fuck this
-            elif type == 'scheme':
-                form = SchemeForm(request.POST)
-                if form.is_valid():
-                    if not form.cleaned_data["create_new_scheme"]:
-                        form = SchemeForm(request.POST, instance = gd.scheme)
-                    form.save()
-            elif type == 'lmark':
-                form = EditLmForm(request.POST)
-                if form.is_valid():
-                    cd = form.cleaned_data
-                    lm = Landmark.objects.get(pk = int(cd['lm_id']))
-                    g.edit_lmark(lm = lm, name = cd['name'], desc = cd['desc'])
-                    g.edit_clue(lm = lm, value = cd['clue'])
-                    g.edit_conf(lm = lm, ques=cd['ques'], ans=cd['ans'])
-                else:
-                    return form.errors.as_json()
-            elif type == 'game':
-                form = EditGameForm(request.POST)
-                if form.is_valid():
-                    cd = form.cleaned_data
-                    g.edit(name = cd["name"], desc = cd["desc"])
-        elif u.is_mkr and request.method == "GET":
-            gd = GameDetails.objects.get(maker=u)
-            g = Game(gd)
-            if type == "winner":
-                w = User.objects.get(pk= request.GET.get('u'))
-                g.set_winner(w)
-            elif type == "remove":
-                t = User.objects.get(pk= request.GET.get('u'))
-                g.rm_team(t)
-        return HttpResponseRedirect("/")
-    # except Exception as e:
-        #     return render(request, "teamdash.html", {"name" : u.name, "feedback" : str(e), "title": "Error", "type" : "error"})
+                        return form.errors.as_json()
+            if u.is_mkr and request.method == 'POST':
+                gd = GameDetails.objects.get(maker=u)
+                g = Game(gd)
+                if type == 'reorder':
+                    # rformset = forms.formset_factory(ReorderForm)
+                    # rForm = rformset(request.POST)
+                    # logging.debug(request.POST)
+                    # if rForm.is_valid():
+                    #     neworder = []
+                    #     cd = rForm.cleaned_data
+                    #     logging.debug(len(cd))
+                    #     logging.debug(cd[0])
+                    #     for x in cd:
+                    #         logging.debug(x)
+                    #     # pdb.set_trace()
+                        neworder : [int] = []
+                        for i in range(len(g.hunt)):
+                            order = request.POST.get("form-{0!s}-h_{0!s}".format(i), default=False)
+                            logging.debug(order)
+                            if not order:
+                                raise Exception("Invalid reordering")
+                            neworder.append(int(order)-1)
+                        logging.debug(neworder)
+                        g.reorder_hunt(neworder)
+                elif type == 'scheme':
+                    form = SchemeForm(request.POST)
+                    if form.is_valid():
+                        if not form.cleaned_data["create_new_scheme"]:
+                            form = SchemeForm(request.POST, instance = gd.scheme)
+                        form.save()
+                elif type == 'lmark':
+                    form = EditLmForm(request.POST)
+                    if form.is_valid():
+                        cd = form.cleaned_data
+                        lm = Landmark.objects.get(pk = int(cd['lm_id']))
+                        g.edit_lmark(lm = lm, name = cd['name'], desc = cd['desc'])
+                        g.edit_clue(lm = lm, value = cd['clue'])
+                        g.edit_conf(lm = lm, ques=cd['ques'], ans=cd['ans'])
+                    else:
+                        return form.errors.as_json()
+                elif type == 'game':
+                    form = EditGameForm(request.POST)
+                    if form.is_valid():
+                        cd = form.cleaned_data
+                        g.edit(name = cd["name"], desc = cd["desc"])
+            elif u.is_mkr and request.method == "GET":
+                gd = GameDetails.objects.get(maker=u)
+                g = Game(gd)
+                if type == "winner":
+                    w = User.objects.get(pk= request.GET.get('u'))
+                    g.set_winner(w)
+                elif type == "remove":
+                    t = User.objects.get(pk= request.GET.get('u'))
+                    g.rm_team(t)
+            return HttpResponseRedirect("/")
+        except Exception as e:
+            return render(request, "error.html", {"feedback": "<h2> {0!s} - {1!s}</h2>".format(e, e.args)})
     return HttpResponseRedirect("/login")
-

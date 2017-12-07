@@ -52,9 +52,9 @@ class Game(GTMS.ITF, GTTS.ITF):
     # ValueError for illegal value
     # Warning for nonexistent Landmark (meaning one will be created)
     def edit_lmark(self, lm: Landmark, name: str, desc: str) -> bool:
-        if type(name) != str or type(desc) != str:
+        if type(name) != str or type(desc) != str or name.strip() == "" or desc.strip() == "":
             raise ValueError("Types for landmark must be string")
-            return False
+            # unneccessary
         if Landmark.objects.filter(name = lm.name, desc = lm.desc) is not None:
             lm.name = name
             lm.desc = desc
@@ -93,7 +93,7 @@ class Game(GTMS.ITF, GTTS.ITF):
     def edit_clue(self, lm: Landmark, value: str) -> bool:
         if type(value) != str:
             raise ValueError("Invalid clue value")
-        if Hunt.objects.filter(lmark = lm, game = self.dtls):
+        if Hunt.objects.filter(lmark = lm, game = self.dtls).count() == 0:
             raise IndexError("That landmark is not in this game")
         c = Clue.objects.filter(lmark = lm)
         if c.count() == 0:
@@ -141,12 +141,13 @@ class Game(GTMS.ITF, GTTS.ITF):
     # KeyError for team not in game
     def rm_team(self, team: User) -> bool:
         try:
-            u = User.objects.get(pk = team.pk)
-            if Status.objects.filter(team = team, game = self.dtls).count() == 0:
-                raise KeyError("That team is not in a game you manage")
-            u.delete()
-        except:
-            raise KeyError("That does not exist")
+            if Status.objects.filter(game = self.dtls, team = team).count() == 0:
+              raise KeyError("That team is not in a game you manage")
+            team.delete()
+        except Exception as e:
+            if type(e) is not KeyError:
+                raise KeyError("That does not exist")
+            raise e
         return True
 
 
@@ -188,7 +189,7 @@ class Game(GTMS.ITF, GTTS.ITF):
         try:
             s = ScoreScheme.objects.get(name = scheme)
             if s.name == "default":
-                raise UserError("Cannot edit default scheme")
+                raise EnvironmentError("Cannot edit default scheme")
         except:
             raise KeyError("That scheme does not exist")
         if type(wrong) != float or type(right) != float or type(plc_num) != float or type(ans_time) != float or type(gm_time) != float:
@@ -234,11 +235,15 @@ class Game(GTMS.ITF, GTTS.ITF):
             output.append({"name" : h.lmark.name, "order" : h.h_order})
         return output
 
-    def req_team_statuses(self) -> [{str, int}]:
-        output : [{str, int}] = []
+    def req_team_statuses(self) -> [{User, Status, int}]:
+        output : [{User, Status, int}] = []
         for i in range(len(self.players)):
             p = self.players[i]
-            output.append({"tm": p.team, "st" : p, "index" : i})
+            if p.cur == -1:
+                lmreport = "Done"
+            else:
+                lmreport = self.hunt[p.cur].lmark.name
+            output.append({"tm": p.team, "st" : p, "index" : i, "lm" : lmreport})
         return output
 
 
@@ -274,7 +279,7 @@ class Game(GTMS.ITF, GTTS.ITF):
     # UserWarning if team not done with game
     # KeyError if nonexistent team
     # KeyError if team not in game
-    def set_winner(self, team: User) -> User:
+    def set_winner_by_score(self, team: User) -> User:
         try:
             u = User.objects.get(pk = team.pk)
             if Status.objects.filter(team = team, game = self.dtls).count() == 0:
@@ -292,7 +297,13 @@ class Game(GTMS.ITF, GTTS.ITF):
             
         #because all scores are currently 0 - the first team will be returned    
         return Team[List.index(max(List))]
-    
+
+    def set_winner(self, team : User) -> bool:
+        self.dtls.winner = team.pk
+        self.dtls.on = False
+        self.dtls.save()
+        return True
+
     # ReferenceError if team is not playing
     # IndexError if game is not on
     # EnvironmentError if no clue
@@ -396,3 +407,11 @@ class Game(GTMS.ITF, GTTS.ITF):
         s.playing = False
         s.save()
         return True
+
+    def calc_scores(self):
+        for p in self.players:
+            p.score = 0
+            sc = LmScore.objects.filter(team=p.team, game=self.dtls)
+            for x in sc:
+                p.score = p.score + self.calc_score_entry(x)
+            p.save()

@@ -52,21 +52,18 @@ class Game(GTMS.ITF, GTTS.ITF):
     # ValueError for illegal value
     # Warning for nonexistent Landmark (meaning one will be created)
     def edit_lmark(self, lm: Landmark, name: str, desc: str) -> bool:
+        if lm not in Landmark.objects.all():
+            if Landmark.objects.filter(name = lm.name).count() != 0:
+                raise NameError("A landmark with that name already exists")
+
         if type(name) != str or type(desc) != str or name.strip() == "" or desc.strip() == "":
             raise ValueError("Types for landmark must be string")
-            # unneccessary
-        if Landmark.objects.filter(name = lm.name, desc = lm.desc) is not None:
-            lm.name = name
-            lm.desc = desc
-            lm.save()
-            
-            if Hunt.objects.filter(lmark = lm, game = self.dtls) is None:
-                Hunt(lmark = lm, game = self.dtls).save()
-        else:
-            Lnd = Landmark(name = name, desc = desc)
-            Lnd.save()
-            Hunt(lmark = Lnd, game = self.dtls).save()
-        
+
+        lm.save()
+        if Hunt.objects.filter(lmark = lm, game = self.dtls).count() == 0:
+            h = Hunt(lmark = lm, game = self.dtls)
+            h.save()
+
         return True
             
     # ValueError if invalid order
@@ -135,6 +132,13 @@ class Game(GTMS.ITF, GTTS.ITF):
         u.save()
         s = Status(team = u, game = self.dtls, playing = self.dtls.on)
         s.save()
+        return True
+
+    def rm_lmark(self, index: int) -> bool:
+        if index < 0 or index >= len(self.hunt):
+            raise IndexError("Invalid landmark to remove")
+        h = Hunt.objects.get(game = self.dtls, h_order = index)
+        h.delete()
         return True
 
     # KeyError for nonexistent team

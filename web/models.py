@@ -28,7 +28,7 @@ class GameDetails(models.Model):
     on = models.BooleanField(default = False)
     winner = models.IntegerField(default = -1)
     maker = models.ForeignKey(User, on_delete = models.CASCADE)
-    scheme = models.ForeignKey(ScoreScheme)
+    scheme = models.ForeignKey(ScoreScheme, default=ScoreScheme.objects.get(name = 'default'))
     startTime = models.DateTimeField(default = None, null = True)
     def __str__(self):
         return str('Game ModInst :: name = ' + self.name + ', maker = '+ self.maker.name )

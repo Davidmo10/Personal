@@ -84,7 +84,7 @@ def dash(request):
             try:
                 gd = GameDetails.objects.get(maker = u)
             except:
-                return HttpResponseRedirect('/do/mkgame')
+                return HttpResponseRedirect('/do/create')
             g = Game(gd)
             h = g.req_hunt()
             hForms : [{EditLmForm, int}] = []
@@ -113,18 +113,16 @@ def dash(request):
             rformset = forms.formset_factory(ReorderForm, formset=BaseReorderForm, extra=len(h))
             rForm = rformset()
             sForm = SchemeForm(instance=gd.scheme)
-            if gd.scheme.name == 'default':
-                sForm.fields["create_new_scheme"] = True
-                sForm.fields["create_new_scheme"].widget = forms.HiddenInput()
             ntcForm = CredsForm()
             ntcForm.fields["oldpwd"].label = "Password"
             ntcForm.fields["newpwd"].label = "Repeat Password"
             mkrForm = CredsForm(initial = {"name" : u.name})
             gForm = EditGameForm(instance = g.dtls)
+            newlmForm = EditLmForm()
             return render(request, 'makerdash.html', {'name' : u.name, 'gmdet' : gd, 'teams' : tms, 'hunt' : zip(rForm, h),
                                                       'hunt_mng_form' : rForm.management_form,'sch' : gd.scheme, "cForms" : tForms,
                                                       "hForms" : hForms, "schemeForm" : sForm, 'ntForm': ntcForm, 'credsForm' : [mkrForm, u.pk],
-                                                        "gameForm" : gForm,
+                                                        "gameForm" : gForm, "newlmForm" : newlmForm,
                                                       })
         else:
             try:
@@ -189,14 +187,33 @@ def do(request, type):
     if request.session.get('loggedin', False):
         try:
             u = User.objects.get(name = request.session['name'])
-            s = Status.objects.get(team = u)
         except:
             return HttpResponseRedirect('/login')
-        if type == 'forfeit':
-            s.playing = False
-            s.save()
         if type == 'logout':
             request.session.flush()
+        if not u.is_mkr:
+            s = Status.objects.get(team = u)
+            if type == 'forfeit':
+                s.playing = False
+                s.save()
+        else:
+            try:
+                gd = GameDetails.objects.get(maker = u)
+            except Exception as e:
+                if request.method == 'POST':
+                    cf = EditGameForm(request.POST)
+                    if cf.is_valid():
+                        cd = cf.cleaned_data
+                        GameDetails(name = cd["name"],desc = cd["desc"], maker = u, scheme = ScoreScheme.objects.get(name = 'default')).save()
+                    return HttpResponseRedirect('/')
+                else:
+                    cf = EditGameForm()
+                    return render(request, "create.html", {"maker" : u.pk, "createForm" : cf})
+            g = Game(gd)
+            if type == 'stop':
+                g.stop()
+            if type == 'start':
+                g.start()
         return HttpResponseRedirect("/")
     # except Exception as e:
         #     return render(request, "teamdash.html", {"name" : u.name, "feedback" : str(e), "title": "Error", "type" : "error"})
@@ -261,6 +278,7 @@ def edit(request, type):
                         else:
                             lm = Landmark(name = cd['name'], desc = cd['desc'])
                         g.edit_lmark(lm = lm, name = cd['name'], desc = cd['desc'])
+                        lm = Landmark.objects.get(name = cd['name'])
                         g.edit_clue(lm = lm, value = cd['clue'])
                         g.edit_conf(lm = lm, ques=cd['ques'], ans=cd['ans'])
                     else:
@@ -277,9 +295,14 @@ def edit(request, type):
                     w = User.objects.get(pk= request.GET.get('u'))
                     g.set_winner(w)
                 elif type == "remove":
-                    t = User.objects.get(pk= request.GET.get('u'))
-                    g.rm_team(t)
+                    tm = request.GET.get('u', default=False)
+                    if tm is not False:
+                        t = User.objects.get(pk= tm)
+                        g.rm_team(t)
+                    lm = request.GET.get('lm', default=False)
+                    if lm is not False:
+                        g.rm_lmark(int(lm))
             return HttpResponseRedirect("/")
         except Exception as e:
-            return render(request, "error.html", {"feedback": "<h2> {0!s} - {1!s}</h2>".format(e, e.args)})
+            return render(request, "error.html", {"feedback": " {0!s} - {1!s}".format(e, e.args)})
     return HttpResponseRedirect("/login")

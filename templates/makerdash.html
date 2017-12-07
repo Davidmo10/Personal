@@ -60,6 +60,13 @@
             el.style.display = 'block';
             curVisible = el;
         }
+        function switchIt(id) {
+            clearChild();
+            el = document.getElementById(id);
+            el.style.display = 'block';
+            curVisible = el;
+
+        }
     </script>
 </head>
 
@@ -67,18 +74,20 @@
 <h1 id="header">Welcome back {{ name }}!</h1>
 <div id="commands"><a href="do/logout">Logout</a>
     <a href="do/{% if gmdet.on %}stop">End {% else %}start">Start {% endif %}Game</a>
-    <a href="javascript:showEditCreds()">Edit Credentials</a>
-    <a href="javascript:editGameDetails()">Edit Game Details</a></div><br><br>
+    <a href="javascript:switchIt('editCreds')">Edit Credentials</a>
+    <a href="javascript:switchIt('editgamedetails')">Edit Game Details</a></div><br><br>
 <div id="status">
     <b>{{ gmdet.name }}</b><br>
+    <a href="javascript:switchIt('addLM')" style="font-size:15px">Add Landmark</a><br>
+    {% if hunt.all %}
     <form id='reorder-form' action="edit/reorder" method="POST">
     {% csrf_token %}
     {{ hunt_mng_form }}
     {% for x in hunt %}
         <div id="hunt_detail">
-            <div id="stat_order"><span class="huntForm">{{x.0}}</span><span class="huntOrder">{{ x0 }}</span></div>
+            <div id="stat_order"><span class="huntForm">{{x.0}}</span><span class="huntOrder">{{ x.0 }}</span></div>
             <b><a href="javascript:editLm({{ x.1.order }})">{{ x.1.name }}</a></b><br>
-
+            <a style="font-size:15px" href="/edit/remove?lm={{ x.1.order }}">Remove Landmark</a>
         </div>
     {% endfor %}
     <span style="font-size:85%; line-height:1.3">
@@ -88,11 +97,12 @@
     </span><span class="huntOrder">
         <a href="javascript:showReorder()">Reorder</a>
     </span></span>
-    </form>
+    </form> {% endif %}
 </div>
 <div id="middle-block">
-    <div id="scheme"><table><tr><td style="width:120px"><b>Score Scheme :</b><br>{{ sch.name }}<br><a href="javascript:showEditScheme()">Edit</a></td><td><b>Wrong</b> = {{ sch.wrong }} <b>Right</b> = {{ sch.right }} <b>Per Pending Answer Second</b> = {{ sch.ans_per_sec }}<br><b>Place Numerator</b> = {{ sch.place_numerator }} <b>Game Duration per Second</b> = {{ sch.game_per_sec }}</td></tr></table></div>
+    <div id="scheme"><table><tr><td style="width:120px"><b>Score Scheme :</b><br>{{ sch.name }}<br><a href="javascript:switchIt('editscheme')">Edit</a></td><td><b>Wrong</b> = {{ sch.wrong }} <b>Right</b> = {{ sch.right }} <b>Per Pending Answer Second</b> = {{ sch.ans_per_sec }}<br><b>Place Numerator</b> = {{ sch.place_numerator }} <b>Game Duration per Second</b> = {{ sch.game_per_sec }}</td></tr></table></div>
 <div id="feedback">
+    <div id="addLM" style="display:none"><form action="/edit/lmark" method="POST">{% csrf_token %} {{ newlmForm.as_p }}<input type="hidden" name="lm_id" value="-1"><input type="submit" value="Add Landmark"></form></div>
     <div id="gameDesc">
         <h2>{{ gmdet.name }}
             {% if gmdet.on %} is underway!</h2><br>

@@ -7,11 +7,11 @@
 </head>
 
 <body style="text-align:center; margin-top:100px;background:lavender; color:darkblue">
-<h1 id="header">Error</h1>
+<h1 id="header">Create Game</h1>
 <div id="feedback">
-    <h2>{{ feedback }}</h2>
+    <form action="/do/create" method="POST">{% csrf_token %}{{ createForm.as_p }}<input type="hidden" name="mkr" value="{{ maker }}">
+        <input type="submit" value="Create Game"></form>
     <br><br>
-    <a href="/" style="font-size:18px; text-decoration:underline">Home</a>
 </div>
 </body>
 </html>

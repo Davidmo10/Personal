@@ -156,7 +156,7 @@ def dash(request):
             except Exception as e:
                 title = "Error"
                 feedback= str(e)
-                return render(request, 'teamdash.html', {'name': u.name, 'type': "error", 'feedback' : feedback, 'title': title})
+                return render(request, 'error.html', {'feedback' : feedback})
 
     else:
         return HttpResponseRedirect('/login')

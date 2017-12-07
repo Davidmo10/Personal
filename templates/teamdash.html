@@ -30,11 +30,11 @@
     {{ feedback }}
     <br><br>
     {% if type == 'clue' %}
-        <a href="/do/ques">Request Question</a>
+        <a href="/req/ques">Request Question</a>
     {%  elif type == 'pending' %}
         Requested @ {{ pending }}
         <br><br>
-        <form action="/do/ans" method="POST">
+        <form action="/req/ans" method="POST">
         {% csrf_token %}
         {{ ansForm }}
         <input type="submit" value="Submit Answer">

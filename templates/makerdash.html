@@ -54,6 +54,12 @@
             el.style.display = 'block';
             curVisible = el;
         }
+        function editGameDetails() {
+            clearChild();
+            el = document.getElementById('editgamedetails');
+            el.style.display = 'block';
+            curVisible = el;
+        }
     </script>
 </head>
 
@@ -62,7 +68,7 @@
 <div id="commands"><a href="do/logout">Logout</a>
     <a href="do/{% if gmdet.on %}stop">End {% else %}start">Start {% endif %}Game</a>
     <a href="javascript:showEditCreds()">Edit Credentials</a>
-    <a href="edit/game">Edit Game Details</a></div><br><br>
+    <a href="javascript:editGameDetails()">Edit Game Details</a></div><br><br>
 <div id="status">
     <b>{{ gmdet.name }}</b><br>
     <form id='reorder-form' action="edit/reorder" method="POST">
@@ -87,8 +93,10 @@
 <div id="middle-block">
     <div id="scheme"><table><tr><td style="width:120px"><b>Score Scheme :</b><br>{{ sch.name }}<br><a href="javascript:showEditScheme()">Edit</a></td><td><b>Wrong</b> = {{ sch.wrong }} <b>Right</b> = {{ sch.right }} <b>Per Pending Answer Second</b> = {{ sch.ans_per_sec }}<br><b>Place Numerator</b> = {{ sch.place_numerator }} <b>Game Duration per Second</b> = {{ sch.game_per_sec }}</td></tr></table></div>
 <div id="feedback">
+    <div id="gameDesc">{{ gmdet.desc }}<script>curVisible = document.getElementById('gameDesc');</script></div>
     <div id="editcreds"><form action="edit/creds" method="POST">{% csrf_token %}{{ credsForm.0.as_p }}<input type="hidden" name="user_id" value="{{  credsForm.1}}"><input type="submit" value="Change credentials"></form></div>
     <div id="editscheme"><form action="edit/scheme" method="POST">{% csrf_token %}{{ schemeForm.as_p }}<input type="submit" value="Submit Edit"></form></div>
+    <div id="editgamedetails"><form action="edit/game" method="POST">{% csrf_token %}{{ gameForm.as_p }}<input type="submit" value="Edit Game Details"></form></div>
     {% for x in hForms %}
         <div id="hForm{{ x.index }}" style="display:none">
             <h2>{{ x.form.name.value }}</h2>

@@ -184,24 +184,17 @@ class Game(GTMS.ITF, GTTS.ITF):
     # KeyError on nonexistent scheme
     # EnvironmentError if another game is using the same scheme
     # ValueError on non-float values
-    def edit_score_sch(self, scheme: str, wrong: float, right: float, plc_num: float, ans_time: float,
-                       gm_time: float) -> bool:
-        try:
-            s = ScoreScheme.objects.get(name = scheme)
-            if s.name == "default":
-                raise EnvironmentError("Cannot edit default scheme")
-        except:
-            raise KeyError("That scheme does not exist")
-        if type(wrong) != float or type(right) != float or type(plc_num) != float or type(ans_time) != float or type(gm_time) != float:
+    def edit_score_sch(self, scheme: ScoreScheme) -> bool:
+        if scheme.name == "default":
+            raise EnvironmentError("Cannot edit default scheme")
+        if type(scheme.wrong) != float or type(scheme.right) != float or type(scheme.place_numerator) != float or type(scheme.ans_per_sec) != float or type(scheme.game_per_sec) != float:
             raise ValueError("Invalid scoring scheme")
-        if GameDetails.objects.filter(scheme = s).exclude(name = self.name) != 0:
+        if GameDetails.objects.filter(scheme = scheme).exclude(name = self.name).count() != 0:
             raise EnvironmentError("Another game is using this scoring scheme, try creating a new one")
-        s.right = right
-        s.wrong = wrong
-        s.place_numerator = plc_num
-        s.ans_per_sec = ans_time
-        s.game_per_sec = gm_time
-        s.save()
+        scheme.save()
+        self.dtls.scheme = scheme
+        self.dtls.save()
+        self.calc_scores()
         return True
     
    

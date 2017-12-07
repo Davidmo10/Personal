@@ -44,7 +44,7 @@ class BaseReorderForm(forms.BaseFormSet):
         form.fields["h_" + str(index)] = forms.IntegerField(initial=index+1, label="", widget=forms.TextInput(attrs={'class':'reorder_box'}))
 
 class SchemeForm(forms.ModelForm):
-    create_new_scheme = forms.BooleanField(initial=False)
+    create_new_scheme = forms.BooleanField(initial=False, required = False)
     class Meta:
         model = ScoreScheme
         fields = ['name', 'wrong', 'right', 'place_numerator', 'ans_per_sec', 'game_per_sec']
@@ -120,10 +120,11 @@ def dash(request):
             ntcForm.fields["oldpwd"].label = "Password"
             ntcForm.fields["newpwd"].label = "Repeat Password"
             mkrForm = CredsForm(initial = {"name" : u.name})
+            gForm = EditGameForm(instance = g.dtls)
             return render(request, 'makerdash.html', {'name' : u.name, 'gmdet' : gd, 'teams' : tms, 'hunt' : zip(rForm, h),
                                                       'hunt_mng_form' : rForm.management_form,'sch' : gd.scheme, "cForms" : tForms,
                                                       "hForms" : hForms, "schemeForm" : sForm, 'ntForm': ntcForm, 'credsForm' : [mkrForm, u.pk],
-
+                                                        "gameForm" : gForm,
                                                       })
         else:
             try:
@@ -151,7 +152,7 @@ def dash(request):
                 cForm = CredsForm(initial = {"name" : u.name})
                 return render(request, 'teamdash.html',
                               {'name': u.name, 'type': status["curtype"], 'gmdet': status["game"], 'title': title, 'feedback': feedback,
-                               'progress': progress, 'total' : status["total"], 'ansForm' :ansForm, 'credsForm' : zip(cForm, u.pk), 'pending' : s.pending,
+                               'progress': progress, 'total' : status["total"], 'ansForm' :ansForm, 'credsForm' : [cForm, u.pk], 'pending' : s.pending,
 
                                 })
             except Exception as e:
@@ -248,7 +249,8 @@ def edit(request, type):
                     if form.is_valid():
                         if not form.cleaned_data["create_new_scheme"]:
                             form = SchemeForm(request.POST, instance = gd.scheme)
-                        form.save()
+                        sch = form.save(commit=False)
+                        g.edit_score_sch(sch)
                 elif type == 'lmark':
                     form = EditLmForm(request.POST)
                     if form.is_valid():

@@ -114,3 +114,7 @@ a:hover {
 #header {
     margin-left:-86px;
 }
+
+#newteam {
+    display: none;
+}

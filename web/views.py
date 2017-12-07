@@ -116,8 +116,15 @@ def dash(request):
             if gd.scheme.name == 'default':
                 sForm.fields["create_new_scheme"] = True
                 sForm.fields["create_new_scheme"].widget = forms.HiddenInput()
+            ntcForm = CredsForm()
+            ntcForm.fields["oldpwd"].label = "Password"
+            ntcForm.fields["newpwd"].label = "Repeat Password"
+            mkrForm = CredsForm(initial = {"name" : u.name})
+            return render(request, 'makerdash.html', {'name' : u.name, 'gmdet' : gd, 'teams' : tms, 'hunt' : zip(rForm, h),
+                                                      'hunt_mng_form' : rForm.management_form,'sch' : gd.scheme, "cForms" : tForms,
+                                                      "hForms" : hForms, "schemeForm" : sForm, 'ntForm': ntcForm, 'credsForm' : [mkrForm, u.pk],
 
-            return render(request, 'makerdash.html', {'name' : u.name, 'gmdet' : gd, 'teams' : tms, 'hunt' : zip(rForm, h), 'hunt_mng_form' : rForm.management_form,'sch' : gd.scheme, "cForms" : tForms, "hForms" : hForms, "schemeForm" : sForm })
+                                                      })
         else:
             try:
                 s = Status.objects.get(team = u)
@@ -144,7 +151,9 @@ def dash(request):
                 cForm = CredsForm(initial = {"name" : u.name})
                 return render(request, 'teamdash.html',
                               {'name': u.name, 'type': status["curtype"], 'gmdet': status["game"], 'title': title, 'feedback': feedback,
-                               'progress': progress, 'total' : status["total"], 'ansForm' :ansForm, 'credsForm' : zip(cForm, u.pk), 'pending' : s.pending })
+                               'progress': progress, 'total' : status["total"], 'ansForm' :ansForm, 'credsForm' : zip(cForm, u.pk), 'pending' : s.pending,
+
+                                })
             except Exception as e:
                 title = "Error"
                 feedback= str(e)
@@ -203,40 +212,37 @@ def edit(request, type):
                 if request.method == "POST":
                     form = CredsForm(request.POST)
                     if form.is_valid():
-                        t = User.objects.get(pk = form.cleaned_data['user_id'])
                         cd = form.cleaned_data
+                        t_pk = cd['user_id']
+                        if t_pk == -1 and u.is_mkr:
+                            if cd['newpwd'] != cd['oldpwd']:
+                                return render(request, 'error.html', {'feedback' : "Passwords did not match"})
+                            gd = GameDetails.objects.get(maker=u)
+                            g = Game(gd)
+                            g.mk_team(cd["name"], cd["newpwd"])
+                            return HttpResponseRedirect('/')
+                        t = User.objects.get(pk = t_pk)
                         if t.pwd == cd['oldpwd'] or (u.is_mkr and cd['oldpwd'] == u.pwd):
                             t.pwd = cd['newpwd']
                             t.name = cd['name']
                             t.save()
                         else:
-                            return render(request, 'error.html', {'feedback':'Invalid password'})
+                            return render(request, 'error.html', {'feedback':'Invalid login information'})
                     else:
                         return form.errors.as_json()
             if u.is_mkr and request.method == 'POST':
                 gd = GameDetails.objects.get(maker=u)
                 g = Game(gd)
                 if type == 'reorder':
-                    # rformset = forms.formset_factory(ReorderForm)
-                    # rForm = rformset(request.POST)
-                    # logging.debug(request.POST)
-                    # if rForm.is_valid():
-                    #     neworder = []
-                    #     cd = rForm.cleaned_data
-                    #     logging.debug(len(cd))
-                    #     logging.debug(cd[0])
-                    #     for x in cd:
-                    #         logging.debug(x)
-                    #     # pdb.set_trace()
-                        neworder : [int] = []
-                        for i in range(len(g.hunt)):
-                            order = request.POST.get("form-{0!s}-h_{0!s}".format(i), default=False)
-                            logging.debug(order)
-                            if not order:
-                                raise Exception("Invalid reordering")
-                            neworder.append(int(order)-1)
-                        logging.debug(neworder)
-                        g.reorder_hunt(neworder)
+                    neworder : [int] = []
+                    for i in range(len(g.hunt)):
+                        order = request.POST.get("form-{0!s}-h_{0!s}".format(i), default=False)
+                        logging.debug(order)
+                        if not order:
+                            raise Exception("Invalid reordering")
+                        neworder.append(int(order)-1)
+                    logging.debug(neworder)
+                    g.reorder_hunt(neworder)
                 elif type == 'scheme':
                     form = SchemeForm(request.POST)
                     if form.is_valid():
@@ -247,7 +253,11 @@ def edit(request, type):
                     form = EditLmForm(request.POST)
                     if form.is_valid():
                         cd = form.cleaned_data
-                        lm = Landmark.objects.get(pk = int(cd['lm_id']))
+                        lm_pk = int(cd['lm_id'])
+                        if(lm_pk != -1):
+                            lm = Landmark.objects.get(pk = lm_pk)
+                        else:
+                            lm = Landmark(name = cd['name'], desc = cd['desc'])
                         g.edit_lmark(lm = lm, name = cd['name'], desc = cd['desc'])
                         g.edit_clue(lm = lm, value = cd['clue'])
                         g.edit_conf(lm = lm, ques=cd['ques'], ans=cd['ans'])

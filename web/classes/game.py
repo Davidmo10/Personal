@@ -133,7 +133,7 @@ class Game(GTMS.ITF, GTTS.ITF):
             raise NameError("A user with that name already exists")
         u = User(name = name, pwd = pwd)
         u.save()
-        s = Status(team = u, game = self.dtls)
+        s = Status(team = u, game = self.dtls, playing = self.dtls.on)
         s.save()
         return True
 

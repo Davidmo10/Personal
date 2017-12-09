@@ -127,6 +127,7 @@ class TestData:
         ]
         for m in my_models:
             m.save()
+        User(name='newmkr', pwd='pwd', is_mkr=True).save()
         gd = GameDetails.objects.get(pk = gd_pk)
         g = Game(gd)
         g.calc_scores()

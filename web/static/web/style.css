@@ -48,6 +48,10 @@ body>div>div{
     font-size: 110%;
 }
 
+.error{
+    color: #F44336;
+}
+
 #team-status{
     flex: 0 1 auto;
     background: ghostwhite;
@@ -69,7 +73,6 @@ body>div>div{
     /*width: auto;*/
     /*position:relative;*/
     background:cornsilk;
-    /*border: aliceblue groove 3px;*/
     /*margin-bottom:10px;*/
     /*padding:5px;*/
     /*text-align:left;*/

@@ -11,7 +11,7 @@
 
 <br><br>
 {% if attempted %}
-    <h2>We're sorry, that login information is invalid</h2>
+    <h3 class="error">We're sorry, that login information is invalid</h3>
 {% endif %}
 <form action="/login" method="POST">
     {% csrf_token %}

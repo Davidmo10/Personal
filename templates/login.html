@@ -3,15 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>eScavenge</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static "web/style.css" %}">
 </head>
-<body style="text-align:center; margin-top:100px;background:lavender; color:darkblue">
+<body>
 <h1>Welcome to eScavenge!</h1>
 
 <br><br>
 {% if attempted %}
     <h2>We're sorry, that login information is invalid</h2>
 {% endif %}
-<h3>Login:</h3>
 <form action="/login" method="POST">
     {% csrf_token %}
     {{ form.as_p }}

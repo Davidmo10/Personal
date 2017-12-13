@@ -88,7 +88,7 @@ class Hunt(models.Model):
 			self.h_order) + 'game = ' + self.game.name + 'lmark = ' + self.lmark.name)
 
 	def save(self, *args, **kwargs):
-		if (self.h_order == -1):
+		if self.h_order == -1:
 			self.h_order = Hunt.objects.filter(game=self.game).count()
 		super().save(*args, **kwargs)
 

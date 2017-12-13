@@ -74,7 +74,6 @@ class GameMaker(User):
 		self.myGame.myUserDict.append(team)
 		return True
 
-
 	# def create_scavenger_hunt(self):
 	# 	pass
 

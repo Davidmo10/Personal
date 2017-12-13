@@ -72,11 +72,11 @@ class Game(GTMS.ITF, GTTS.ITF):
 	def reorder_hunt(self, order: [int]) -> bool:
 		if len(self.hunt) != len(order):
 			raise IndexError("Invalid order")
-		iMax = len(order)
-		seen: [bool] = [False] * iMax
-		for i in range(iMax):
+		i_max = len(order)
+		seen: [bool] = [False] * i_max
+		for i in range(i_max):
 			cur = order[i]
-			if cur not in range(iMax):
+			if cur not in range(i_max):
 				raise ValueError("Invalid order")
 			if seen[cur]:
 				raise ValueError("Invalid order")
@@ -161,7 +161,7 @@ class Game(GTMS.ITF, GTTS.ITF):
 			u = User.objects.get(pk=team.pk)
 			if Status.objects.filter(team=team, game=self.dtls).count() == 0:
 				raise KeyError("That team is not in a game you manage")
-		except:
+		except (Status.DoesNotExist, KeyError):
 			raise KeyError("That team does not exist")
 		if type(name) is not str or name.strip() == "":
 			raise ValueError("Illegal name")
@@ -203,7 +203,7 @@ class Game(GTMS.ITF, GTTS.ITF):
 	def req_status(self, team: User) -> {GameDetails, str, bool, float}:
 		try:
 			u = User.objects.get(pk=team.pk)
-		except:
+		except User.DoesNotExist:
 			raise KeyError("User does not exist")
 		progress = self.req_team_progress(team)
 		tot_score = 0
@@ -314,7 +314,7 @@ class Game(GTMS.ITF, GTTS.ITF):
 		try:
 			c = Clue.objects.get(lmark=lm)
 			return c.value
-		except:
+		except Clue.DoesNotExist:
 			raise EnvironmentError("There is no clue associated with this landmark")
 
 	# ReferenceError if team is not playing
@@ -337,7 +337,7 @@ class Game(GTMS.ITF, GTTS.ITF):
 			s.pending = dt.now(tz('US/Central'))
 			s.save()
 			return c.ques
-		except:
+		except Clue.DoesNotExist:
 			raise EnvironmentError("There is no confirmation associated with this landmark")
 
 	# ReferenceError if team is not playing
@@ -363,7 +363,7 @@ class Game(GTMS.ITF, GTTS.ITF):
 			sc.save()
 			s.pending = None
 			s.score = s.score + self.calc_score_entry(sc)
-			if (ans == c.ans):
+			if ans == c.ans:
 				s.cur = s.cur + 1
 				if s.cur > len(self.hunt):
 					s.playing = False
@@ -372,7 +372,7 @@ class Game(GTMS.ITF, GTTS.ITF):
 			else:
 				s.save()
 				return False
-		except:
+		except Confirmation.DoesNotExist:
 			raise EnvironmentError("There is no confirmation associated with this landmark")
 
 	# KeyError on nonexistent team
@@ -385,7 +385,7 @@ class Game(GTMS.ITF, GTTS.ITF):
 	def forfeit(self, team: User) -> bool:
 		try:
 			t = User.objects.get(pk=team.pk)
-		except:
+		except User.DoesNotExist:
 			raise KeyError("Nonexistent team may not forfeit")
 		if not self.is_on():
 			raise IndexError("Cannot forfeit a game that is not in progress")

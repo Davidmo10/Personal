@@ -13,7 +13,7 @@ class ITF(ABC):
     
     # ValueError if invalid order
     # IndexError if submitted order is longer than hunt or less than zero
-    def reorder_hunt(self, order : [int] ) -> bool:
+    def reorder_hunt(self, order: [int]) -> bool:
         pass
     
     # ValueError for illegal value

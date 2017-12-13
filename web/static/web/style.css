@@ -70,10 +70,7 @@ body>div>div{
 }
 
 #scheme{
-    /*width: auto;*/
-    /*position:relative;*/
     background:cornsilk;
-    /*margin-bottom:10px;*/
     text-align:left;
 }
 
@@ -97,16 +94,6 @@ body>div>div{
     font-size:18px;
 }
 
-/*#status {*/
-    /*position:absolute;*/
-    /*width: 200px;*/
-    /*background:ghostwhite;*/
-    /*font-size:20px;*/
-    /*border: aliceblue groove 3px;*/
-    /*margin-bottom:20px;*/
-    /*padding:10px 0;*/
-/*}*/
-
 #stat_order {
     position:absolute;
     left:2px;
@@ -118,29 +105,6 @@ body>div>div{
 #editcreds {
     display:none;
 }
-
-/*#teams {*/
-    /*position:absolute;*/
-    /*width: 200px;*/
-    /*background:ghostwhite;*/
-    /*font-size:20px;*/
-    /*border: aliceblue groove 3px;*/
-    /*margin-bottom:20px;*/
-    /*left:1000px;*/
-    /*top:215px;*/
-    /*font-weight:bold;*/
-/*}*/
-
-/*#scheme {*/
-    /*width:682px;*/
-    /*left:244px;*/
-    /*position:relative;*/
-    /*background:cornsilk;*/
-    /*border: aliceblue groove 3px;*/
-    /*margin-bottom:10px;*/
-    /*padding:5px;*/
-    /*text-align:left;*/
-/*}*/
 
 table {
     border: 0;

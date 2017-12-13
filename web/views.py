@@ -76,7 +76,7 @@ def login(request):
 					request.session['name'] = u.name
 					request.session['mkr'] = u.is_mkr
 					return HttpResponseRedirect('/')
-			except:
+			except (User.DoesNotExist, ValueError):
 				form = LoginForm()
 				return render(request, 'login.html', {'form': form, 'attempted': True})
 	else:
@@ -88,12 +88,12 @@ def dash(request):
 	if request.session.get('loggedin', False):
 		try:
 			u = User.objects.get(name=request.session['name'])
-		except:
+		except (User.DoesNotExist, KeyError):
 			return HttpResponseRedirect('/login')
 		if request.session['mkr']:
 			try:
 				gd = GameDetails.objects.get(maker=u)
-			except:
+			except GameDetails.DoesNotExist:
 				return HttpResponseRedirect('/do/create')
 			g = Game(gd)
 			h = g.req_hunt()
@@ -103,13 +103,13 @@ def dash(request):
 				lm = Landmark.objects.get(name=x["name"])
 				try:
 					cl = Clue.objects.get(lmark__name=x["name"]).value
-				except:
+				except (Clue.DoesNotExist, KeyError):
 					cl = ""
 				try:
 					co = Confirmation.objects.get(lmark__name=x["name"])
 					ques = co.ques
 					ans = co.ans
-				except:
+				except (Confirmation.DoesNotExist, KeyError):
 					ques = ""
 					ans = ""
 				h_forms.append({"form": EditLmForm(
@@ -182,11 +182,9 @@ def req(request, kind):
 		try:
 			u = User.objects.get(name=request.session['name'])
 			s = Status.objects.get(team=u)
-		except:
+		except (User.DoesNotExist, Status.DoesNotExist, KeyError):
 			return HttpResponseRedirect('/login')
-		# try:
 		g = Game(s.game)
-		status = g.req_status(u)
 		if kind == "ques":
 			g.req_ques(u)
 		elif kind == "ans":
@@ -195,8 +193,6 @@ def req(request, kind):
 				if form.is_valid():
 					g.submit_ans(u, form.cleaned_data["ans"])
 		return HttpResponseRedirect("/")
-		# except Exception as e:
-		#     return render(request, "teamdash.html", {"name" : u.name, "feedback" : str(e), "title": "Error", "type" : "error"})
 	return HttpResponseRedirect("/login")
 
 
@@ -204,7 +200,7 @@ def do(request, action):
 	if request.session.get('loggedin', False):
 		try:
 			u = User.objects.get(name=request.session['name'])
-		except:
+		except (User.DoesNotExist, KeyError):
 			return HttpResponseRedirect('/login')
 		if action == 'logout':
 			request.session.flush()
@@ -216,7 +212,7 @@ def do(request, action):
 		else:
 			try:
 				gd = GameDetails.objects.get(maker=u)
-			except Exception as e:
+			except GameDetails.DoesNotExist:
 				if request.method == 'POST':
 					cf = EditGameForm(request.POST)
 					if cf.is_valid():
@@ -240,7 +236,7 @@ def edit(request, to_edit):
 	if request.session.get('loggedin', False):
 		try:
 			u = User.objects.get(name=request.session['name'])
-		except:
+		except (User.DoesNotExist, KeyError):
 			return HttpResponseRedirect('/login')
 		try:
 			if to_edit == 'creds':

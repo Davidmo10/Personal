@@ -1,18 +1,29 @@
 /*Fonts*/
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 
+/*Main color scheme*/
+:root{
+    --primary-color: #ce93d8;
+    --primary-text-color: black;
+    /*--secondary-text-color: #631D28;*/
+    --secondary-text-color: maroon;
+}
+
 /*Background*/
 body{
     font-family: "Roboto", Arial, sans-serif;
     background: #F5F5F5;
-    color: black;
+    color: var(--primary-text-color);
     text-align: center;
-    margin-top: 46px;
+    margin: 0;
 }
 
-/*Any div within a top-level div*/
-body>div>div{
-    border:aliceblue groove 5px;
+header{
+    padding: 20px;
+    background: var(--primary-color);
+}
+header h1{
+    margin-top: 0;
 }
 
 .commands{
@@ -25,21 +36,20 @@ body>div>div{
 
 .flex-container{
     display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    align-items: flex-start;
+    justify-content: space-evenly;
+    flex-flow: row wrap;
+    align-items: stretch;
 }
 
 .vertical-flex{
-    flex: 0 1 650px;
-    display:flex;
-    flex-direction: column;
-    margin-left: 20px;
-    margin-right: 20px;
+    flex: 1 1 650px;
+    display: flex;
+    flex-flow: column nowrap;
+    order: 1;
 }
 
 .feedback{
-    flex: 0 1 auto;
+    flex: 2 1 650px;
     padding: 20px;
     background: papayawhip;
 }
@@ -52,27 +62,25 @@ body>div>div{
     color: #F44336;
 }
 
-#team-status{
-    flex: 0 1 auto;
+.sidebar{
+    box-sizing: border-box;
+    flex: 1 1 200px;
     background: ghostwhite;
     padding: 10px;
+    order: 1;
+    border: solid grey .5px;
 }
 
-#status{
-    flex: 0 1 200px;
-    background: ghostwhite;
-    border:aliceblue groove 5px;
-}
-
-#teams{
-    flex: 0 1 200px;
-    background: ghostwhite;
+.horizontal_bar{
+    flex: 0 1 auto;
+    background:cornsilk;
+    padding: 5px;
 }
 
 #scheme{
-    background:cornsilk;
     text-align:left;
 }
+
 
 /*Material Design box shadows from https://codepen.io/sdthornton/pen/wBZdXq*/
 
@@ -102,10 +110,6 @@ body>div>div{
     border-bottom: 1px;
 }
 
-#editcreds {
-    display:none;
-}
-
 table {
     border: 0;
     margin: 0;
@@ -129,11 +133,11 @@ td b {
     line-height: 1.5;
 }
 a {
-    color:maroon;
+    color: var(--secondary-text-color);
     text-decoration:none;
 }
 a:visited {
-    color:maroon;
+    color: var(--secondary-text-color);
     text-decoration:none;
 }
 a:hover {
@@ -153,17 +157,12 @@ a:hover {
     border-bottom: 2px solid deepskyblue;
 }
 
-.huntForm {
-    display:none;
-}
-#editscheme {
+.hidden_form{
     display: none;
 }
 
-#newteam {
-    display: none;
-}
-
-#editgamedetails {
-    display: none;
+@media (max-width: 866px) {
+    .vertical-flex {
+        order: 0;
+    }
 }

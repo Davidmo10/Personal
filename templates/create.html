@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ name }}'s eScavenge Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}style.css">
+</head>
+
+<body style="text-align:center; margin-top:100px;background:lavender; color:darkblue">
+<h1 id="header">Create Game</h1>
+<a href="/do/logout">Logout</a><br>
+<div id="feedback">
+    <form action="/do/create" method="POST">{% csrf_token %}{{ createForm.as_p }}<input type="hidden" name="mkr" value="{{ maker }}">
+        <input type="submit" value="Create Game"></form>
+    <br><br>
+</div>
+</body>
+</html>

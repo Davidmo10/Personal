@@ -3,59 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ name }}'s eScavenge Dashboard</title>
-    <style>
-        #hunt_detail {
-            margin:10px;
-            background:white;
-            border: rebeccapurple dotted 1px;
-            font-size: 15px;
-            position:relative;
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}style.css">
+    <script>
+        function showEditCreds() {
+            document.getElementById("editcreds").style.display = 'block';
         }
-        #hunt_detail b{
-            font-size:18px;
-        }
-        #status {
-            position:absolute;
-            width: 200px;
-            background:ghostwhite;
-            font-size:20px;
-            border: aliceblue groove 3px;
-        }
-        #stat_order {
-            position:absolute;
-            left:2px;
-            top:2px;
-            font-weight:bold
-        }
-        #feedback {
-            width:800px;
-            position:absolute;
-            left:250px;
-            min-height:300px;
-            background: papayawhip;
-            padding:20px;
-            border:aliceblue groove 5px;
-
-        }
-    </style>
+    </script>
 </head>
 
 <body style="text-align:center; margin-top:100px;background:lavender; color:darkblue">
 <h1>Welcome back {{ name }}!</h1>
-<div id="commands"><a href="logout">Logout</a></div><br><br>
+<div id="commands"><a href="do/logout">Logout</a><a href="do/forfeit">Forfeit</a><a href="javascript:showEditCreds()">Edit Credentials</a></div><br><br>
 <div id="status">Your Progress:<br>
     <b>{{ gmdet.name }}</b><br>
     {% for p in progress %}
         <div id="hunt_detail">
         <div id="stat_order">{{ p.order }}</div>
-            <b>{{ p.lm }}</b><br>{{ p.right }}<br>Score: {{ p.score }}
+            <b>{{ p.lm }}</b><br>{{ p.right }}<br>Score: {{ p.score|floatformat }}
         </div>
     {% endfor %}
+    Total Score = <b>{{ total|floatformat }}</b>
 </div>
 <div id="feedback">
-    <h2>Current Clue:</h2>
-    {{ clue }}
-
+    <div id="editcreds"><form action="edit/creds" method="POST">{% csrf_token %}{{ credsForm }}<input type="submit" value="Change credentials"></form></div>
+    <h2>{{ title }}</h2>
+    {{ feedback }}
+    <br><br>
+    {% if type == 'clue' %}
+        <a href="/req/ques">Request Question</a>
+    {%  elif type == 'pending' %}
+        Requested @ {{ pending }}
+        <br><br>
+        <form action="/req/ans" method="POST">
+        {% csrf_token %}
+        {{ ansForm }}
+        <input type="submit" value="Submit Answer">
+        </form>
+    {% elif type == 'error'%}
+        <a href="/">Home</a>
+    {% endif %}
 </div>
 </body>
 </html>

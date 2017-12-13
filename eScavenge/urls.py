@@ -17,8 +17,20 @@ from django.conf.urls import url
 from django.contrib import admin
 from web import views
 
+from django.conf import settings
+from django.conf.urls import include, url
+
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^login$', views.login),
-    url(r'^$', views.dash)
+    url(r'^$', views.dash),
+    url(r'^req/(?P<type>.*)', views.req),
+    url(r'^do/(?P<type>.*)', views.do),
+    url(r'^edit/(?P<type>.*)', views.edit)
 ]
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns = [
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    ] + urlpatterns

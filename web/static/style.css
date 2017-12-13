@@ -17,7 +17,7 @@
     font-size:20px;
     border: aliceblue groove 3px;
     margin-bottom:20px;
-    padding:10px 0px;
+    padding:10px 0;
 }
 #stat_order {
     position:absolute;
@@ -101,9 +101,7 @@ a:hover {
     color:mediumpurple;
     text-decoration:underline;
 }
-.reorder_box {
-    width:20px;
-}
+
 .huntForm {
     display:none;
 }

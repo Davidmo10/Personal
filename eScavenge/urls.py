@@ -21,11 +21,11 @@ from web import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^login$', views.login),
+    url(r'^login$', views.login, name="login"),
     url(r'^$', views.dash),
-    url(r'^req/(?P<type>.*)', views.req, name="req"),
-    url(r'^do/(?P<type>.*)', views.do, name="do"),
-    url(r'^edit/(?P<type>.*)', views.edit, name="edit")
+    url(r'^req/(?P<kind>.*)', views.req, name="req"),
+    url(r'^do/(?P<action>.*)', views.do, name="do"),
+    url(r'^edit/(?P<to_edit>.*)', views.edit, name="edit")
 ]
 if settings.DEBUG:
     import debug_toolbar

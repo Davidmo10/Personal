@@ -12,7 +12,7 @@
     <h2>We're sorry, that login information is invalid</h2>
 {% endif %}
 <h3>Login:</h3>
-<form action="/login" method="POST">
+<form method="POST" action={% url 'login' %}>
     {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="Login">

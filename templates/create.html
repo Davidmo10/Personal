@@ -8,9 +8,9 @@
 
 <body style="text-align:center; margin-top:100px;background:lavender; color:darkblue">
 <h1 id="header">Create Game</h1>
-<a href="/do/logout">Logout</a><br>
+<a href={% url 'do' action='logout' %}>Logout</a><br>
 <div id="feedback">
-    <form action="/do/create" method="POST">{% csrf_token %}{{ createForm.as_p }}<input type="hidden" name="mkr" value="{{ maker }}">
+    <form method="POST" action={% url 'do' action='create' %}>{% csrf_token %}{{ createForm.as_p }}<input type="hidden" name="mkr" value="{{ maker }}">
         <input type="submit" value="Create Game"></form>
     <br><br>
 </div>

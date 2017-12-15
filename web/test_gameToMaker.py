@@ -5,7 +5,6 @@ from web.tests import TestData
 
 
 class EditLandmarkTests(TestCase):
-	# TODO
 
 	def setUp(self):
 		TestData.wipe()
@@ -14,19 +13,25 @@ class EditLandmarkTests(TestCase):
 		self.landmarks = Landmark.objects.all()
 
 	def test_edit_landmark(self):
-		pass
-
-	def test_edit_multiple(self):
-		pass
+		self.assertEqual(self.landmarks[0].name, "Landmark 1", "Name incorrect: something wrong with setup")
+		self.assertEqual(self.landmarks[0].desc, "Test landmark 1", "Description incorrect: something wrong with setup")
+		self.game.edit_lmark(self.landmarks[0], "NewName", "NewDesc")
+		self.landmarks = Landmark.objects.all()
+		self.assertEqual(self.landmarks[0].name, "NewName", "Landmark name not changed correctly")
+		self.assertEqual(self.landmarks[0].desc, "NewDesc", "Landmark description not changed correctly")
 
 	def test_duplicate_name(self):
-		pass
+		with self.assertRaises(NameError):
+			self.game.edit_lmark(self.landmarks[0], "team2", "RandomDesc")
 
 	def test_illegal_type(self):
-		pass
+		with self.assertRaises(ValueError):
+			self.game.edit_lmark(self.landmarks[0], False, True)
 
-	def test_edit_nonexistant(self):
-		pass
+	def test_edit_nonexistent(self):
+		self.game.edit_lmark(Landmark(name="FakeLandmark", desc="FakeDesc"), "NewLandmark", "NewDesc")
+		self.newLandmark = Landmark.objects.filter(name="NewLandmark")
+		self.assertEqual(self.newLandmark, "NewDesc", "New landmark not created properly")
 
 
 class ReorderHuntTests(TestCase):
@@ -60,6 +65,7 @@ class EditClueTests(TestCase):
 		TestData.wipe()
 		TestData.build()
 		self.game = Game(GameDetails.objects.all()[0])
+		self.clues = Clue.objects.all()
 
 	def test_edit_clue(self):
 		pass
@@ -75,21 +81,27 @@ class EditClueTests(TestCase):
 
 
 class EditConfirmation(TestCase):
-	# TODO
 
 	def setUp(self):
 		TestData.wipe()
 		TestData.build()
 		self.game = Game(GameDetails.objects.all()[0])
+		self.confirmations = Confirmation.objects.all()
+		self.landmark = Landmark.objects.all()[0]
 
 	def test_edit_confirmation(self):
-		pass
+		self.assertEqual(self.confirmations[0].ques, "Question 1", "Incorrect question: something wrong with setup")
+		self.game.edit_conf(self.landmark, "NewQuestion", "NewAnswer")
+		self.assertEqual(self.confirmations[0].ques, "NewQuestion", "Question not changed correctly")
+		self.assertEqual(self.confirmations[0].ans, "NewAnswer", "Answer not changed correctly")
 
 	def test_illegal_type(self):
-		pass
+		with self.assertRaises(ValueError):
+			self.game.edit_conf(self.landmark, False, True)
 
 	def test_illegal_landmark(self):
-		pass
+		with self.assertRaises(IndexError):
+			self.game.edit_conf(Landmark(name="Dummy", desc="Dummy"), "This test", "Should raise IndexError")
 
 
 class MakeTeamTests(TestCase):

@@ -22,7 +22,7 @@ class EditLandmarkTests(TestCase):
 
 	def test_duplicate_name(self):
 		with self.assertRaises(NameError):
-			self.game.edit_lmark(self.landmarks[0], "team2", "RandomDesc")
+			self.game.edit_lmark(self.landmarks[0], "Landmark 7", "RandomDesc")
 
 	def test_illegal_type(self):
 		with self.assertRaises(ValueError):
@@ -105,21 +105,23 @@ class EditConfirmation(TestCase):
 
 
 class MakeTeamTests(TestCase):
-	# TODO
 
 	def setUp(self):
 		TestData.wipe()
 		TestData.build()
 		self.game = Game(GameDetails.objects.all()[0])
+		self.teams = User.objects.filter(is_mkr=False)
 
-	def make_team(self):
-		pass
+	def test_make_team(self):
+		self.assertEqual(len(self.teams), 14, "Wrong number of teams: something wrong in setup")
+		self.game.mk_team("TeamName", "TeamPass")
+		self.assertEqual(len(User.objects.filter(is_mkr=False)), 15, "Number of teams did not increment on team creation")
+		self.newTeam = User.objects.filter(name="TeamName")
+		self.assertEqual(self.newTeam.count(), 1, "Team not found in list of users")
 
-	def make_duplicate_team(self):
-		pass
-
-	def make_multiple_teams(self):
-		pass
+	def test_make_duplicate_team(self):
+		with self.assertRaises(NameError):
+			self.game.mk_team("team1", "Pass")
 
 
 class RemoveTeamTests(TestCase):
@@ -153,31 +155,37 @@ class RemoveTeamTests(TestCase):
 
 
 class EditTeamCredentialsTests(TestCase):
-	# TODO
 
 	def setUp(self):
 		TestData.wipe()
 		TestData.build()
 		self.game = Game(GameDetails.objects.all()[0])
+		self.teams = User.objects.filter(is_mkr=False)
 
 	def test_edit_credentials(self):
-		pass
+		self.game.edit_creds(self.teams[0], "NewName", "NewPass")
+		self.assertEqual(self.teams[0].name, "NewName", "Team name not changed correctly")
+		self.assertEqual(self.teams[0].pwd, "NewPass", "Team password not changed correctly")
 
 	def test_invalid_team(self):
-		pass
+		with self.assertRaises(KeyError):
+			self.game.edit_creds(User(name="FakeTeam", pwd="Should raise KeyError"), "NewName", "NewPass")
 
-	def test_not_in_team(self):
-		pass
+	def test_not_in_game(self):
+		# Raises KeyError when trying to edit team not in game
+		with self.assertRaises(KeyError):
+			self.game.edit_creds(self.teams.filter(name="team12"), "NewName", "NewPass")
 
 	def test_illegal_type(self):
-		pass
+		with self.assertRaises(ValueError):
+			self.game.edit_creds(self.teams[0], False, True)
 
 	def test_duplicate_name(self):
+		# Doesn't seem like a requirement based on interface
 		pass
 
 
 class MakeScoreSchemeTests(TestCase):
-	# TODO
 
 	def setUp(self):
 		TestData.wipe()
@@ -185,13 +193,16 @@ class MakeScoreSchemeTests(TestCase):
 		self.game = Game(GameDetails.objects.all()[0])
 
 	def test_make_scheme(self):
-		pass
+		self.game.mk_score_sch("NewScheme")
+		self.assertTrue(ScoreScheme.objects.filter(name="NewScheme") is not None, "Scheme  not created correctly")
 
 	def test_duplicate_name(self):
-		pass
+		with self.assertRaises(NameError):
+			self.game.mk_score_sch("Test scheme")
 
 	def test_illegal_type(self):
-		pass
+		with self.assertRaises(ValueError):
+			self.game.mk_score_sch(False)
 
 
 class EditScoreSchemeTests(TestCase):

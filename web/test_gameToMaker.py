@@ -35,7 +35,7 @@ class EditLandmarkTests(TestCase):
 
 
 class ReorderHuntTests(TestCase):
-	# TODO
+	# TODO Don't understand how this method words
 
 	def setUp(self):
 		TestData.wipe()
@@ -59,25 +59,28 @@ class ReorderHuntTests(TestCase):
 
 
 class EditClueTests(TestCase):
-	# TODO
 
 	def setUp(self):
 		TestData.wipe()
 		TestData.build()
 		self.game = Game(GameDetails.objects.all()[0])
 		self.clues = Clue.objects.all()
+		self.landmarks = Landmark.objects.all()
+		self.firstLandmark = self.landmarks.filter(name="Landmark 1")
 
 	def test_edit_clue(self):
-		pass
+		self.testClue = Clue.objects.filter(lmark=self.firstLandmark)
+		self.assertEqual(self.testClue[0].value, "Clue 1", "Something wrong with setup, clue not linked correctly")
+		self.game.edit_clue(self.firstLandmark, "New Clue")
+		self.assertEqual(self.testClue[0].value, "New Clue", "Clue not changed correctly")
 
 	def test_illegal_type(self):
-		pass
+		with self.assertRaises(ValueError):
+			self.game.edit_clue(self.firstLandmark, False)
 
 	def test_illegal_landmark(self):
-		pass
-
-	def test_edit_multiple(self):
-		pass
+		with self.assertRaises(IndexError):
+			self.game.edit_clue(Landmark(name="Fake", desc="Landmark"), "This test should raise IndexError")
 
 
 class EditConfirmation(TestCase):
@@ -206,15 +209,19 @@ class MakeScoreSchemeTests(TestCase):
 
 
 class EditScoreSchemeTests(TestCase):
-	# TODO
+	# TODO don't understand how to use this method
 
 	def setUp(self):
 		TestData.wipe()
 		TestData.build()
 		self.game = Game(GameDetails.objects.all()[0])
+		self.schemes = ScoreScheme.objects.all()
 
 	def test_edit_scheme(self):
 		pass
+		# self.assertEqual(self.schemes[1].wrong, -1, "Not expected value. Something wrong with setup")
+		# self.game.edit_score_sch(ScoreScheme("Test scheme", wrong=-2, right=2))
+		# self.assertEqual(self.schemes[1].wrong, -2, "Scheme not edited correctly")
 
 	def test_nonexistent_scheme(self):
 		pass
@@ -239,7 +246,6 @@ class RequestMakerStatusTests(TestCase):
 
 
 class RequestHuntTests(TestCase):
-	# TODO
 
 	def setUp(self):
 		TestData.wipe()
@@ -247,7 +253,8 @@ class RequestHuntTests(TestCase):
 		self.game = Game(GameDetails.objects.all()[0])
 
 	def test_request_hunt(self):
-		pass
+		# Just printing
+		self.game.req_hunt()
 
 
 class EditGameTests(TestCase):
@@ -274,7 +281,6 @@ class EditGameTests(TestCase):
 
 
 class StartGameTests(TestCase):
-	# TODO
 
 	def setUp(self):
 		TestData.wipe()
@@ -282,14 +288,17 @@ class StartGameTests(TestCase):
 		self.game = Game(GameDetails.objects.all()[0])
 
 	def test_start_game(self):
-		pass
+		self.assertFalse(self.game.dtls.on, "Game is on, something wrong with setup")
+		self.game.start()
+		self.assertTrue(self.game.dtls.on, "Game not started correctly")
 
 	def test_already_started(self):
-		pass
+		self.game.start()
+		with self.assertRaises(UserWarning):
+			self.game.start()
 
 
 class StopGameTests(TestCase):
-	# TODO
 
 	def setUp(self):
 		TestData.wipe()
@@ -297,14 +306,16 @@ class StopGameTests(TestCase):
 		self.game = Game(GameDetails.objects.all()[0])
 
 	def test_stop_game(self):
-		pass
+		self.game.dtls.on = True
+		self.game.stop()
+		self.assertFalse(self.game.dtls.on, "Game not stopped correctly")
 
 	def test_already_stopped(self):
-		pass
+		with self.assertRaises(UserWarning):
+			self.game.stop()
 
 
 class IsOnTests(TestCase):
-	# TODO
 
 	def setUp(self):
 		TestData.wipe()
@@ -312,28 +323,37 @@ class IsOnTests(TestCase):
 		self.game = Game(GameDetails.objects.all()[0])
 
 	def test_is_on(self):
-		pass
+		self.assertFalse(self.game.is_on(), "Game should be off unless something wrong with setup")
 
 	def test_is_off(self):
-		pass
+		self.game.dtls.on = True
+		self.assertTrue(self.game.is_on())
 
 
 class SetWinnerTests(TestCase):
-	# TODO
 
 	def setUp(self):
 		TestData.wipe()
 		TestData.build()
 		self.game = Game(GameDetails.objects.all()[0])
+		self.teams = User.objects.filter(is_mkr=False)
 
 	def test_set_winner(self):
-		pass
+		self.assertEqual(self.game.dtls.winner, -1, "Winner not -1, something wrong with setup")
+		self.game.set_winner(self.teams[0])
+		self.assertEqual(self.game.dtls.winner, self.teams[0].pk, "Winner not set correctly")
 
 	def test_not_in_game(self):
-		pass
+		# Should raise KeyError if not in game
+		with self.assertRaises(KeyError):
+			self.game.set_winner(self.teams[12])
 
 	def test_nonexistent_team(self):
-		pass
+		# Should raise KeyError if team does not exist
+		with self.assertRaises(KeyError):
+			self.game.set_winner(User(name="Fake team", pwd="123"))
 
 	def test_team_not_finished(self):
+		# Passing this, don't see a finished parameter for Users
 		pass
+

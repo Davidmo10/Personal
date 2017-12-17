@@ -17,7 +17,7 @@ class ITF(ABC):
     
     # ValueError for illegal value
     # IndexError for illegal landmark
-    def edit_clue(self, clue: Clue, value: str) -> bool:
+    def edit_clue(self, landmark: Landmark, value: str) -> bool:
         pass
     
     # ValueError for illegal value

@@ -101,18 +101,35 @@
             {% else %}
                 Current: {{ x.lm }}<br>
             {%  endif %}
-            <a href={%url 'edit' to_edit='winner' %}"?u={{ x.tm.pk }}">Declare Winner</a><br>
-            <a href={%url 'edit' to_edit='remove' %}"?u={{ x.tm.pk }}">Delete Team</a>
+            <a href="{%url 'edit' to_edit='winner' %}?u={{ x.tm.pk }}">Declare Winner</a><br>
+            <a href="{%url 'edit' to_edit='remove' %}?u={{ x.tm.pk }}">Delete Team</a>
         </div>
     {% endfor %}
 </div>
 <div id="middle-block" class="vertical-flex">
     <div id="scheme" class="horizontal_bar">
-        <table><tr><td><b>Score Scheme :</b><br>{{ sch.name }}<br><a href="javascript:switchIt('editscheme')">Edit</a></td><td><b>Wrong</b> = {{ sch.wrong }} <b>Right</b> = {{ sch.right }} <b>Per Pending Answer Second</b> = {{ sch.ans_per_sec }}<br><b>Place Numerator</b> = {{ sch.place_numerator }} <b>Game Duration per Second</b> = {{ sch.game_per_sec }}</td></tr>
+        <table>
+            <tr>
+                <td>
+                    <b>Score Scheme :</b><br/>
+                    {{ sch.name }}<br>
+                    <a href="javascript:switchIt('editscheme')">Edit</a>
+                </td><td>
+                    <b>Wrong</b> = {{ sch.wrong }} <b>Right</b> = {{ sch.right }} <b>Per Pending Answer Second</b> = {{ sch.ans_per_sec }}<br>
+                    <b>Place Numerator</b> = {{ sch.place_numerator }} <b>Game Duration per Second</b> = {{ sch.game_per_sec }}
+                </td>
+            </tr>
         </table>
     </div>
 <div id="feedback" class="feedback">
-    <div id="addLM" class="hidden_form"><form action="{% url 'edit' to_edit='lmark' %}" method="POST">{% csrf_token %} {{ newlmForm.as_p }}<input type="hidden" name="lm_id" value="-1"><input type="submit" value="Add Landmark"></form></div>
+    <div id="addLM" class="hidden_form">
+        <form action="{% url 'edit' to_edit='lmark' %}" method="POST">
+            {% csrf_token %}
+            {{ newlmForm.as_p }}
+            <input type="hidden" name="lm_id" value="-1">
+            <input type="submit" value="Add Landmark">
+        </form>
+    </div>
     <div id="gameDesc">
         {% if gmdet.on %}
             <h2>{{ gmdet.name }} is underway!</h2><br/>
@@ -171,12 +188,13 @@
             </form>
         </div>
     {% endfor %}
-    <div id="newteam"><form method="POST" action="{%url 'edit' to_edit='creds' %}">
+    <div id="newteam" class="hidden_form">
+        <form method="POST" action="{%url 'edit' to_edit='creds' %}">
         {%  csrf_token %}
         {{ ntForm.as_p }}
         <input type="hidden" name="user_id" value="-1">
         <input type="submit" value="Create Team">
-    </form>
+        </form>
     </div>
 </div>
 </div>
@@ -184,24 +202,27 @@
         <b>{{ gmdet.name }}</b><br>
         <a href="javascript:switchIt('addLM')" class="hunt_detail_add">Add Landmark</a><br>
         <form id='reorder-form' action="{% url 'edit' to_edit='reorder' %}" method="POST">
-        {% csrf_token %}
-        {{ hunt_mng_form }}
-        {% for x in hunt %}
-            <div class="hunt_detail">
-                <div id="stat_order"><span class="huntForm hidden_form">{{x.0}}</span><span class="huntOrder">{{ x.0 }}</span></div>
-                <b><a href="javascript:editLm({{ x.1.order }})">{{ x.1.name }}</a></b><br>
-                <a href={% url 'edit' to_edit='remove' %}"?lm={{ x.1.order }}">Remove Landmark</a>
-            </div>
-        {% endfor %}
-        <span>
-            <span class="huntForm hidden_form">
-                <a href="javascript:submitReorder()">Submit Reorder</a><br>
-                <a href="javascript:hideReorder()">Cancel</a>
+            {% csrf_token %}
+            {{ hunt_mng_form }}
+            {% for x in hunt %}
+                <div class="hunt_detail">
+                    <div id="stat_order">
+                        <span class="huntForm hidden_form">{{x.0}}</span>
+                        <span class="huntOrder">{{ x.0 }}</span>
+                    </div>
+                    <b><a href="javascript:editLm({{ x.1.order }})">{{ x.1.name }}</a></b><br>
+                    <a href="{% url 'edit' to_edit='remove' %}?lm={{ x.1.order }}">Remove Landmark</a>
+                </div>
+            {% endfor %}
+            <span>
+                <span class="huntForm hidden_form">
+                    <a href="javascript:submitReorder()">Submit Reorder</a><br>
+                    <a href="javascript:hideReorder()">Cancel</a>
+                </span>
+                <span class="huntOrder">
+                    <a href="javascript:showReorder()">Reorder</a>
+                </span>
             </span>
-            <span class="huntOrder">
-                <a href="javascript:showReorder()">Reorder</a>
-            </span>
-        </span>
         </form>
     </div>
 </body>

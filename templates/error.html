@@ -3,15 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ name }}'s eScavenge Dashboard</title>
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}style.css">
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static "web/style.css" %}">
 </head>
 
-<body style="text-align:center; margin-top:100px;background:lavender; color:darkblue">
+<body>
 <h1 id="header">Error</h1>
-<div id="feedback">
+<div id="feedback" class="feedback">
     <h2>{{ feedback }}</h2>
     <br><br>
-    <a href="/" style="font-size:18px; text-decoration:underline">Home</a>
+    <a href="/">Home</a>
 </div>
 </body>
 </html>

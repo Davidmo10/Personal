@@ -167,7 +167,6 @@ def dash(request):
 				               'feedback': feedback,
 				               'progress': progress, 'total': status["total"], 'ansForm': answer_form,
 				               'credsForm': [credential_form, u.pk], 'pending': s.pending,
-
 				               })
 			except Exception as e:
 				feedback = str(e)

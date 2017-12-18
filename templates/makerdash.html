@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!--suppress JSUnusedLocalSymbols -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -16,19 +17,19 @@
         }
         function showEditCreds() {
             clearChild();
-            el = document.getElementById("editcreds")
+            var el = document.getElementById("editcreds");
             el.style.display = 'block';
             curVisible = el
         }
         function editTm(i) {
             clearChild();
-            el = document.getElementById("cForm" + i);
+            var el = document.getElementById("cForm" + i);
             el.style.display = "block";
             curVisible = el;
         }
         function editLm(i) {
             clearChild();
-            el = document.getElementById("hForm" + i);
+            var el = document.getElementById("hForm" + i);
             el.style.display = "block";
             curVisible = el;
         }
@@ -45,25 +46,25 @@
         }
         function showEditScheme() {
             clearChild();
-            el = document.getElementById('editscheme');
+            var el = document.getElementById('editscheme');
             el.style.display = 'block';
-            curVisbile = el;
+            var curVisible = el;
         }
         function addTeam() {
             clearChild();
-            el = document.getElementById('newteam');
+            var el = document.getElementById('newteam');
             el.style.display = 'block';
             curVisible = el;
         }
         function editGameDetails() {
             clearChild();
-            el = document.getElementById('editgamedetails');
+            var el = document.getElementById('editgamedetails');
             el.style.display = 'block';
             curVisible = el;
         }
         function switchIt(id) {
             clearChild();
-            el = document.getElementById(id);
+            var el = document.getElementById(id);
             el.style.display = 'block';
             curVisible = el;
 
@@ -75,8 +76,12 @@
 <header>
     <h1 id="header">Welcome back {{ name }}!</h1>
     <div id="maker-commands" class="commands">
-        <a href="do/logout">Logout</a>
-        <a href="do/{% if gmdet.on %}stop">End {% else %}start">Start {% endif %}Game</a>
+        <a href="{% url 'do' action='logout' %}">Logout</a>
+        {% if gmdet.on %}
+            <a href={% url 'do' action='stop' %}>End Game</a>
+        {% else %}
+            <a href={% url 'do' action='start' %}>Start Game</a>
+        {% endif %}
         <a href="javascript:switchIt('editCreds')">Edit Credentials</a>
         <a href="javascript:switchIt('editgamedetails')">Edit Game Details</a>
     </div>
@@ -96,100 +101,129 @@
             {% else %}
                 Current: {{ x.lm }}<br>
             {%  endif %}
-            <a href="/edit/winner?u={{ x.tm.pk }}">Declare Winner</a><br>
-            <a href="/edit/remove?u={{ x.tm.pk }}">Delete Team</a>
+            <a href="{%url 'edit' to_edit='winner' %}?u={{ x.tm.pk }}">Declare Winner</a><br>
+            <a href="{%url 'edit' to_edit='remove' %}?u={{ x.tm.pk }}">Delete Team</a>
         </div>
     {% endfor %}
+</div>
+<div id="middle-block" class="vertical-flex">
+    <div id="scheme" class="horizontal_bar">
+        <table>
+            <tr>
+                <td>
+                    <b>Score Scheme :</b><br/>
+                    {{ sch.name }}<br>
+                    <a href="javascript:switchIt('editscheme')">Edit</a>
+                </td><td>
+                    <b>Wrong</b> = {{ sch.wrong }} <b>Right</b> = {{ sch.right }} <b>Per Pending Answer Second</b> = {{ sch.ans_per_sec }}<br>
+                    <b>Place Numerator</b> = {{ sch.place_numerator }} <b>Game Duration per Second</b> = {{ sch.game_per_sec }}
+                </td>
+            </tr>
+        </table>
     </div>
-    <div id="middle-block" class="vertical-flex">
-        <div id="scheme" class="horizontal_bar">
-            <table>
-                <tr><td><b>Score Scheme :</b><br>{{ sch.name }}<br><a href="javascript:switchIt('editscheme')">Edit</a></td><td><b>Wrong</b> = {{ sch.wrong }} <b>Right</b> = {{ sch.right }} <b>Per Pending Answer Second</b> = {{ sch.ans_per_sec }}<br><b>Place Numerator</b> = {{ sch.place_numerator }} <b>Game Duration per Second</b> = {{ sch.game_per_sec }}</td></tr>
-            </table>
-        </div>
-        <div id="feedback" class="feedback">
-            <div id="addLM" class="hidden_form"><form action="/edit/lmark" method="POST">{% csrf_token %} {{ newlmForm.as_p }}<input type="hidden" name="lm_id" value="-1"><input type="submit" value="Add Landmark"></form></div>
-            <div id="gameDesc">
-                <h2>{{ gmdet.name }}
-                    {% if gmdet.on %} is underway!</h2><br>
-                        Game started @ {{ gmdet.startTime }}<br>
-                    {% elif gmdet.startTime is None %}
-                        has yet to start</h2><br>
-                    {% else %} has ended.</h2><b>Winner is {{ gmdet.winner }}!!!!!</b>
-                    {% endif %}
-                <b>Description:</b> {{ gmdet.desc }}<br>
-                <script>curVisible = document.getElementById('gameDesc');</script>
-            </div>
-            <div id="editcreds" class="hidden_form">
-                <form action="edit/creds" method="POST">
-                    {% csrf_token %}{{ credsForm.0.as_p }}
-                    <input type="hidden" name="user_id" value="{{credsForm.1}}">
-                    <input type="submit" value="Change credentials">
-                </form>
-            </div>
-            <div id="editscheme" class="hidden_form">
-                <form action="edit/scheme" method="POST">
-                    {% csrf_token %}{{ schemeForm.as_p }}
-                    <input type="submit" value="Submit Edit">
-                </form>
-            </div>
-            <div id="editgamedetails" class="hidden_form">
-                <form action="edit/game" method="POST">
-                    {% csrf_token %}
-                    {{ gameForm.as_p }}
-                    <input type="submit" value="Edit Game Details">
-                </form>
-            </div>
-            {% for x in hForms %}
-                <div id="hForm{{ x.index }}" class="hidden_form">
-                    <h2>{{ x.form.name.value }}</h2>
-                    <form action="edit/lmark" method="POST">
-                        {% csrf_token %}
-                        {{ x.form.as_p }}
-                        <input type="hidden" name="lm_id" value="{{ x.lm_id }}">
-                        <input type="submit" value="Edit Landmark">
-                    </form>
-                </div>
-            {% endfor %}
-            {% for x in cForms %}
-                <div id="cForm{{ x.index }}" class="hidden_form">
-                    <b>{{ x.form.name.value }}</b><br>
-                    <form action="edit/creds" method="POST">
-                        {% csrf_token %}
-                        {{ form.errors }}
-                        {%   for f in x.form.visible_fields %}<p>{{ f }}</p>{% endfor %}
-                        <input type="hidden" name="user_id" value="{{ x.pk }}">
-                        <input type="submit" value="Edit Credentials">
-                    </form>
-                </div>
-            {% endfor %}
-            <div id="newteam" class="hidden_form"><form method="POST" action="/edit/creds">{%  csrf_token %}{{ ntForm.as_p }}<input type="hidden" name="user_id" value="-1"><input type="submit" value="Create Team"></form></div>
-        </div>
+<div id="feedback" class="feedback">
+    <div id="addLM" class="hidden_form">
+        <form action="{% url 'edit' to_edit='lmark' %}" method="POST">
+            {% csrf_token %}
+            {{ newlmForm.as_p }}
+            <input type="hidden" name="lm_id" value="-1">
+            <input type="submit" value="Add Landmark">
+        </form>
     </div>
-    <div id="status" class="sidebar">
-        <b>{{ gmdet.name }}</b><br>
-        <a href="javascript:switchIt('addLM')" class="hunt_detail_add">Add Landmark</a><br>
-        <form id='reorder-form' action="edit/reorder" method="POST">
-        {% csrf_token %}
-        {{ hunt_mng_form }}
-        {% for x in hunt %}
-            <div class="hunt_detail">
-                <div id="stat_order"><span class="huntForm hidden_form">{{x.0}}</span><span class="huntOrder">{{ x.0 }}</span></div>
-                <b><a href="javascript:editLm({{ x.1.order }})">{{ x.1.name }}</a></b><br>
-                <a href="/edit/remove?lm={{ x.1.order }}">Remove Landmark</a>
-            </div>
-        {% endfor %}
-        <span>
-            <span class="huntForm hidden_form">
-                <a href="javascript:submitReorder()">Submit Reorder</a><br>
-                <a href="javascript:hideReorder()">Cancel</a>
-            </span>
-            <span class="huntOrder">
-                <a href="javascript:showReorder()">Reorder</a>
-            </span>
-        </span>
+    <div id="gameDesc">
+        {% if gmdet.on %}
+            <h2>{{ gmdet.name }} is underway!</h2><br/>
+            Game started @ {{ gmdet.startTime }}<br/>
+        {% elif gmdet.startTime is None %}
+            <h2>{{ gmdet.name }}has yet to start</h2><br/>
+        {% else %}
+            <h2>{{ gmdet.name }} has ended.</h2>
+            <b>Winner is {{ gmdet.winner }}!!!!!</b>
+        {% endif %}
+        <b>Description:</b> {{ gmdet.desc }}<br>
+        <script>curVisible = document.getElementById('gameDesc');</script>
+    </div>
+    <div id="editcreds" class="hidden_form">
+        <form action="{% url 'edit' to_edit='creds' %}" method="POST">
+            {% csrf_token %}
+            {{ credsForm.0.as_p }}
+            <input type="hidden" name="user_id" value="{{  credsForm.1}}">
+            <input type="submit" value="Change credentials">
+        </form>
+    </div>
+    <div id="editscheme" class="hidden_form">
+        <form action="{% url 'edit' to_edit='scheme'%}" method="POST">
+            {% csrf_token %}
+            {{ schemeForm.as_p }}
+            <input type="submit" value="Submit Edit">
+        </form>
+    </div>
+    <div id="editgamedetails" class="hidden_form">
+        <form action="{% url 'edit' to_edit='game' %}" method="POST">
+            {% csrf_token %}
+            {{ gameForm.as_p }}
+            <input type="submit" value="Edit Game Details">
+        </form>
+    </div>
+    {% for x in hForms %}
+        <div id="hForm{{ x.index }}" class="hidden_form">
+            <h2>{{ x.form.name.value }}</h2>
+            <form action="{%url 'edit' to_edit='lmark' %}" method="POST">
+                {% csrf_token %}
+                {{ x.form.as_p }}
+                <input type="hidden" name="lm_id" value="{{ x.lm_id }}">
+                <input type="submit" value="Edit Landmark">
+            </form>
+        </div>
+    {% endfor %}
+    {% for x in cForms %}
+        <div id="cForm{{ x.index }}" class="hidden_form">
+            <b>{{ x.form.name.value }}</b><br>
+            <form action="{%url 'edit' to_edit='creds' %}" method="POST">
+                {% csrf_token %}
+                {{ form.errors }}
+                {%   for f in x.form.visible_fields %}<p>{{ f }}</p>{% endfor %}
+                <input type="hidden" name="user_id" value="{{ x.pk }}">
+                <input type="submit" value="Edit Credentials">
+            </form>
+        </div>
+    {% endfor %}
+    <div id="newteam" class="hidden_form">
+        <form method="POST" action="{%url 'edit' to_edit='creds' %}">
+        {%  csrf_token %}
+        {{ ntForm.as_p }}
+        <input type="hidden" name="user_id" value="-1">
+        <input type="submit" value="Create Team">
         </form>
     </div>
 </div>
+</div>
+    <div id="status" class="sidebar">
+        <b>{{ gmdet.name }}</b><br>
+        <a href="javascript:switchIt('addLM')" class="hunt_detail_add">Add Landmark</a><br>
+        <form id='reorder-form' action="{% url 'edit' to_edit='reorder' %}" method="POST">
+            {% csrf_token %}
+            {{ hunt_mng_form }}
+            {% for x in hunt %}
+                <div class="hunt_detail">
+                    <div id="stat_order">
+                        <span class="huntForm hidden_form">{{x.0}}</span>
+                        <span class="huntOrder">{{ x.0 }}</span>
+                    </div>
+                    <b><a href="javascript:editLm({{ x.1.order }})">{{ x.1.name }}</a></b><br>
+                    <a href="{% url 'edit' to_edit='remove' %}?lm={{ x.1.order }}">Remove Landmark</a>
+                </div>
+            {% endfor %}
+            <span>
+                <span class="huntForm hidden_form">
+                    <a href="javascript:submitReorder()">Submit Reorder</a><br>
+                    <a href="javascript:hideReorder()">Cancel</a>
+                </span>
+                <span class="huntOrder">
+                    <a href="javascript:showReorder()">Reorder</a>
+                </span>
+            </span>
+        </form>
+    </div>
 </body>
 </html>

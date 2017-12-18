@@ -1,4 +1,5 @@
 from abc import ABC
+
 from web.models import *
 
 
@@ -12,7 +13,7 @@ class ITF(ABC):
     
     # ValueError if invalid order
     # IndexError if submitted order is longer than hunt or less than zero
-    def reorder_hunt(self, order : [int] ) -> bool:
+    def reorder_hunt(self, order: [int]) -> bool:
         pass
     
     # ValueError for illegal value
@@ -41,13 +42,13 @@ class ITF(ABC):
         pass
     
     # NameError on same name
-    def mk_score_sch(self, name: str) -> bool: 
+    def mk_score_sch(self, name: str) -> bool:
         pass
     
     # KeyError on nonexistent scheme
     # EnvironmentError if another game is using the same scheme
     # ValueError on non-float values
-    def edit_score_sch(self, scheme: ScoreScheme, wrong: float, right: float, plc_num: float, ans_time: float, gm_time: float) -> bool: 
+    def edit_score_sch(self, scheme: ScoreScheme) -> bool:
         pass
     
     def req_mkr_status(self) -> [Status]:

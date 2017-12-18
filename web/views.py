@@ -1,14 +1,13 @@
-from django.shortcuts import render
 from web.models import *
-from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponseRedirect, HttpResponse
-from django import forms
-from web.classes.game import Game
-from datetime import datetime as dt
-from pytz import timezone as tz
 import logging
 
-import logging
+from django import forms
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
+
+from web.classes.game import Game
+from web.models import *
+
 logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
 logging.debug('This message should appear on the console')
 logging.info('So should this')
@@ -253,7 +252,7 @@ def edit(request, type):
                 g = Game(gd)
                 if type == 'reorder':
                     neworder : [int] = []
-                    for i in range(len(g.hunt)):
+                    for i in range(len(g.landmarks)):
                         order = request.POST.get("form-{0!s}-h_{0!s}".format(i), default=False)
                         logging.debug(order)
                         if not order:

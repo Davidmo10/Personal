@@ -1,2 +1,3 @@
+pytz
 django-debug-toolbar
 Django==1.11.*

@@ -39,7 +39,7 @@ class GameMaker(User):
 	# 	return self.myGame
 
 	def create_landmark(self, name: str) -> bool:
-		if(self.myGame.get_landmark_by_name(name) != None):
+		if self.myGame.get_landmark_by_name(name) is not None:
 			return False
 		temp_landmark = Landmark(name)
 		self.myGame.landmarkList.append(temp_landmark)
@@ -73,7 +73,6 @@ class GameMaker(User):
 		team = Team(name, password, self.myGame)
 		self.myGame.myUserDict.append(team)
 		return True
-
 
 	# def create_scavenger_hunt(self):
 	# 	pass

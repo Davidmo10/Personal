@@ -19,5 +19,5 @@ class UserFactory:
 		if user_index == -1:
 			raise LoginError("Invalid username " + user)
 		if game.myUserDict[user_index].password != password:
-			raise LoginError("Invalid User/Password " + user + " / " + password )
+			raise LoginError("Invalid User/Password " + user + " / " + password)
 		return game.myUserDict[user_index]

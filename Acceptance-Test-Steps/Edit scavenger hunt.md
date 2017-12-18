@@ -15,5 +15,4 @@
 7. Change the numbers in the upper left to 4, 3, 2, 1 for landmarks 1, 2, 3, and 4
 8. Click "Submit Reorder"
     +[ ] Should now display landmarks in order 4, 3, 2, 1
-        + TODO Fix this
     +[X] Numbers in the corner of the Landmarks should correspond to their order

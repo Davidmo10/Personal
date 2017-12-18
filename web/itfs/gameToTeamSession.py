@@ -16,7 +16,7 @@ class ITF(ABC):
 
     # ReferenceError if team is not playing
     # IndexError if game is not on
-    # EnvironmentError if team does not have a question pending
+    # KeyError if team does not have a question pending
     def submit_ans(self, team: User, str) -> bool:
         pass
 

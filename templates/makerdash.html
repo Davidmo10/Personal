@@ -143,14 +143,6 @@
         <b>Description:</b> {{ gmdet.desc }}<br>
         <script>curVisible = document.getElementById('gameDesc');</script>
     </div>
-    <div id="editcreds" class="hidden_form">
-        <form action="{% url 'edit' to_edit='creds' %}" method="POST">
-            {% csrf_token %}
-            {{ credsForm.0.as_p }}
-            <input type="hidden" name="user_id" value="{{  credsForm.1}}">
-            <input type="submit" value="Change credentials">
-        </form>
-    </div>
     <div id="editscheme" class="hidden_form">
         <form action="{% url 'edit' to_edit='scheme'%}" method="POST">
             {% csrf_token %}

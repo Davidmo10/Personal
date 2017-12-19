@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!--suppress JSUnusedLocalSymbols -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -16,8 +17,8 @@
 <header>
     <h1>Welcome back {{ name }}!</h1>
     <div id="team-commands" class="commands">
-        <a href="do/logout">Logout</a>
-        <a href="do/forfeit">Forfeit</a>
+        <a href="{% url 'do' action="logout" %}">Logout</a>
+        <a href="{% url 'do' action='forfeit' %}">Forfeit</a>
         <a href="javascript:showEditCreds()">Edit Credentials</a>
     </div>
 </header>
@@ -28,22 +29,30 @@
     {% for p in progress %}
         <div id="hunt_detail">
         <div id="stat_order">{{ p.order }}</div>
-            <b>{{ p.lm }}</b><br>{{ p.right }}<br>Score: {{ p.score|floatformat }}
+            <b>{{ p.lm }}</b><br/>
+            {{ p.right }}<br/>
+            Score: {{ p.score|floatformat }}
         </div>
     {% endfor %}
     Total Score = <b>{{ total|floatformat }}</b>
 </div>
     <div id="feedback" class="feedback">
-    <div id="editcreds" class="hidden_form"><form action="edit/creds" method="POST">{% csrf_token %}{{ credsForm }}<input type="submit" value="Change credentials"></form></div>
+    <div id="editcreds" class="hidden_form">
+        <form action="{% url 'edit' to_edit='creds' %}" method="POST">
+            {% csrf_token %}
+            {{ credsForm }}
+            <input type="submit" value="Change credentials">
+        </form>
+    </div>
     <h2>{{ title }}</h2>
     {{ feedback }}
     <br><br>
     {% if type == 'clue' %}
-        <a href="/req/ques">Request Question</a>
+        <a href={% url 'req' kind='ques' %}>Request Question</a>
     {%  elif type == 'pending' %}
         Requested @ {{ pending }}
         <br><br>
-        <form action="/req/ans" method="POST">
+        <form method="POST" action={% url 'req' kind='ans' %}>
         {% csrf_token %}
         {{ ansForm }}
         <input type="submit" value="Submit Answer">

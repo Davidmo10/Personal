@@ -36,14 +36,8 @@ class TestGameMaker(unittest.TestCase):
 		self.assertTrue(self.GM.create_team("name", "pass"), "The Team has not been created.")
 
 	def test_create_team_duplicate(self):
-		self.GM.create_team("name","pass")
-		self.assertFalse(self.GM.create_team("name","pass"), "The Team has been created twice.")
-
-#	def test_create_team_duplicate_side_effect(self):
-#		self.GM.create_team("name", "pass")
-#		self.GM.create_team("name", "pass")
-#		i = 0
-#		all (u.name == "name" for u in self.GM.myGame.myUserList)
+		self.GM.create_team("name", "pass")
+		self.assertFalse(self.GM.create_team("name", "pass"), "The Team has been created twice.")
 
 	def test_edit_landmark_clue_when_landmark_non_existent(self):
 		self.assertFalse(self.GM.edit_landmark_clue("name", "new_clue", ), "todo")

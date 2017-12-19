@@ -7,7 +7,6 @@ from Team import Team
 
 
 class TestGameConfirmation(unittest.TestCase):
-
 	def setUp(self):
 		self.string_question = StringQuestion("What color is the car?", "Red")
 		self.landmark = Landmark("landmark1")
@@ -35,7 +34,8 @@ class TestGameConfirmation(unittest.TestCase):
 
 	def test_add_landmark(self):
 		self.lm_test = Landmark("landmark3")
-		self.assertTrue(self.game.add_landmark(self.lm_test), "add_landmark cannot successfully add a landmark to your game")
+		self.assertTrue(self.game.add_landmark(self.lm_test),
+		                "add_landmark cannot successfully add a landmark to your game")
 
 	# Would require mocking which we have not learned yet
 	# Waiting to implement this test
@@ -43,20 +43,19 @@ class TestGameConfirmation(unittest.TestCase):
 	# def test_get_clue(self):
 	# 	self.assertEquals()
 
-
-
 	# The following tests were implemented with a mock trial
 	# Unsure if the code is correct - left implementations
 	#
 	def test_getQuestion(self):
 		self.assertEqual(
 			self.game.get_question(0), "What color is the car?", "Returned: " + str(self.landmark.get_confirmation())
-			+ " instead of proper question")
+			                                                     + " instead of proper question")
 
 	def test_getQuestion2(self):
 		self.assertEqual(
-			self.game.get_question(1), "What is written on the board?", "Returned: " + str(self.landmark.get_confirmation().display())
-			                         + " instead of proper question")
+			self.game.get_question(1), "What is written on the board?",
+			"Returned: " + str(self.landmark.get_confirmation().display())
+			+ " instead of proper question")
 
 	def test_answerCorrect(self):
 		self.assertTrue(self.game.check_answer(0, "Red"), "Did not accept correct answer")
@@ -65,7 +64,8 @@ class TestGameConfirmation(unittest.TestCase):
 		self.assertFalse(self.game.check_answer(0, "Blue"), "Accepted incorrect answer")
 
 	def test_get_lm_by_name(self):
-		self.assertEqual(self.game.get_landmark_by_name("landmark2"), self.landmark2, "Game couldn't retrieve landmark by name")
+		self.assertEqual(self.game.get_landmark_by_name("landmark2"), self.landmark2,
+		                 "Game couldn't retrieve landmark by name")
 
 	def test_has_user_by_name(self):
 		self.game.myUserDict.append(Team("foo", "bar", self.game))

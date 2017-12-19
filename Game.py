@@ -43,7 +43,6 @@ class Game(GameGameMaker, GameTeam):
 		for i in self.landmarkList:
 			if i.get_name() == name:
 				return i
-		return None
 
 	def is_on(self):
 		return self.on
@@ -60,9 +59,7 @@ class Game(GameGameMaker, GameTeam):
 	def get_maker(self):
 		return self.myUserDict[0]
 
-
 	def get_user_by_name(self, search_for: str) -> User:
 		for i in range(len(self.myUserDict)):
 			if self.myUserDict[i].name == search_for:
 				return self.myUserDict[i]
-		return None

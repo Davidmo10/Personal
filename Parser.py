@@ -12,7 +12,7 @@ class Parser:
 	def __init__(self, game: Game):
 		self.user = None
 		self.commandsDict = {"login": (lambda username, password: self._login(username, password)),
-							 "exit": (lambda: self.exit_game())}
+		                     "exit": (lambda: self.exit_game())}
 		self.game = game
 
 	def parse(self, command: str) -> str:
@@ -62,7 +62,7 @@ class Parser:
 	def _logout(self) -> bool:
 		self.user = None
 		self.commandsDict = {"login": (lambda username, password: self._login(username, password)),
-							 "exit": (lambda: self.exit_game())}
+		                     "exit": (lambda: self.exit_game())}
 		return True
 
 	def print_commands(self) -> None:
@@ -70,7 +70,7 @@ class Parser:
 		for c in self.commandsDict:
 			arg_string = str(signature(self.commandsDict[c]))
 			if arg_string == "()":
-				arg_string = "";
+				arg_string = ""
 			else:
 				arg_string = arg_string.replace("(", "<")
 				arg_string = arg_string.replace(", ", "> <")

@@ -254,6 +254,7 @@ class Game(GTMS.ITF, GTTS.ITF):
 		if self.is_on():
 			raise UserWarning("This game is already in progress")
 		self.dtls.on = True
+		self.dtls.startTime = dt.now()
 		self.dtls.save()
 		return True
 
@@ -364,8 +365,9 @@ class Game(GTMS.ITF, GTTS.ITF):
 			s.pending = None
 			s.score = s.score + self.calc_score_entry(sc)
 			if ans == c.ans:
-				s.cur = s.cur + 1
-				if s.cur > len(self.landmarks):
+				if s.cur < len(self.landmarks):
+					s.cur = s.cur + 1
+				if s.cur >= len(self.landmarks):
 					s.playing = False
 				s.save()
 				return True

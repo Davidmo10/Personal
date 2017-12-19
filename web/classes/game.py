@@ -16,14 +16,14 @@ class Game(GTMS.ITF, GTTS.ITF):
 		self.on: bool = dtls.on
 		self.players: [Status] = []
 		self.scheme: ScoreScheme = dtls.scheme
-		self.hunt: [Landmark] = []
+		self.landmarks: [Landmark] = []
 
 		sel: models.QuerySet = Status.objects.filter(game=dtls)
 		for s in sel:
 			self.players.append(s)
 		sel: models.QuerySet = Hunt.objects.filter(game=dtls).order_by('h_order')
 		for s in sel:
-			self.hunt.append(s)
+			self.landmarks.append(s)
 
 	def calc_score_entry(self, entry: LmScore) -> float:
 		output: float = 0
@@ -39,7 +39,7 @@ class Game(GTMS.ITF, GTTS.ITF):
 		s = Status.objects.get(team=team)
 		output: [{str, str, float}] = []
 		for p in progress:
-			lm = self.hunt[p.which].lmark.name
+			lm = self.landmarks[p.which].lmark.name
 			if p.which == s.cur:
 				lm = "********"
 			if p.correct:
@@ -70,7 +70,7 @@ class Game(GTMS.ITF, GTTS.ITF):
 	# ValueError if invalid order
 	# IndexError if submitted order is longer than hunt or less than zero
 	def reorder_hunt(self, order: [int]) -> bool:
-		if len(self.hunt) != len(order):
+		if len(self.landmarks) != len(order):
 			raise IndexError("Invalid order")
 		i_max = len(order)
 		seen: [bool] = [False] * i_max
@@ -81,8 +81,8 @@ class Game(GTMS.ITF, GTTS.ITF):
 			if seen[cur]:
 				raise ValueError("Invalid order")
 			seen[cur] = True
-			self.hunt[i].h_order = cur
-		for h in self.hunt:
+			self.landmarks[i].h_order = cur
+		for h in self.landmarks:
 			h.save()
 		return True
 
@@ -134,7 +134,7 @@ class Game(GTMS.ITF, GTTS.ITF):
 		return True
 
 	def rm_lmark(self, index: int) -> bool:
-		if index < 0 or index >= len(self.hunt):
+		if index < 0 or index >= len(self.landmarks):
 			raise IndexError("Invalid landmark to remove")
 		h = Hunt.objects.get(game=self.dtls, h_order=index)
 		h.delete()
@@ -213,7 +213,7 @@ class Game(GTMS.ITF, GTTS.ITF):
 		if not self.is_on():
 			curtype = "gameoff"
 		elif not s.playing:
-			if s.cur >= len(self.hunt):
+			if s.cur >= len(self.landmarks):
 				curtype = "done"
 			else:
 				curtype = "forfeited"
@@ -225,7 +225,7 @@ class Game(GTMS.ITF, GTTS.ITF):
 
 	def req_hunt(self) -> [{str, int}]:
 		output: [{str, int}] = []
-		for h in self.hunt:
+		for h in self.landmarks:
 			output.append({"name": h.lmark.name, "order": h.h_order})
 		return output
 
@@ -236,7 +236,7 @@ class Game(GTMS.ITF, GTTS.ITF):
 			if p.cur == -1:
 				lmreport = "Done"
 			else:
-				lmreport = self.hunt[p.cur].lmark.name
+				lmreport = self.landmarks[p.cur].lmark.name
 			output.append({"tm": p.team, "st": p, "index": i, "lm": lmreport})
 		return output
 
@@ -310,7 +310,7 @@ class Game(GTMS.ITF, GTTS.ITF):
 			raise ReferenceError("You may not have a clue after forfeiting")
 		if s.pending is not None:
 			raise KeyError("You may not have a clue while a question is pending")
-		lm = self.hunt[s.cur].lmark
+		lm = self.landmarks[s.cur].lmark
 		try:
 			c = Clue.objects.get(lmark=lm)
 			return c.value
@@ -329,7 +329,7 @@ class Game(GTMS.ITF, GTTS.ITF):
 		s = s.first()
 		if not s.playing:
 			raise ReferenceError("You may not have a question after forfeiting")
-		lm = self.hunt[s.cur].lmark
+		lm = self.landmarks[s.cur].lmark
 		if s.pending is not None:
 			return Confirmation.objects.get(lmark=lm).ques
 		try:
@@ -355,7 +355,7 @@ class Game(GTMS.ITF, GTTS.ITF):
 			raise ReferenceError("You may not submit an answer after forfeiting")
 		if s.pending is None:
 			raise KeyError("You may not submit an answer without a question pending")
-		lm = self.hunt[s.cur].lmark
+		lm = self.landmarks[s.cur].lmark
 		try:
 			c = Confirmation.objects.get(lmark=lm)
 			deltat = (dt.now(tz('US/Central')) - s.pending).total_seconds()
@@ -365,7 +365,7 @@ class Game(GTMS.ITF, GTTS.ITF):
 			s.score = s.score + self.calc_score_entry(sc)
 			if ans == c.ans:
 				s.cur = s.cur + 1
-				if s.cur > len(self.hunt):
+				if s.cur > len(self.landmarks):
 					s.playing = False
 				s.save()
 				return True

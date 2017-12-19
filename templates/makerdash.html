@@ -82,7 +82,6 @@
         {% else %}
             <a href={% url 'do' action='start' %}>Start Game</a>
         {% endif %}
-        <a href="javascript:switchIt('editCreds')">Edit Credentials</a>
         <a href="javascript:switchIt('editgamedetails')">Edit Game Details</a>
     </div>
 </header>
@@ -95,12 +94,13 @@
             <b><a href="javascript:editTm({{ x.index }})">{{ x.tm.name }}</a></b><br>
             Score: {{ x.st.score|floatformat }}<br/>
             {% if not x.st.playing %}
-                Forfeited<br/>
+                Forfeited
             {% elif x.lm == "Done" %}
-                Done<br>
+                Done
             {% else %}
-                Current: {{ x.lm }}<br>
+                Current: {{ x.lm }}
             {%  endif %}
+            <br/>
             <a href="{%url 'edit' to_edit='winner' %}?u={{ x.tm.pk }}">Declare Winner</a><br>
             <a href="{%url 'edit' to_edit='remove' %}?u={{ x.tm.pk }}">Delete Team</a>
         </div>
@@ -143,14 +143,6 @@
         <b>Description:</b> {{ gmdet.desc }}<br>
         <script>curVisible = document.getElementById('gameDesc');</script>
     </div>
-    <div id="editcreds" class="hidden_form">
-        <form action="{% url 'edit' to_edit='creds' %}" method="POST">
-            {% csrf_token %}
-            {{ credsForm.0.as_p }}
-            <input type="hidden" name="user_id" value="{{  credsForm.1}}">
-            <input type="submit" value="Change credentials">
-        </form>
-    </div>
     <div id="editscheme" class="hidden_form">
         <form action="{% url 'edit' to_edit='scheme'%}" method="POST">
             {% csrf_token %}
@@ -182,7 +174,7 @@
             <form action="{%url 'edit' to_edit='creds' %}" method="POST">
                 {% csrf_token %}
                 {{ form.errors }}
-                {%   for f in x.form.visible_fields %}<p>{{ f }}</p>{% endfor %}
+                {{ x.form.as_p }}
                 <input type="hidden" name="user_id" value="{{ x.pk }}">
                 <input type="submit" value="Edit Credentials">
             </form>
@@ -208,7 +200,6 @@
                 <div class="hunt_detail">
                     <div id="stat_order">
                         <span class="huntForm hidden_form">{{x.0}}</span>
-                        <span class="huntOrder">{{ x.0 }}</span>
                     </div>
                     <b><a href="javascript:editLm({{ x.1.order }})">{{ x.1.name }}</a></b><br>
                     <a href="{% url 'edit' to_edit='remove' %}?lm={{ x.1.order }}">Remove Landmark</a>

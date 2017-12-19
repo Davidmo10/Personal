@@ -3,5 +3,7 @@
 
 (Assuming server is started and web page is loaded to default)
 
-1. 
-2. 
+1. Enter "maker1" and "maker1pwd", then press submit
+2. Click "Start Game"
+3. Click "Declare Winner" on team1's card
+    +[ ] Should display "Game over, team1 has won"

@@ -31,10 +31,10 @@
 3. Change the values to "a", "b", "c", "d", and "e"
 4. Press "Edit Landmark" button below form
     
-    -[X] Should return to main dashboard, with the first landmark titled "a"
+    -[ ] Should return to main dashboard, with the first landmark titled "a"
 5. Again, click the title of the first landmark
     
-    -[X] Fields should display as "a", "b", "c", "d", and "e" as you entered them
+    -[ ] Fields should display as "a", "b", "c", "d", and "e" as you entered them
 
 ## User Story #5
 #### As a game maker, I can add a landmark to a scavenger hunt

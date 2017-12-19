@@ -174,7 +174,7 @@
             <form action="{%url 'edit' to_edit='creds' %}" method="POST">
                 {% csrf_token %}
                 {{ form.errors }}
-                {%   for f in x.form.visible_fields %}<p>{{ f }}</p>{% endfor %}
+                {{ x.form.as_p }}
                 <input type="hidden" name="user_id" value="{{ x.pk }}">
                 <input type="submit" value="Edit Credentials">
             </form>

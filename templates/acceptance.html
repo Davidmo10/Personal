@@ -189,8 +189,8 @@ function logout(callback) {
 	xhr.addEventListener("load", parseResponse);
 	xhr.send();
 }
-function allPass() {
-	feedback.innerHTML += "<br><br><span style='color:green'>All done</span><br><br>";
+function allPass(el) {
+	document.getElementById(el).innerHTML = "<span style='color:green'>Passed</span>";
 }
 //req/ques
 </script>
@@ -198,21 +198,29 @@ function allPass() {
 <h1>AJAX Acceptance Tests</h1>
 
 <br><br>
+<b>Team Tests: </b><span id="checkTeam" style="cursor:pointer">Check Team Tests</span>
 <div id='feedback'>
 
 </div>
 <script>
 	feedback = document.getElementById('feedback');
-	var checkLogout = logout.bind(null, allPass);
-	var loginNewCreds = checkLogin.bind(null, "Nananana", "booboo", checkLogout);
-	var credChange = changeCreds.bind(null, "Nananana", "team10pwd", "booboo", {{ pk }}, loginNewCreds);
-	var statCheck = getStatus.bind(null, credChange);
-	var postClueCheck = checkGetClue.bind(null, "Clue 10", statCheck);
-	var validAnswer = submitAnswer.bind(null, true, "Answer 9", postClueCheck);
-	var getQues = getQuestion.bind(null, "Question 9", validAnswer);
-	var invalidAnswer = submitAnswer.bind(null, false, getQues, getQues);
-	var clueCheck = checkGetClue.bind(null, "Clue 9", invalidAnswer);
-	checkLogin("team10", "team10pwd", clueCheck);
+	function team() {
+		tmp = document.getElementById('checkTeam');
+		tmp.removeEventListener('click', team);
+		tmp.innerHTML = "";
+		var done = allPass.bind(null, "checkTeam");
+		var checkLogout = logout.bind(null, done);
+		var loginNewCreds = checkLogin.bind(null, "Nananana", "booboo", checkLogout);
+		var credChange = changeCreds.bind(null, "Nananana", "team10pwd", "booboo", {{ pk }}, loginNewCreds);
+		var statCheck = getStatus.bind(null, credChange);
+		var postClueCheck = checkGetClue.bind(null, "Clue 10", statCheck);
+		var validAnswer = submitAnswer.bind(null, true, "Answer 9", postClueCheck);
+		var getQues = getQuestion.bind(null, "Question 9", validAnswer);
+		var invalidAnswer = submitAnswer.bind(null, false, getQues, getQues);
+		var clueCheck = checkGetClue.bind(null, "Clue 9", invalidAnswer);
+		checkLogin("team10", "team10pwd", clueCheck);
+	}
+	document.getElementById('checkTeam').addEventListener('click', team);
 </script>
 
 </body>

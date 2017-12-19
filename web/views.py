@@ -266,7 +266,7 @@ def edit(request, to_edit):
 				g = Game(gd)
 				if to_edit == 'reorder':
 					neworder: [int] = []
-					for i in range(len(g.hunt)):
+					for i in range(len(g.landmark)):
 						order = request.POST.get("form-{0!s}-h_{0!s}".format(i), default=False)
 						logging.debug(order)
 						if not order:

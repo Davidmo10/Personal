@@ -369,7 +369,6 @@ class Game(GTMS.ITF, GTTS.ITF):
 				if s.cur >= len(self.landmarks):
 					s.playing = False
 				s.save()
-				s.save()
 				return True
 			else:
 				s.save()

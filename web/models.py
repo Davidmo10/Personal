@@ -32,7 +32,7 @@ class GameDetails(models.Model):
 	on = models.BooleanField(default=False)
 	winner = models.IntegerField(default=-1)
 	maker = models.ForeignKey(User, on_delete=models.CASCADE)
-	scheme = models.ForeignKey(ScoreScheme, default=ScoreScheme.objects.get(name='default'))
+	scheme = models.ForeignKey(ScoreScheme, default=ScoreScheme.objects.get(name='default'), on_delete=models.DO_NOTHING)
 	startTime = models.DateTimeField(default=None, null=True)
 
 	def __str__(self):

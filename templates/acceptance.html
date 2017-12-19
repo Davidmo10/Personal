@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>eScavenge</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static "web/style.css" %}">
+</head>
+<script>
+
+var csrf = function() {
+	foo = document.cookie;
+	i = foo.indexOf("csrftoken=");
+	i = i + 10;
+	j = foo.indexOf(";", i);
+	return document.cookie.substring(i, j)
+}.call();
+var origin = window.location.origin;
+var xhr = new XMLHttpRequest();
+var feedback = null;
+
+function testing(text) {
+	feedback.innerHTML += text + " .... ";
+}
+function result(result) {
+	if(result == 1) 
+		feedback.innerHTML += "<span style='color:green'>Success</span><br>";
+	else
+		feedback.innerHTML += "<span style='color:red'>Failed</span><br>";
+}
+function checkLogin(user, pwd, callback) {
+	testing("Logging in as team 10");
+	xhr.open("POST", "/login", true);
+	xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	xhr.send("csrfmiddlewaretoken="+csrf+"&uname="+user+"&upwd="+pwd);
+	function parseResponse() {
+		xhr.removeEventListener("load", parseResponse);	
+		success = xhr.responseURL == origin + "/";
+		result(success);
+		if(success) callback();
+	}
+	xhr.addEventListener("load", parseResponse);
+}
+
+function checkGetClue(clueText, callback) {
+	testing("Checking current clue is " + clueText)
+	xhr.open("Get", "/", true);
+	xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	xhr.responseType = "document";
+	function parseResponse() {
+	xhr.removeEventListener("load", parseResponse);
+		doc = xhr.response;
+		page = doc.getElementById("page-type");
+		content = doc.getElementById("page-contents");
+		if(typeof page === null || page.innerText != "Current Clue"){
+			result(0);
+			return;
+		}
+		if(content.innerText == clueText) {
+			result(1);
+			return callback();
+		}
+		result(0);
+	}
+	xhr.addEventListener("load", parseResponse);
+	xhr.send();
+}
+
+function submitAnswer(valid, ans, callback) {
+	if(!valid)
+		testing("Checking answer submit errors without question");
+	else
+		testing("Checking answer submit");
+	xhr.open("POST", "/req/ans", true);
+	xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	function parseResponse() {
+		xhr.removeEventListener("load", parseResponse);
+		err = xhr.responseURL == origin + "/error" || xhr.status == 500;
+		success = valid ? !err : err;
+		result(success);
+		if(success) callback();
+	}
+	xhr.addEventListener("load", parseResponse);
+	xhr.send("csrfmiddlewaretoken="+csrf+"&ans="+ans);
+}
+
+function getQuestion(questionText, callback) {
+	testing("Checking can grab question and it is "+questionText);
+	xhr.open("GET", "/req/ques", true);
+	xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	xhr.responseType = "document";
+	function parseResponse() {
+		xhr.removeEventListener("load", parseResponse);
+		doc = xhr.response;
+		page = doc.getElementById("page-type");
+		content = doc.getElementById("page-contents");
+		if(typeof page === null || page.innerText != "Current Question"){
+			result(0);
+			return;
+		}
+		if(content.innerText == questionText) {
+			result(1);
+			return callback();
+		}
+		result(0);
+	}
+	xhr.addEventListener("load", parseResponse);
+	xhr.send();
+}
+
+function getStatus(callback) {
+	testing("Fetching status");
+	xhr.open("GET", "/", true);
+	xhr.setRequestHeader("Content-type", "application/x-www.-form-urlencoded");
+	xhr.responseType = "document";
+	function validateStatus(ev) {
+		ev.target.removeEventListener("click", validateStatus);
+		tmp = document.getElementById("visualize-status");
+		tmp.parentNode.removeChild(tmp);
+		if(ev.target.id == "aOk") {
+			result(1);
+			return callback();
+		}
+		result(0);
+	}
+	function parseResponse() {
+		xhr.removeEventListener("load", parseResponse);
+		doc = xhr.response;
+		status = doc.getElementById("team-status");
+		if(typeof status === null) {
+			result(0);
+			return;
+		}
+		tmp = document.createElement("div");
+		tmp.id = "visualize-status";
+		tmp.innerHTML = doc.getElementById("team-status").innerHTML;
+		tmp.appendChild(document.createElement("br"));
+		aOk = document.createElement("button");
+		aOk.id = "aOk";
+		aOk.innerText = "Validate";
+		aOk.addEventListener("click", validateStatus);
+		tmp.appendChild(aOk);
+		nuhUh = document.createElement("button");
+		nuhUh.id = "nuhUh";
+		nuhUh.innerText = "Invalidate";
+		nuhUh.addEventListener("click", validateStatus);
+		tmp.appendChild(nuhUh);
+		feedback.appendChild(tmp);
+
+		yar = doc.getElementsByTagName('input');
+		for(i = 0; i < yar.length; i++) {
+			el = yar[i];
+			if(el.name == "csrfmiddlewaretoken") {
+				console.log(csrf);
+				csrf = el.value;
+				console.log(csrf);
+				break;
+			}
+		}
+	}
+	xhr.addEventListener("load", parseResponse);
+	xhr.send();
+}
+
+function changeCreds(newName, oldPass, newPass, pk, callback) {
+	testing("Changing team name to "+newName+", pwd to "+newPass);
+	xhr.open("POST", "/edit/creds", true);
+	xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	function parseResponse() {
+		xhr.removeEventListener("load", parseResponse);
+		success = xhr.responseURL == origin + "/login";
+		result(success);
+		if(success) callback();
+	}
+	xhr.addEventListener("load", parseResponse);
+	xhr.send("csrfmiddlewaretoken="+csrf+"&name="+newName+"&oldpwd="+oldPass+"&newpwd="+newPass+"&user_id={{pk}}");
+}
+
+function logout(callback) {
+	testing("Logging out");
+	xhr.open("GET", "/do/logout", true);
+	xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	function parseResponse() {
+		xhr.removeEventListener("load", parseResponse);
+		success = xhr.responseURL == origin + "/login";
+		result(success);
+		if(success) callback();
+	}
+	xhr.addEventListener("load", parseResponse);
+	xhr.send();
+}
+function allPass(el) {
+	document.getElementById(el).innerHTML = "<span style='color:green'>Passed</span>";
+}
+//req/ques
+</script>
+<body>
+<h1>AJAX Acceptance Tests</h1>
+
+<br><br>
+<b>Team Tests: </b><span id="checkTeam" style="cursor:pointer">Check Team Tests</span>
+<div id='feedback'>
+
+</div>
+<script>
+	feedback = document.getElementById('feedback');
+	function team() {
+		tmp = document.getElementById('checkTeam');
+		tmp.removeEventListener('click', team);
+		tmp.innerHTML = "";
+		var done = allPass.bind(null, "checkTeam");
+		var checkLogout = logout.bind(null, done);
+		var loginNewCreds = checkLogin.bind(null, "Nananana", "booboo", checkLogout);
+		var credChange = changeCreds.bind(null, "Nananana", "team10pwd", "booboo", {{ pk }}, loginNewCreds);
+		var statCheck = getStatus.bind(null, credChange);
+		var postClueCheck = checkGetClue.bind(null, "Clue 10", statCheck);
+		var validAnswer = submitAnswer.bind(null, true, "Answer 9", postClueCheck);
+		var getQues = getQuestion.bind(null, "Question 9", validAnswer);
+		var invalidAnswer = submitAnswer.bind(null, false, getQues, getQues);
+		var clueCheck = checkGetClue.bind(null, "Clue 9", invalidAnswer);
+		checkLogin("team10", "team10pwd", clueCheck);
+	}
+	document.getElementById('checkTeam').addEventListener('click', team);
+</script>
+
+</body>
+</html>

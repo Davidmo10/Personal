@@ -44,8 +44,8 @@
             <input type="submit" value="Change credentials">
         </form>
     </div>
-    <h2>{{ title }}</h2>
-    {{ feedback }}
+    <h2 id="page-type">{{ title }}</h2>
+    <span id="page-contents">{{ feedback }}</span>
     <br><br>
     {% if type == 'clue' %}
         <a href={% url 'req' kind='ques' %}>Request Question</a>

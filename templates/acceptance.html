@@ -29,7 +29,7 @@ function result(result) {
 		feedback.innerHTML += "<span style='color:red'>Failed</span><br>";
 }
 function checkLogin(user, pwd, callback) {
-	testing("Logging in as team 10");
+	testing("Logging in as"+user);
 	xhr.open("POST", "/login", true);
 	xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	xhr.send("csrfmiddlewaretoken="+csrf+"&uname="+user+"&upwd="+pwd);

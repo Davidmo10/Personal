@@ -200,7 +200,6 @@
                 <div class="hunt_detail">
                     <div id="stat_order">
                         <span class="huntForm hidden_form">{{x.0}}</span>
-                        <span class="huntOrder">{{ x.0 }}</span>
                     </div>
                     <b><a href="javascript:editLm({{ x.1.order }})">{{ x.1.name }}</a></b><br>
                     <a href="{% url 'edit' to_edit='remove' %}?lm={{ x.1.order }}">Remove Landmark</a>

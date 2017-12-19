@@ -254,6 +254,7 @@ class Game(GTMS.ITF, GTTS.ITF):
 		if self.is_on():
 			raise UserWarning("This game is already in progress")
 		self.dtls.on = True
+		self.dtls.startTime = dt.now()
 		self.dtls.save()
 		return True
 

@@ -274,25 +274,33 @@ class TestTeam(TestCase):
         self.game.edit_score_sch(s)
         self.assertEqual(self.game.scheme.name,"scheme1","Scheme not set correctly")
 
-
-    #DO THIS PART AND DOWN
-    def test_edit_game_name_and_description(self):
-        # as a Game Maker I can successfully edit name of game
-        # as a Game Maker I can successfully edit description of game
-        pass
+ def test_edit_game_name_and_description(self):
+        name = "newName"
+        desc = "new game description"
+        testName = 3 #cannot do integer value for this
+        testDesc = 4 #must be string
+        self.assertRaises(UserError, self.game.edit(testName, testDesc))
+        self.game.edit(name, desc)
+        self.assertEqual(self.u.name, "newName", "New name of game not set correctly")
+        self.assertEqual(self.u.desc, "new game description", "New description of game not set correctly")
 
     def test_start_game(self):
-        # as a Game Maker I can set game staus to on
-        pass
+        self.u.on = True
+        self.assertRaises(UserWarning, self.game.start())
+        self.u.on = False
+        self.assertEquals(self.game.start(), True, "The game did not successfully start - game was already on")
 
     def test_stop_game(self):
-        # as a Game Maker I can set game status to off
-        pass
+        self.u.on = False
+        self.assertRaises(UserWarning, self.game.stop())
+        self.u.on = True
+        self.assertEquals(self.game.stop(), True, "The game did not successfully stop - game was already off")
 
     def test_game_is_on(self):
-        # as a Game Maker I can check the status of a game
-        pass
-
+        self.u.on = True
+        self.assertEquals(self.game.is_on(), True, "Game is not on")
+        self.u.on = False
+        self.assertEquals(self.game.is_on(), False, "Game is on")
 
 class TestTeam(TestCase):
     def test_create_team(self):

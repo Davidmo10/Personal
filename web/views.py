@@ -185,14 +185,18 @@ def req(request, kind):
 		except (User.DoesNotExist, Status.DoesNotExist, KeyError):
 			return HttpResponseRedirect('/login')
 		g = Game(s.game)
-		if kind == "ques":
-			g.req_ques(u)
-		elif kind == "ans":
-			if request.method == "POST":
-				form = AnswerForm(request.POST)
-				if form.is_valid():
-					g.submit_ans(u, form.cleaned_data["ans"])
-		return HttpResponseRedirect("/")
+		try:
+			if kind == "ques":
+				g.req_ques(u)
+			elif kind == "ans":
+				if request.method == "POST":
+					form = AnswerForm(request.POST)
+					if form.is_valid():
+						g.submit_ans(u, form.cleaned_data["ans"])
+			return HttpResponseRedirect("/")
+		except Exception as e:
+			feedback = str(e)
+			return render(request, 'error.html', {'feedback': feedback})
 	return HttpResponseRedirect("/login")
 
 

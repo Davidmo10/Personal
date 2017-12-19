@@ -3,7 +3,7 @@ import logging
 from django import forms
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-
+from web.tests import TestData
 from web.classes.game import Game
 from web.models import *
 
@@ -128,12 +128,14 @@ def dash(request):
 			team_cred_form = CredsForm()
 			team_cred_form.fields["oldpwd"].label = "Password"
 			team_cred_form.fields["newpwd"].label = "Repeat Password"
+			maker_cred_form = CredsForm(initial={"name": u.name})
 			edit_game_form = EditGameForm(instance=g.dtls)
 			landmark_form = EditLmForm()
 			return render(request, 'makerdash.html', {'name': u.name, 'gmdet': gd, 'teams': tms, 'hunt': zip(reorder_form, h),
 			                                          'hunt_mng_form': reorder_form.management_form, 'sch': gd.scheme,
 			                                          "cForms": t_forms,
 			                                          "hForms": h_forms, "schemeForm": scheme_form, 'ntForm': team_cred_form,
+			                                          'credsForm': [maker_cred_form, u.pk],
 			                                          "gameForm": edit_game_form, "newlmForm": landmark_form,
 			                                          })
 		else:
@@ -159,12 +161,12 @@ def dash(request):
 					title = "Current Clue"
 					feedback = g.req_clue(u)
 				answer_form = AnswerForm()
-				credential_form = CredsForm(initial={"name": u.name, "user_id": u.pk})
+				credential_form = CredsForm(initial={"name": u.name})
 				return render(request, 'teamdash.html',
 				              {'name': u.name, 'type': status["curtype"], 'gmdet': status["game"], 'title': title,
 				               'feedback': feedback,
 				               'progress': progress, 'total': status["total"], 'ansForm': answer_form,
-				               'credsForm': credential_form, 'pending': s.pending,
+				               'credsForm': [credential_form, u.pk], 'pending': s.pending,
 
 				               })
 			except Exception as e:
@@ -264,7 +266,7 @@ def edit(request, to_edit):
 				g = Game(gd)
 				if to_edit == 'reorder':
 					neworder: [int] = []
-					for i in range(len(g.landmarks)):
+					for i in range(len(g.hunt)):
 						order = request.POST.get("form-{0!s}-h_{0!s}".format(i), default=False)
 						logging.debug(order)
 						if not order:
@@ -317,3 +319,9 @@ def edit(request, to_edit):
 		except Exception as e:
 			return render(request, "error.html", {"feedback": " {0!s} - {1!s}".format(e, e.args)})
 	return HttpResponseRedirect("/login")
+
+def acceptance(request, test):
+	TestData.wipe()
+	TestData.build()
+	pk = User.objects.get(name = "team10").pk
+	return render(request, "acceptance.html", {'pk' : pk})

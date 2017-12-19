@@ -53,19 +53,23 @@ class Game(GTMS.ITF, GTTS.ITF):
 	# ValueError for illegal value
 	# Warning for nonexistent Landmark (meaning one will be created)
 	def edit_lmark(self, lm: Landmark, name: str, desc: str) -> bool:
-		if lm not in Landmark.objects.all():
-			if Landmark.objects.filter(name=lm.name).count() != 0:
-				raise NameError("A landmark with that name already exists")
 
-		if type(name) != str or type(desc) != str or name.strip() == "" or desc.strip() == "":
-			raise ValueError("Types for landmark must be string")
+        	if type(name) != str or type(desc) != str or name.strip() == "" or desc.strip() == "":
+            		raise ValueError("Types for landmark must be string")
 
-		lm.save()
-		if Hunt.objects.filter(lmark=lm, game=self.dtls).count() == 0:
-			h = Hunt(lmark=lm, game=self.dtls)
-			h.save()
+        	if lm not in Landmark.objects.all():
+            		if Landmark.objects.filter(name = lm.name).count() != 0:
+ 	               		raise NameError("A landmark with that name already exists")
+            		lmk = Landmark(name=name, desc=desc)
+            		lmk.save()
+        	lm.name = name
+        	lm.desc = desc
+        	lm.save()
+        	if Hunt.objects.filter(lmark = lm, game = self.dtls).count() == 0:
+            		h = Hunt(lmark = lm, game = self.dtls)
+           		 h.save()
 
-		return True
+        	return True
 
 	# ValueError if invalid order
 	# IndexError if submitted order is longer than hunt or less than zero

@@ -159,12 +159,12 @@ def dash(request):
 					title = "Current Clue"
 					feedback = g.req_clue(u)
 				answer_form = AnswerForm()
-				credential_form = CredsForm(initial={"name": u.name})
+				credential_form = CredsForm(initial={"name": u.name, "user_id": u.pk})
 				return render(request, 'teamdash.html',
 				              {'name': u.name, 'type': status["curtype"], 'gmdet': status["game"], 'title': title,
 				               'feedback': feedback,
 				               'progress': progress, 'total': status["total"], 'ansForm': answer_form,
-				               'credsForm': [credential_form, u.pk], 'pending': s.pending,
+				               'credsForm': credential_form, 'pending': s.pending,
 
 				               })
 			except Exception as e:
